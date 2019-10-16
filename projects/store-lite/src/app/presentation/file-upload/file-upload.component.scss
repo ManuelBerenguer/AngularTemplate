@@ -1,0 +1,30 @@
+::ng-deep .radioButtonLabel{
+  width: 125px;
+  height: 90px;
+  display: inline-block;
+  background-color: #f0f0f0;
+  color: #444;
+  padding: 10px 7px;
+  border: 1px solid #dcddde;
+  margin-bottom: 5px;
+  margin-left: 20px;
+  cursor: pointer;
+  font-size: 12px;
+  text-align: center;
+  fill: #e46e0c;
+}
+
+::ng-deep .genericIcon {
+  width: 55px;
+  height: 29px;
+  margin-bottom: 5px;
+  fill: inherit;
+}
+
+::ng-deep input[type="radio"]:checked + label{
+  background-color: #e46e0c;
+  border-color: #e46e0c;
+  color: #fff;
+  font-weight: 700;
+  fill: #414042;
+}

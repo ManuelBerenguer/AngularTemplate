@@ -1,0 +1,71 @@
+<!-- <section style="padding-left: 50px; padding-bottom: 50px; padding-right: 50px; padding-top: 10px;">
+  <h1 style="text-align: left;">Store</h1>
+  <h3 style="text-align: left;">Upload any electronic file</h3>
+  <h5 style="text-align: left;">Hi {{(this.storeLitePresentation.loggedUser$ | async)?.userName}}, {{(this.storeLitePresentation.loggedUser$ | async)?.clientName}}</h5>
+  <table border="1">
+    <tr>
+      <td style="width: 50%">
+        <app-stats></app-stats>
+      </td>
+      <td style="width: 50%">
+        <app-storage></app-storage>
+      </td>
+    </tr>
+    <tr>
+      <td style="width: 50%">
+uPLOAD
+      </td>
+      <td style="width: 50%">
+UPGRADE
+      </td>
+    </tr>
+  </table>
+</section> -->
+
+<div class="container storeContainer" style="height: 100%">
+  <div class="row">
+    <div class="col">
+      <h1 class="dash">Store</h1>
+      <p>Upload any electronic file</p>
+    </div>
+  </div>
+  <div class="row">
+
+    <div class="col-sm-6" style="padding: 0px 10px 0px 10px">
+
+      <div class="card store-card text-center" >
+        <div class="card-body">
+          <div class="card-block-header">Store Stats</div>
+          <!-- <app-stats></app-stats> -->
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-6" style="padding: 0px 10px 0px 10px">
+
+      <div class="card store-card text-center">
+        <div class="card-body">
+          <div class="card-block-header">Storage</div>
+          <!-- <app-storage></app-storage> -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6" style="padding: 0px 10px 0px 10px">
+
+      <app-file-upload></app-file-upload>
+
+    </div>
+    <div class="col-sm-6" style="padding: 0px 10px 0px 10px">
+
+      <div class="card store-card text-center">
+        <div class="card-body">
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

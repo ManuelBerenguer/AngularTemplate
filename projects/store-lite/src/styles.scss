@@ -1,0 +1,111 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* app-all is on the shared folder root/shared/styles, angular.jason includes this option to grab those styles stylePreprocessorOptions */
+@import 'app-all';
+
+body {
+  padding: 0;
+  margin: 0;
+  font-size: 18px;
+  height: 100vh; // expand body to use all the vertical space
+}
+
+h1, h2, h3 {
+  margin: 0;
+}
+
+h1 {
+  font-weight: bold;
+  font-size: 20px;
+  color: #414042;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+h1.dash {
+  margin-bottom: 0;
+  font-size: 45px;
+  color: #414042;
+  margin-top: 10px;
+}
+
+h3 {
+  color: #414042;
+}
+
+.storeContainer {
+  padding-right: 10px !important;
+  padding-left: 10px !important;
+}
+
+.store-card{
+  margin-bottom: 20px;
+  border: 0px;
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+}
+
+.shadow-card{
+  padding: 20px 50px;
+}
+
+.card-block-header{
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.card-block-content{
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-grey {box-shadow: inset 0px 0px 0px 20px #dcddde}
+
+.card-text-primary {font-weight: bold; font-size: 20px; color: #414042; letter-spacing: 0px;}
+.card-text-secondary {font-weight: bold; font-size: 16px; color: #414042; letter-spacing: 0px;}
+.card-text-tertiary {font-size: 13px; color: #B2B2B2; letter-spacing: 0px;}
+
+// .btnOrange {
+//   background-color: #e46e0c;
+//   color: #fff;
+// }
+
+// .storeBtn {
+//   padding: 8px 7px;
+//   text-decoration: none;
+//   font-weight: bold;
+//   font-size: 13px;
+//   min-width: 60px;
+//   display: inline-block;
+//   border: 0px;
+// }
+
+.btnUpload:before {
+  content: url(../../../shared/assets/icons/iconUpload.svg);
+  display: inline-block;
+  margin-top: -5px;
+  padding-right: 3px;
+}
+
+.btn {
+  border: 0px;
+  font-weight: bold;
+  font-size: 13px;
+  display: inline-block;
+  padding: 8px 7px;
+}
+
+.btn-primary:hover{
+  background-color:#ec8a1a;
+}
+
+.btn-secondary:hover{
+  background-color: #717171;
+  //color: black;
+}

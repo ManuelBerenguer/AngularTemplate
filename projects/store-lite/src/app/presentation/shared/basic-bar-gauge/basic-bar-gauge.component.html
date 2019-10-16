@@ -1,0 +1,16 @@
+<dx-bar-gauge id="gauge"
+    [startValue]="0"
+    [endValue]="100"
+    [values]="seriesValues"
+    [palette]="seriesPalette">
+  <dxo-size [height]="200"></dxo-size>
+  <dxo-label [visible]="false" [indent]="10" [customizeText]="customizeText">
+    <!--<dxo-format type="fixedPoint" [precision]="1"></dxo-format>-->
+  </dxo-label>
+  <dxo-legend
+    [visible]="true"
+    verticalAlignment="center"
+    horizontalAlignment="right"
+    [customizeText]="customizeText">
+  </dxo-legend>
+</dx-bar-gauge>

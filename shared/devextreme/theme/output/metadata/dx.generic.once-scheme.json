@@ -1,0 +1,180 @@
+{
+    "items": [
+        {
+            "key": "@base-font-family",
+            "value": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+            "key": "@base-accent",
+            "value": "#e46e0c"
+        },
+        {
+            "key": "@base-bg",
+            "value": "#f0f0f0"
+        },
+        {
+            "key": "@base-text-color",
+            "value": "#58585a"
+        },
+        {
+            "key": "@base-border-color",
+            "value": "#dee2e6"
+        },
+        {
+            "key": "@base-border-radius",
+            "value": "0.25rem"
+        },
+        {
+            "key": "@base-border-radius-large",
+            "value": "0.3rem"
+        },
+        {
+            "key": "@base-border-radius-small",
+            "value": "0.2rem"
+        },
+        {
+            "key": "@base-success",
+            "value": "#28a745"
+        },
+        {
+            "key": "@base-warning",
+            "value": "#ffc107"
+        },
+        {
+            "key": "@base-danger",
+            "value": "#dc3545"
+        },
+        {
+            "key": "@base-link-color",
+            "value": "#e46e0c"
+        },
+        {
+            "key": "@base-hover-color",
+            "value": "rgba(0, 0, 0, 0.075)"
+        },
+        {
+            "key": "@button-normal-bg",
+            "value": "#f8f9fa"
+        },
+        {
+            "key": "@button-normal-border-color",
+            "value": "#f8f9fa"
+        },
+        {
+            "key": "@button-default-bg",
+            "value": "#e46e0c"
+        },
+        {
+            "key": "@button-default-border-color",
+            "value": "#e46e0c"
+        },
+        {
+            "key": "@button-success-bg",
+            "value": "#28a745"
+        },
+        {
+            "key": "@button-success-border-color",
+            "value": "#28a745"
+        },
+        {
+            "key": "@button-danger-bg",
+            "value": "#dc3545"
+        },
+        {
+            "key": "@button-danger-border-color",
+            "value": "#dc3545"
+        },
+        {
+            "key": "@button-border-radius",
+            "value": "0.25rem"
+        },
+        {
+            "key": "@texteditor-border-color",
+            "value": "#ced4da"
+        },
+        {
+            "key": "@texteditor-bg",
+            "value": "#fff"
+        },
+        {
+            "key": "@texteditor-color",
+            "value": "#495057"
+        },
+        {
+            "key": "@texteditor-border-radius",
+            "value": "0.25rem"
+        },
+        {
+            "key": "@texteditor-focused-border-color",
+            "value": "#f8b278"
+        },
+        {
+            "key": "@texteditor-placeholder-color",
+            "value": "#6c757d"
+        },
+        {
+            "key": "@pager-page-selected-bg",
+            "value": "#e46e0c"
+        },
+        {
+            "key": "@pager-page-selected-border-color",
+            "value": "#e46e0c"
+        },
+        {
+            "key": "@pager-page-selected-color",
+            "value": "#fff"
+        },
+        {
+            "key": "@tooltip-color",
+            "value": "#fff"
+        },
+        {
+            "key": "@tooltip-bg",
+            "value": "#000"
+        },
+        {
+            "key": "@overlay-content-bg",
+            "value": "#fff"
+        },
+        {
+            "key": "@overlay-border-color",
+            "value": "rgba(0, 0, 0, 0.2)"
+        },
+        {
+            "key": "@progressbar-bg",
+            "value": "#e9ecef"
+        },
+        {
+            "key": "@progressbar-border-color",
+            "value": "#fff"
+        },
+        {
+            "key": "@progressbar-range-bg",
+            "value": "#e46e0c"
+        },
+        {
+            "key": "@list-border-color",
+            "value": "rgba(0, 0, 0, 0.125)"
+        },
+        {
+            "key": "@list-item-hover-bg",
+            "value": "#f8f9fa"
+        },
+        {
+            "key": "@list-item-selected-color",
+            "value": "#fff"
+        },
+        {
+            "key": "@list-item-selected-bg",
+            "value": "#e46e0c"
+        },
+        {
+            "key": "@badge-bg",
+            "value": "#e46e0c"
+        }
+    ],
+    "baseTheme": "generic.light",
+    "outputColorScheme": "once-scheme",
+    "makeSwatch": false,
+    "version": "19.1.6"
+}

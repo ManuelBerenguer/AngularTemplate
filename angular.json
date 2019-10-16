@@ -1,0 +1,333 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "shared-lib": {
+      "projectType": "library",
+      "root": "projects/shared-lib",
+      "sourceRoot": "projects/shared-lib/src",
+      "prefix": "shared",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/shared-lib/tsconfig.lib.json",
+            "project": "projects/shared-lib/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/shared-lib/src/test.ts",
+            "tsConfig": "projects/shared-lib/tsconfig.spec.json",
+            "karmaConfig": "projects/shared-lib/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/shared-lib/tsconfig.lib.json",
+              "projects/shared-lib/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "store-lite": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/store-lite",
+      "sourceRoot": "projects/store-lite/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/store-lite",
+            "index": "projects/store-lite/src/index.html",
+            "main": "projects/store-lite/src/main.ts",
+            "polyfills": "projects/store-lite/src/polyfills.ts",
+            "tsConfig": "projects/store-lite/tsconfig.app.json",
+            "aot": false,
+            "assets": [
+              "projects/store-lite/src/favicon.ico",
+              "projects/store-lite/src/assets",
+              {
+                "glob": "**/*",
+                "input": "./shared/assets/",
+                "output": "./assets"
+              }
+            ],
+            "styles": [
+              "node_modules/devextreme/dist/css/dx.common.css",
+              "shared/devextreme/theme/output/dx.generic.once-scheme/dx.generic.once-scheme.css",
+              "projects/store-lite/src/styles.scss"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "shared/styles"
+              ]
+            },
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/store-lite/src/environments/environment.ts",
+                  "with": "projects/store-lite/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "store-lite:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "store-lite:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "store-lite:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/store-lite/src/test.ts",
+            "polyfills": "projects/store-lite/src/polyfills.ts",
+            "tsConfig": "projects/store-lite/tsconfig.spec.json",
+            "karmaConfig": "projects/store-lite/karma.conf.js",
+            "assets": [
+              "projects/store-lite/src/favicon.ico",
+              "projects/store-lite/src/assets",
+              {
+                "glob": "**/*",
+                "input": "./shared/assets/",
+                "output": "./assets"
+              }
+            ],
+            "styles": [
+              "projects/store-lite/src/styles.scss"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "shared/styles"
+              ]
+            },
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/store-lite/tsconfig.app.json",
+              "projects/store-lite/tsconfig.spec.json",
+              "projects/store-lite/e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/store-lite/e2e/protractor.conf.js",
+            "devServerTarget": "store-lite:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "store-lite:serve:production"
+            }
+          }
+        }
+      }
+    },
+    "once": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/once",
+      "sourceRoot": "projects/once/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/once",
+            "index": "projects/once/src/index.html",
+            "main": "projects/once/src/main.ts",
+            "polyfills": "projects/once/src/polyfills.ts",
+            "tsConfig": "projects/once/tsconfig.app.json",
+            "aot": false,
+            "assets": [
+              "projects/once/src/favicon.ico",
+              "projects/once/src/assets",
+              {
+                "glob": "**/*",
+                "input": "./shared/assets/",
+                "output": "./assets"
+              }
+            ],
+            "styles": [
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
+              "projects/once/src/styles.scss"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "shared/styles"
+              ]
+            },
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/once/src/environments/environment.ts",
+                  "with": "projects/once/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "once:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "once:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "once:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/once/src/test.ts",
+            "polyfills": "projects/once/src/polyfills.ts",
+            "tsConfig": "projects/once/tsconfig.spec.json",
+            "karmaConfig": "projects/once/karma.conf.js",
+            "assets": [
+              "projects/once/src/favicon.ico",
+              "projects/once/src/assets",
+              {
+                "glob": "**/*",
+                "input": "./shared/assets/",
+                "output": "./assets"
+              }
+            ],
+            "styles": [
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
+              "projects/once/src/styles.scss"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "shared/styles"
+              ]
+            },
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/once/tsconfig.app.json",
+              "projects/once/tsconfig.spec.json",
+              "projects/once/e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/once/e2e/protractor.conf.js",
+            "devServerTarget": "once:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "once:serve:production"
+            }
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "once"
+}

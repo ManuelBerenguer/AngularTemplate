@@ -1,0 +1,25 @@
+<ng-container *ngIf="this.storeLitePresentation.stats$ | async as stats"><!-- subscribe in the template with async pipe automaticly unsubcrives on destroy -->
+  <table cellpadding="15">
+    <tr>
+      <td>
+        <app-basic-stat
+          [number]="stats.unlinkedAssets"
+          [text]="textForUnlinked">
+        </app-basic-stat>
+      </td>
+      <td>
+        <app-basic-stat
+          [number]="stats.unresolvedConflicts"
+          [text]="textForUnresolved"
+          [iconUrl]="'./assets/icons/red-warning-triangle.png'">
+        </app-basic-stat>
+      </td>
+      <td>
+        <app-basic-stat
+          [number]="stats.tooSmallImages"
+          [text]="textForTooSmall">
+        </app-basic-stat>
+      </td>
+    </tr>
+  </table>
+</ng-container>

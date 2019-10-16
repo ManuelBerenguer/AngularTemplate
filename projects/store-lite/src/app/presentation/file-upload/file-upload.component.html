@@ -1,0 +1,89 @@
+<div class="card store-card shadow-card card-grey text-center">
+  <div class="card-body card-block-content">
+
+    <div class="card-text-primary" i18n="">
+      Please ensure your upload file contains only one product group at a time.
+    </div>
+    <div class="card-text-tertiary">
+      You can select up to 5 files per upload
+    </div>
+    <br />
+    <div>
+      <button type="button" class="btn btn-primary storeBtn btnUpload" (click)="openModal(fileUploadModal)">
+        &nbsp;Upload
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-template #fileUploadModal class="modal-dialog-centered">
+    <div class="modal-header">
+        <h1 class="modal-title" id="fileUploadModalTitle">Upload Files</h1>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="fileuploadModalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="fileUploadForm" (ngSubmit)="submitFileUploadForm()">
+          <div class="modal-body" style="display: flex">
+            <div style="width: 100%;">Please select how these files will be linked</div>
+            <div style="width: 100%; display: flex; justify-content: flex-end">
+
+                <!-- <input type="text" name="prueba" formControlName="prueba" /> -->
+                <!-- <input type="radio" id="partNumberBtn" name="linked" value="partNumber" formControlName="linked" />
+                <input type="radio" id="applicationBtn" name="linked" value="application" formControlName="linked" /> -->
+
+                <div>
+                    <input type="radio" id="partNumberBtn" name="linked" value="partNumber" formControlName="linked" style="display:none" />
+                    <label for="partNumberBtn" class="radioButtonLabel">
+                      <svg class="genericIcon">
+                        <use href="./assets/icons/iconVehicles.svg#iconVehicles"></use>
+                      </svg>
+                      <br />
+                      By Part Number
+                    </label>
+                  </div>
+
+                  <div>
+                      <input type="radio" id="applicationBtn" name="linked" value="application" formControlName="linked" style="display:none" />
+                      <label for="applicationBtn" class="radioButtonLabel">
+                        <svg class="genericIcon">
+                          <use href="./assets/icons/iconCatalogue.svg#iconCatalogue"></use>
+                        </svg>
+                        <br />
+                        By Catalogue Application
+                      </label>
+                    </div>
+
+                  <input #assets type="file" formControlName="assets" (change)="handleAssets(assets.files)" multiple style="display:none"/>
+
+                    <!-- <app-radio-button-image-text [iconUrl]="'./assets/icons/iconVehicles.svg#iconVehicles'"
+                    [id]="'partNumberBtn'"
+                    [value]="'partNumber'"
+                    [name]="'linked'"
+                    [text]="'By Part Number'"
+                    [parentForm]="fileUploadForm"></app-radio-button-image-text>
+
+                    <app-radio-button-image-text [iconUrl]="'./assets/icons/iconCatalogue.svg#iconCatalogue'"
+                    [id]="'applicationBtn'"
+                    [value]="'application'"
+                    [name]="'linked'"
+                    [text]="'By Catalogue Application'"
+                    [parentForm]="fileUploadForm"></app-radio-button-image-text> -->
+
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary mr-auto" (click)="fileuploadModalRef.hide()">Cancel Upload</button>
+            <button type="button" class="btn btn-primary" (click)="assets.click()" [disabled]="myLinkedControl.invalid">Continue Upload</button>
+          </div>
+        </form>
+</ng-template>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="fileUploadModalTitle" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+        </div>
+      </div>
+</div>
