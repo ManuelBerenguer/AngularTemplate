@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-// import * as JSZip from 'jszip';
+import * as JSZip from 'jszip';
 import { from, Observable } from 'rxjs';
 import { IDictionary } from '../base/idictionary';
 @Injectable()
@@ -11,37 +11,37 @@ export class FileUtils {
   public static UPLOAD_NUMBER_OF_FILES_VALID_KEY = 'isNumberOfFilesValid';
   public static UPLOAD_FILE_TYPES_VALID_KEY = 'isFileTypesValid';
 
-  // getFileTypes(files: FileList): IDictionary<any> {
-  //   const result: IDictionary<any> = {};
+  getFileTypes(files: FileList): IDictionary<any> {
+    const result: IDictionary<any> = {};
 
-  //   // const j: JSZip = typeof ( JSZip as any).default === 'function' ? new ( JSZip as any).default() : new JSZip();
+    // const j: JSZip = typeof ( JSZip as any).default === 'function' ? new ( JSZip as any).default() : new JSZip();
 
-  //   if (files && files.length > 0) {
-  //     Array.from(files).forEach((file, index) => {
-  //       const extension = (file && file.name && file.name.indexOf('.') > 0 ? file.name.split('.').pop() : '');
+    if (files && files.length > 0) {
+      Array.from(files).forEach((file, index) => {
+        const extension = (file && file.name && file.name.indexOf('.') > 0 ? file.name.split('.').pop() : '');
 
-  //       result[`${ index } - ${ file.name }`] = extension.toLowerCase().trim();
+        result[`${ index } - ${ file.name }`] = extension.toLowerCase().trim();
 
-  //       if (extension.toLowerCase().trim() === FileUtils.ZIP_FILE_TYPE) {
-  //         // let j: JSZip = typeof ( JSZip as any).default === 'function' ? new ( JSZip as any).default() : new JSZip();
-  //          const jSZip: JSZip = new JSZip();
-  // // typeof ( JSZip as any).default === 'function' ? new ( JSZip as any).default() : new JSZip();
-  //         const observable$: Observable<JSZip> = from(jSZip.loadAsync(file));
+        if (extension.toLowerCase().trim() === FileUtils.ZIP_FILE_TYPE) {
+        // let j: JSZip = typeof ( JSZip as any).default === 'function' ? new ( JSZip as any).default() : new JSZip();
 
-  //         const subscription = observable$.subscribe(x => {
-  //           x.forEach(function(relativePath, zipEntry) {  // 2) print entries
+  // typeof ( JSZip as any).default === 'function' ? new ( JSZip as any).default() : new JSZip();
+        const observable$: Observable<JSZip> = from(JSZip.loadAsync(file));
 
-  //                       console.log(zipEntry.name);
-  //                     });
-  //           }, e => console.error(e));
+        const subscription = observable$.subscribe(x => {
+          x.forEach((relativePath, zipEntry) => {  // 2) print entries
 
-  //       }
+                      console.log(zipEntry.name);
+                    });
+          }, e => console.error(e));
 
-  //     });
-  //   }
+        }
 
-  //   return result;
-  // }
+      });
+    }
+
+    return result;
+  }
 
   public isUploadValid(files: FileList, maxAllowedFiles: number, allowedFileTypes: string[]): IDictionary<any> {
     const result: IDictionary<any> = {};
