@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 // import * as JSZip from 'jszip';
 import { from, Observable } from 'rxjs';
-import { IDictionary } from 'shared-lib/shared-lib';
+import { IDictionary } from '../base/idictionary';
 @Injectable()
 export class FileUtils {
 
-  // uploadIsValid(maxNumberOfFilesAllowed: number, files: any): boolean {
-  //   return true;
-  // }
+
   public static ZIP_FILE_TYPE = 'zip';
+  public static UPLOAD_VALID_KEY = 'isValid';
+  public static UPLOAD_NUMBER_OF_FILES_VALID_KEY = 'isNumberOfFilesValid';
+  public static UPLOAD_FILE_TYPES_VALID_KEY = 'isFileTypesValid';
 
   // getFileTypes(files: FileList): IDictionary<any> {
   //   const result: IDictionary<any> = {};
@@ -23,8 +24,8 @@ export class FileUtils {
 
   //       if (extension.toLowerCase().trim() === FileUtils.ZIP_FILE_TYPE) {
   //         // let j: JSZip = typeof ( JSZip as any).default === 'function' ? new ( JSZip as any).default() : new JSZip();
-  //         const jSZip: JSZip = new JSZip();
-  // typeof ( JSZip as any).default === 'function' ? new ( JSZip as any).default() : new JSZip();
+  //          const jSZip: JSZip = new JSZip();
+  // // typeof ( JSZip as any).default === 'function' ? new ( JSZip as any).default() : new JSZip();
   //         const observable$: Observable<JSZip> = from(jSZip.loadAsync(file));
 
   //         const subscription = observable$.subscribe(x => {
@@ -41,5 +42,18 @@ export class FileUtils {
 
   //   return result;
   // }
+
+  public isUploadValid(files: FileList, maxAllowedFiles: number, allowedFileTypes: string[]): IDictionary<any> {
+    const result: IDictionary<any> = {};
+
+    const numFilesOk: boolean = Array.from(files).length <= maxAllowedFiles;
+
+    result[FileUtils.UPLOAD_NUMBER_OF_FILES_VALID_KEY] = numFilesOk;
+    result[FileUtils.UPLOAD_FILE_TYPES_VALID_KEY] = true;
+
+    result[FileUtils.UPLOAD_VALID_KEY] = numFilesOk;
+
+    return result;
+  }
 
 }

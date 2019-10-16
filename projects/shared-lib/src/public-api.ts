@@ -10,3 +10,5 @@ export * from './lib/core/repositories/user.repository';
 export * from './lib/shared-lib.component';
 export * from './lib/shared-lib.module';
 export * from './lib/shared-lib.service';
+export * from './lib/core/utils/file.utils';
+
