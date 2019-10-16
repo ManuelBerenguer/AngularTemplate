@@ -1,15 +1,19 @@
 import { Injectable } from '@angular/core';
-// import * as JSZip from 'jszip';
+import * as JSZip from 'jszip';
 import { from, Observable } from 'rxjs';
 import { IDictionary } from '../base/idictionary';
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class FileUtils {
 
 
-  public static ZIP_FILE_TYPE = 'zip';
-  public static UPLOAD_VALID_KEY = 'isValid';
-  public static UPLOAD_NUMBER_OF_FILES_VALID_KEY = 'isNumberOfFilesValid';
-  public static UPLOAD_FILE_TYPES_VALID_KEY = 'isFileTypesValid';
+  public ZIP_FILE_TYPE = 'zip';
+  public UPLOAD_VALID_KEY = 'isValid';
+  public UPLOAD_NUMBER_OF_FILES_VALID_KEY = 'isNumberOfFilesValid';
+  public UPLOAD_FILE_TYPES_VALID_KEY = 'isFileTypesValid';
+
+  constructor(){}
 
   // getFileTypes(files: FileList): IDictionary<any> {
   //   const result: IDictionary<any> = {};
@@ -23,10 +27,10 @@ export class FileUtils {
   //       result[`${ index } - ${ file.name }`] = extension.toLowerCase().trim();
 
   //       if (extension.toLowerCase().trim() === FileUtils.ZIP_FILE_TYPE) {
-  //         // let j: JSZip = typeof ( JSZip as any).default === 'function' ? new ( JSZip as any).default() : new JSZip();
-  //          const jSZip: JSZip = new JSZip();
+  //         let j: JSZip = typeof ( JSZip as any).default === 'function' ? new ( JSZip as any).default() : new JSZip();
+  //          //const jSZip: JSZip = new JSZip();
   // // typeof ( JSZip as any).default === 'function' ? new ( JSZip as any).default() : new JSZip();
-  //         const observable$: Observable<JSZip> = from(jSZip.loadAsync(file));
+  //         const observable$: Observable<JSZip> = from(JSZip.loadAsync(file));
 
   //         const subscription = observable$.subscribe(x => {
   //           x.forEach(function(relativePath, zipEntry) {  // 2) print entries
@@ -48,10 +52,10 @@ export class FileUtils {
 
     const numFilesOk: boolean = Array.from(files).length <= maxAllowedFiles;
 
-    result[FileUtils.UPLOAD_NUMBER_OF_FILES_VALID_KEY] = numFilesOk;
-    result[FileUtils.UPLOAD_FILE_TYPES_VALID_KEY] = true;
+    result[this.UPLOAD_NUMBER_OF_FILES_VALID_KEY] = numFilesOk;
+    result[this.UPLOAD_FILE_TYPES_VALID_KEY] = true;
 
-    result[FileUtils.UPLOAD_VALID_KEY] = numFilesOk;
+    result[this.UPLOAD_VALID_KEY] = numFilesOk;
 
     return result;
   }

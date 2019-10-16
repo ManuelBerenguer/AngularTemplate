@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { BasePresentation, UsersRepository } from 'shared-lib';
+import { BasePresentation, UsersRepository, User } from 'shared-lib';
 import { Stats } from '../models/stats.model';
 import { PushRepository } from '../repositories/push.repository';
 import * as storeLiteStore from '../store';
@@ -12,7 +12,9 @@ import * as StatsActions from '../store/actions/stats.actions';
 export class StoreLitePresentation extends BasePresentation implements OnDestroy {
 
   public stats$ = this.storeLiteState$.select(storeLiteStore.selectStats);
-  private subscritions: Subscription = new Subscription();
+  private subscriptions: Subscription = new Subscription();
+
+  public loggedUser: User;
 
   constructor(
     protected usersRepository: UsersRepository,
@@ -21,11 +23,26 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     ) {
     super(usersRepository);
 
+    // Get logged user
+    this.subscribeToUser();
+
     this.loadStats();
 
     // Listen for Pushes
     this.listenPushStats();
     this.listenPushGetStatsSignal();
+  }
+
+  private subscribeToUser() {
+
+    this.subscriptions.add(
+      this.loggedUser$.subscribe(
+        (user: User) => {
+          this.loggedUser = user;
+        }
+      )
+    );
+
   }
 
   /**
@@ -39,7 +56,7 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
    * Push stats
    */
   private listenPushStats(): void {
-    this.subscritions.add(
+    this.subscriptions.add(
       this.serverPushRespository.pushStats()
       .subscribe(
         (statsObj: Stats) => {
@@ -55,7 +72,7 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
    * Push get stats signal
    */
   private listenPushGetStatsSignal(): void {
-    this.subscritions.add(
+    this.subscriptions.add(
       this.serverPushRespository.pushGetStatsSignal()
       .subscribe(
         (signalData: string) => {
@@ -76,6 +93,6 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     // TODO confirm that this works or find a better place to clear the subapplication store (logout, route leave)
     this.storeLiteState$.dispatch(StatsActions.clearStatsAction());
 
-    this.subscritions.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 }

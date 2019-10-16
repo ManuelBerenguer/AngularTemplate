@@ -1,6 +1,8 @@
 import { Component, OnInit, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 import { BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { FileUtils, IDictionary, UsersRepository } from 'shared-lib';
+import { StoreLitePresentation } from '../../core/services/store-lite.presentation';
 
 @Component({
   selector: 'app-file-upload',
@@ -14,13 +16,16 @@ export class FileUploadComponent implements OnInit {
 
   fileUploadForm: FormGroup;
 
-  constructor(private modalService: BsModalService, private fb: FormBuilder) { }
+  constructor(private modalService: BsModalService, private fb: FormBuilder, private fileUtilsService: FileUtils,
+    private userRepository: UsersRepository, public storeLitePresentation: StoreLitePresentation) { }
 
   ngOnInit() {
     this.fileUploadForm = this.fb.group({
       linked: ['', [Validators.required]],
       assets: [null, [Validators.required]]
     });
+
+
   }
 
   get myLinkedControl() {
@@ -39,7 +44,15 @@ export class FileUploadComponent implements OnInit {
   }
 
   handleAssets(files: FileList) {
+    this.fileuploadModalRef.hide();
 
+    let filesCheck: IDictionary<any>;
+    filesCheck = this.fileUtilsService.isUploadValid(files, this.storeLitePresentation.loggedUser.maxAssetsPerUpload, null);
+
+    if(filesCheck[this.fileUtilsService.UPLOAD_VALID_KEY])
+      alert("Ok");
+    else
+      alert("Error");
   }
 
   submitFileUploadForm() {
