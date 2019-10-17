@@ -31,7 +31,7 @@ export class FileUtilsService {
 
   public areExtensionsAllowed(fileNames: string[], allowedExtensions: string[]): boolean {
     if (fileNames && fileNames.length > 0 && allowedExtensions && allowedExtensions.length > 0) {
-      const allowedExtensionsClean = allowedExtensions.filter(ext => ext);
+      const allowedExtensionsClean = allowedExtensions.filter(ext => ext && ext.trim() !== '');
       for (const fileName of fileNames) {
         if (!fileName || !allowedExtensionsClean.some(ext1 => ext1.trim().toLowerCase() === this.getExtension(fileName))) {
           return false;
