@@ -8,10 +8,7 @@ import { resolve } from 'url';
 })
 export class FileUtils {
 
-  public ZIP_FILE_TYPE = 'zip';
-  public UPLOAD_VALID_KEY = 'isValid';
-  public UPLOAD_NUMBER_OF_FILES_VALID_KEY = 'isNumberOfFilesValid';
-  public UPLOAD_FILE_TYPES_VALID_KEY = 'isFileTypesValid';
+
 
   constructor() {}
 
@@ -98,11 +95,11 @@ export class FileUtils {
   //   return result;
   // }
 
-  private getExtension(file: File): string {
+  public getExtension(file: File): string {
     return (file && file.name && file.name.indexOf('.') > 0 ? file.name.split('.').pop() : '').trim().toLowerCase();
   }
 
-  public async unZip(zipFile: File): Promise<string[]> {
+  public async getZipFileNames(zipFile: File): Promise<string[]> {
 
     const result: string[] = [];
 
@@ -118,5 +115,7 @@ export class FileUtils {
 
     return result;
   }
+
+
 
 }
