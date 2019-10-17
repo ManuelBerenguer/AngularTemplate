@@ -53,9 +53,9 @@ export class FileUtils {
     const numFilesOk: boolean = Array.from(files).length <= maxAllowedFiles;
 
     result[this.UPLOAD_NUMBER_OF_FILES_VALID_KEY] = numFilesOk;
-    result[this.UPLOAD_FILE_TYPES_VALID_KEY] = true;
+    result[this.UPLOAD_FILE_TYPES_VALID_KEY] = false;
 
-    result[this.UPLOAD_VALID_KEY] = numFilesOk;
+    result[this.UPLOAD_VALID_KEY] = false;
 
     return result;
   }

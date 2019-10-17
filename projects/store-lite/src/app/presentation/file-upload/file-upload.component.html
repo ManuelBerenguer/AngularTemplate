@@ -9,14 +9,14 @@
     </div>
     <br />
     <div>
-      <button type="button" class="btn btn-primary storeBtn btnUpload" (click)="openModal(fileUploadModal)">
+      <button #uploadBtn type="button" class="btn btn-primary storeBtn btnUpload" (click)="openModal(fileUploadModal)">
         &nbsp;Upload
       </button>
     </div>
   </div>
 </div>
 
-<ng-template #fileUploadModal class="modal-dialog-centered">
+<ng-template #fileUploadModal >
     <div class="modal-header">
         <h1 class="modal-title" id="fileUploadModalTitle">Upload Files</h1>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="fileuploadModalRef.hide()">
@@ -75,11 +75,27 @@
         </form>
 </ng-template>
 
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="fileUploadModalTitle" aria-hidden="true">
+<ng-template #maxFilesErrorModal>
+  <div class="modal-body text-center">
+    <h1>Your file contains more than 5 assets.</h1>
+    <p>Please adjust your file to only 5. <br />
+    Alternatively, to upgrade to Pro and unlimited uploads <br /> please contact your Account manager.</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary mr-auto" (click)="maxFilesErrorModalRef.hide()">Back to Store</button>
+    <button type="button" class="btn btn-primary" (click)="maxFilesErrorModalRef.hide(); uploadBtn.click();">Select files again</button>
+  </div>
+</ng-template>
 
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-
-        </div>
-      </div>
-</div>
+<ng-template #extensionsErrorModal>
+  <div class="modal-body text-center">
+    <h1>Your file contains extensions not allowed.</h1>
+    <p>Please adjust your file to contain only: <br />
+      <span class="text-primary" *ngFor="let extension of storeLitePresentation.loggedUser.allowedAssetsFilesTypesList">{{extension}} </span>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary mr-auto" (click)="extensionsErrorModalRef.hide()">Back to Store</button>
+    <button type="button" class="btn btn-primary" (click)="extensionsErrorModalRef.hide(); uploadBtn.click();">Select files again</button>
+  </div>
+</ng-template>

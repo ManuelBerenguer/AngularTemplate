@@ -1,5 +1,5 @@
-import { Component, OnInit, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
-import { BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import { Component, OnInit, TemplateRef, ChangeDetectionStrategy, ViewChild, ElementRef } from '@angular/core';
+import { BsModalRef, BsModalService, ModalDirective} from 'ngx-bootstrap/modal';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { FileUtils, IDictionary, UsersRepository } from 'shared-lib';
 import { StoreLitePresentation } from '../../core/services/store-lite.presentation';
@@ -13,19 +13,23 @@ import { StoreLitePresentation } from '../../core/services/store-lite.presentati
 export class FileUploadComponent implements OnInit {
 
   fileuploadModalRef: BsModalRef;
+  maxFilesErrorModalRef: BsModalRef;
+  extensionsErrorModalRef: BsModalRef;
 
   fileUploadForm: FormGroup;
 
+  @ViewChild(ModalDirective, { static: false }) fileUploadModal: ModalDirective;
+  @ViewChild('maxFilesErrorModal', {static: false}) maxFilesErrorModal: BsModalRef;
+  @ViewChild('extensionsErrorModal', {static: false}) extensionsErrorModal: BsModalRef;
+
   constructor(private modalService: BsModalService, private fb: FormBuilder, private fileUtilsService: FileUtils,
-    private userRepository: UsersRepository, public storeLitePresentation: StoreLitePresentation) { }
+    public storeLitePresentation: StoreLitePresentation) { }
 
   ngOnInit() {
     this.fileUploadForm = this.fb.group({
       linked: ['', [Validators.required]],
-      assets: [null, [Validators.required]]
+      assets: ['', [Validators.required]]
     });
-
-
   }
 
   get myLinkedControl() {
@@ -47,12 +51,36 @@ export class FileUploadComponent implements OnInit {
     this.fileuploadModalRef.hide();
 
     let filesCheck: IDictionary<any>;
-    filesCheck = this.fileUtilsService.isUploadValid(files, this.storeLitePresentation.loggedUser.maxAssetsPerUpload, null);
+    filesCheck = this.fileUtilsService.isUploadValid(files, this.storeLitePresentation.loggedUser.maxAssetsPerUpload,
+      this.storeLitePresentation.loggedUser.allowedAssetsFilesTypesList);
 
     if(filesCheck[this.fileUtilsService.UPLOAD_VALID_KEY])
       alert("Ok");
-    else
-      alert("Error");
+    else{
+      if(!filesCheck[this.fileUtilsService.UPLOAD_NUMBER_OF_FILES_VALID_KEY]) {
+        this.maxFilesErrorModalRef = this.modalService.show(
+          this.maxFilesErrorModal,
+          Object.assign({}, { class: 'modal-dialog-centered' }) // Vertically centered adding the correspondent bootstrap class
+        );
+      }
+      else {
+        if(!filesCheck[this.fileUtilsService.UPLOAD_FILE_TYPES_VALID_KEY]) {
+          this.extensionsErrorModalRef = this.modalService.show(
+            this.extensionsErrorModal,
+            Object.assign({}, { class: 'modal-dialog-centered' }) // Vertically centered adding the correspondent bootstrap class
+          );
+        }
+      }
+    }
+  }
+
+  selectFiles(template: TemplateRef<any>) {
+    this.maxFilesErrorModalRef.hide();
+
+    this.fileUploadModal.show();
+    //this.openModal(template);
+
+
   }
 
   submitFileUploadForm() {
