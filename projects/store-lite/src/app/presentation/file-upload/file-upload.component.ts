@@ -79,6 +79,9 @@ export class FileUploadComponent implements OnInit {
     // If we can proceed with the upload
     if (filesCheck[this.storeLitePresentation.UPLOAD_VALID_KEY]) {
       this.showProgressBar = true;
+
+      this.storeLitePresentation.uploadAssets(files);
+
     } else {
       // If there is an error with the number of files
       if (!filesCheck[this.storeLitePresentation.UPLOAD_NUMBER_OF_FILES_VALID_KEY]) {

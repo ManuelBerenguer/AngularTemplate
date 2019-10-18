@@ -1,12 +1,13 @@
 import { Injectable, OnDestroy, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { BasePresentation, UsersRepository, IDictionary, User, FileUtilsService } from 'shared-lib';
 import { Stats } from '../models/stats.model';
 import { PushRepository } from '../repositories/push.repository';
 import * as storeLiteStore from '../store';
 import { StoreLiteState } from '../store';
 import * as StatsActions from '../store/actions/stats.actions';
+import { AssetsRepository } from '../repositories/assets.repository';
 
 @Injectable()
 export class StoreLitePresentation extends BasePresentation implements OnDestroy {
@@ -25,7 +26,8 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     protected usersRepository: UsersRepository,
     public storeLiteState$: Store<StoreLiteState>,
     protected serverPushRespository: PushRepository,
-    protected fileUtilsService: FileUtilsService
+    protected fileUtilsService: FileUtilsService,
+    protected assetsRepository: AssetsRepository
     ) {
     super(usersRepository);
 
@@ -151,6 +153,13 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     }
 
     return result;
+  }
+
+  /**
+   * Upload Assets
+   */
+  public uploadAssets(files: FileList): Observable<any> {
+    return this.assetsRepository.uploadAssets(files);
   }
 
   /*
