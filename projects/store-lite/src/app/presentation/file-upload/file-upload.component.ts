@@ -3,6 +3,7 @@ import { BsModalRef, BsModalService, ModalDirective} from 'ngx-bootstrap/modal';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { StoreLitePresentation } from '../../core/services/store-lite.presentation';
 import { IDictionary } from 'shared-lib';
+import { ErrorModalComponent } from './error-modal/error-modal.component';
 
 @Component({
   selector: 'app-file-upload',
@@ -100,7 +101,7 @@ export class FileUploadComponent implements OnInit {
   }
 
   private showFileTypesModalError() {
-    this.extensionsErrorModalRef = this.showModalCentered(this.extensionsErrorModal);
+    this.extensionsErrorModalRef = this.showModalCentered(/*this.extensionsErrorModal*/ErrorModalComponent);
   }
 
   private showModalCentered(modal: any) {

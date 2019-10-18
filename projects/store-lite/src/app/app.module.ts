@@ -32,6 +32,7 @@ import { FileUploadComponent } from './presentation/file-upload/file-upload.comp
 import { BsModalService, ModalModule } from 'ngx-bootstrap';
 import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ErrorModalComponent } from './presentation/file-upload/error-modal/error-modal.component';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     StorageComponent,
     BasicBarGaugeComponent,
     RadioButtonImageTextComponent,
-    FileUploadComponent
+    FileUploadComponent,
+    ErrorModalComponent
   ],
   imports: [
     BrowserModule,
@@ -64,6 +66,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule
   ],
+  entryComponents: [ErrorModalComponent],
   providers: [
     // Repositories
     {provide: UsersRepository, useClass: UsersMockRepository},
