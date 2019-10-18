@@ -104,10 +104,11 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     // We get the files as an array
     const filesArr = Array.from(files);
     // We find out if the number of files taking into account zip files fits the restriction
-    let numberOfFilesCheckResult = await this.checkNumberOfFiles(filesArr, this.loggedUser.maxAssetsPerUpload);
+    const numberOfFilesCheckResult = await this.checkNumberOfFiles(filesArr, this.loggedUser.maxAssetsPerUpload);
     result[this.UPLOAD_NUMBER_OF_FILES_VALID_KEY] = numberOfFilesCheckResult[0];
     // We check if the files fit the types allowed
-    result[this.UPLOAD_FILE_TYPES_VALID_KEY] = this.fileUtilsService.areExtensionsAllowed(numberOfFilesCheckResult[1], this.loggedUser.allowedAssetsFilesTypesList);
+    result[this.UPLOAD_FILE_TYPES_VALID_KEY] = this.fileUtilsService.areExtensionsAllowed(numberOfFilesCheckResult[1],
+      this.loggedUser.allowedAssetsFilesTypesList);
 
     result[this.UPLOAD_VALID_KEY] = (
       result[this.UPLOAD_NUMBER_OF_FILES_VALID_KEY] &&
@@ -122,7 +123,8 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
    * @param filesArr Array of files
    * @param maxNumberOfFiles Maximum number of files into the array
    *
-   * @returns True if the total number of files into the array considering the number of files inside zip files is less or equal than maxNumberOfFiles.
+   * @returns True if the total number of files into the array considering the number of files inside zip files
+   * is less or equal than maxNumberOfFiles.
    * False otherwise.
    */
   private async checkNumberOfFiles(filesArr: Array<File>, maxNumberOfFiles: number): Promise<Array<any>> {
@@ -132,20 +134,18 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     let numberOfFiles = 0;
     result[0] = true;
     result[1] = [];
-    for(let i=0; i<filesArr.length; i++) {
-      let file = filesArr[i];
-      if(this.fileUtilsService.getExtension(file) == this.ZIP_FILE_TYPE) {
-        let unzipResult = await this.fileUtilsService.getZipFileNames(file);
+    for (const file of filesArr) {
+      if (this.fileUtilsService.getExtension(file) === this.ZIP_FILE_TYPE) {
+        const unzipResult = await this.fileUtilsService.getZipFileNames(file);
         numberOfFiles += unzipResult.length;
         result[1].push(...unzipResult);
-      }
-      else {
+      } else {
         result[1].push(file.name);
         numberOfFiles++;
       }
 
-      if(numberOfFiles > maxNumberOfFiles){
-        result[0] = false
+      if (numberOfFiles > maxNumberOfFiles) {
+        result[0] = false;
         break;
       }
     }
