@@ -22,10 +22,12 @@ export class FileUploadComponent implements OnInit {
   @ViewChild('maxFilesErrorModal', {static: false}) maxFilesErrorModal: BsModalRef;
   @ViewChild('extensionsErrorModal', {static: false}) extensionsErrorModal: BsModalRef;
 
+  public showProgressBar = false;
+
   constructor(
     private modalService: BsModalService,
     private fb: FormBuilder,
-    public storeLitePresentation: StoreLitePresentation) { }
+    public storeLitePresentation: StoreLitePresentation) {}
 
   ngOnInit() {
     // We init the Reactive Form
@@ -76,7 +78,7 @@ export class FileUploadComponent implements OnInit {
 
     // If we can proceed with the upload
     if (filesCheck[this.storeLitePresentation.UPLOAD_VALID_KEY]) {
-      alert('Ok');
+      this.showProgressBar = true;
     } else {
       // If there is an error with the number of files
       if (!filesCheck[this.storeLitePresentation.UPLOAD_NUMBER_OF_FILES_VALID_KEY]) {

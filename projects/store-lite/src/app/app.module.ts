@@ -30,6 +30,7 @@ import { StorageComponent } from './presentation/storage/storage.component';
 import { RadioButtonImageTextComponent } from './presentation/shared/radio-button-image-text/radio-button-image-text.component';
 import { FileUploadComponent } from './presentation/file-upload/file-upload.component';
 import { BsModalService, ModalModule } from 'ngx-bootstrap';
+import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 
@@ -59,6 +60,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
     DxBarGaugeModule,
     ModalModule.forRoot(),
+    ProgressbarModule.forRoot(),
     FormsModule,
     ReactiveFormsModule
   ],
