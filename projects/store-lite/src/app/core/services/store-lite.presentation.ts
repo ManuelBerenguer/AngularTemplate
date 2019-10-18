@@ -1,18 +1,17 @@
 import { Injectable, OnDestroy, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { BasePresentation, UsersRepository, IDictionary, User } from 'shared-lib';
+import { BasePresentation, UsersRepository, IDictionary, User, FileUtilsService } from 'shared-lib';
 import { Stats } from '../models/stats.model';
 import { PushRepository } from '../repositories/push.repository';
 import * as storeLiteStore from '../store';
 import { StoreLiteState } from '../store';
 import * as StatsActions from '../store/actions/stats.actions';
-import { FileUtils } from 'shared-lib';
 
 @Injectable()
 export class StoreLitePresentation extends BasePresentation implements OnDestroy {
 
-  public ZIP_FILE_TYPE = 'zip';
+  public readonly ZIP_FILE_TYPE = 'zip';
   public UPLOAD_VALID_KEY = 'isValid';
   public UPLOAD_NUMBER_OF_FILES_VALID_KEY = 'isNumberOfFilesValid';
   public UPLOAD_FILE_TYPES_VALID_KEY = 'isFileTypesValid';
@@ -26,7 +25,7 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     protected usersRepository: UsersRepository,
     public storeLiteState$: Store<StoreLiteState>,
     protected serverPushRespository: PushRepository,
-    protected fileUtilsService: FileUtils
+    protected fileUtilsService: FileUtilsService
     ) {
     super(usersRepository);
 
@@ -91,6 +90,69 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
 
   }
 
+  /**
+   *
+   * @param files HTML input file list
+   *
+   * @return IDictionary specifying if we can upload or not these files and why
+   */
+  public async isUploadValid(files: FileList): Promise<IDictionary<any>> {
+
+    // Result Dictionary
+    const result: IDictionary<any> = {};
+
+    // We get the files as an array
+    const filesArr = Array.from(files);
+    // We find out if the number of files taking into account zip files fits the restriction
+    let numberOfFilesCheckResult = await this.checkNumberOfFiles(filesArr, this.loggedUser.maxAssetsPerUpload);
+    result[this.UPLOAD_NUMBER_OF_FILES_VALID_KEY] = numberOfFilesCheckResult[0];
+    // We check if the files fit the types allowed
+    result[this.UPLOAD_FILE_TYPES_VALID_KEY] = this.fileUtilsService.areExtensionsAllowed(numberOfFilesCheckResult[1], this.loggedUser.allowedAssetsFilesTypesList);
+
+    result[this.UPLOAD_VALID_KEY] = (
+      result[this.UPLOAD_NUMBER_OF_FILES_VALID_KEY] &&
+      result[this.UPLOAD_FILE_TYPES_VALID_KEY]
+    );
+
+    return result;
+  }
+
+  /**
+   *
+   * @param filesArr Array of files
+   * @param maxNumberOfFiles Maximum number of files into the array
+   *
+   * @returns True if the total number of files into the array considering the number of files inside zip files is less or equal than maxNumberOfFiles.
+   * False otherwise.
+   */
+  private async checkNumberOfFiles(filesArr: Array<File>, maxNumberOfFiles: number): Promise<Array<any>> {
+    // Result Dictionary
+    const result: Array<any> = [];
+
+    let numberOfFiles = 0;
+    result[0] = true;
+    result[1] = [];
+    for(let i=0; i<filesArr.length; i++) {
+      let file = filesArr[i];
+      if(this.fileUtilsService.getExtension(file) == this.ZIP_FILE_TYPE) {
+        let unzipResult = await this.fileUtilsService.getZipFileNames(file);
+        numberOfFiles += unzipResult.length;
+        result[1].push(...unzipResult);
+      }
+      else {
+        result[1].push(file.name);
+        numberOfFiles++;
+      }
+
+      if(numberOfFiles > maxNumberOfFiles){
+        result[0] = false
+        break;
+      }
+    }
+
+    return result;
+  }
+
   /*
    * When the service is destroyed we unsubscribe to all ?????????
    */
@@ -101,39 +163,5 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     this.storeLiteState$.dispatch(StatsActions.clearStatsAction());
 
     this.subscriptions.unsubscribe();
-  }
-
-   async isUploadValid(files: FileList): Promise<IDictionary<any>> {
-    const result: IDictionary<any> = {};
-
-    result[this.UPLOAD_FILE_TYPES_VALID_KEY] = false;
-
-    const filesArr = Array.from(files);
-    let numFilesOk: boolean = filesArr && filesArr.length <= this.loggedUser.maxAssetsPerUpload;
-
-    if(numFilesOk){
-      let numberOfFiles = 0;
-
-      for(let i=0; i<filesArr.length; i++) {
-        let file = filesArr[i];
-        if(this.fileUtilsService.getExtension(file) == this.ZIP_FILE_TYPE) {
-          let unzipResult = await this.fileUtilsService.getZipFileNames(file);
-          numberOfFiles += unzipResult.length;
-        }
-        else {
-          numberOfFiles++;
-        }
-      }
-
-      numFilesOk = numberOfFiles <= this.loggedUser.maxAssetsPerUpload;
-
-
-    }
-
-    result[this.UPLOAD_NUMBER_OF_FILES_VALID_KEY] = numFilesOk;
-
-    result[this.UPLOAD_VALID_KEY] = numFilesOk;
-
-    return result;
   }
 }

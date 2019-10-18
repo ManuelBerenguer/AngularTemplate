@@ -9,7 +9,7 @@
     </div>
     <br />
     <div>
-      <button #uploadBtn type="button" class="btn btn-primary storeBtn btnUpload" (click)="openModal(fileUploadModal)">
+      <button #uploadBtn type="button" class="btn btn-primary storeBtn btnUpload" (click)="openFileUploadModal(fileUploadModal)">
         &nbsp;Upload
       </button>
     </div>
@@ -19,11 +19,11 @@
 <ng-template #fileUploadModal >
     <div class="modal-header">
         <h1 class="modal-title" id="fileUploadModalTitle">Upload Files</h1>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="fileuploadModalRef.hide()">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="fileUploadModalRef.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form [formGroup]="fileUploadForm" (ngSubmit)="submitFileUploadForm()">
+      <form [formGroup]="fileUploadForm">
           <div class="modal-body" style="display: flex">
             <div style="width: 100%;">Please select how these files will be linked</div>
             <div style="width: 100%; display: flex; justify-content: flex-end">
@@ -73,7 +73,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary mr-auto" (click)="fileuploadModalRef.hide()">Cancel Upload</button>
+            <button type="button" class="btn btn-secondary mr-auto" (click)="fileUploadModalRef.hide()">Cancel Upload</button>
             <button type="button" class="btn btn-primary" (click)="assets.click()" [disabled]="myLinkedControl.invalid">Continue Upload</button>
           </div>
         </form>

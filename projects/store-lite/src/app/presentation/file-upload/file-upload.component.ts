@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef, ChangeDetectionStrategy, ViewChild, Ele
 import { BsModalRef, BsModalService, ModalDirective} from 'ngx-bootstrap/modal';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { StoreLitePresentation } from '../../core/services/store-lite.presentation';
-import { FileUtils, IDictionary } from 'shared-lib';
+import { IDictionary } from 'shared-lib';
 
 @Component({
   selector: 'app-file-upload',
@@ -12,7 +12,7 @@ import { FileUtils, IDictionary } from 'shared-lib';
 })
 export class FileUploadComponent implements OnInit {
 
-  fileuploadModalRef: BsModalRef;
+  fileUploadModalRef: BsModalRef;
   maxFilesErrorModalRef: BsModalRef;
   extensionsErrorModalRef: BsModalRef;
 
@@ -26,64 +26,80 @@ export class FileUploadComponent implements OnInit {
     public storeLitePresentation: StoreLitePresentation) { }
 
   ngOnInit() {
+    // We init the Reactive Form
     this.fileUploadForm = this.fb.group({
-      linked: ['', [Validators.required]],
-      assets: ['', [Validators.required]]
+      linked: ['', [Validators.required]], // radio button for linked control
+      assets: ['', [Validators.required]] // file input to select files from disk
     });
   }
 
+  /**
+   * getter to acces the linked control
+   */
   get myLinkedControl() {
     return this.fileUploadForm.get('linked');
   }
 
+  /**
+   * getter to acces the file control
+   */
   get myFilesControl() {
     return this.fileUploadForm.get('assets');
   }
 
-  openModal(template: TemplateRef<any>) {
-    this.fileuploadModalRef = this.modalService.show(
-      template,
-      Object.assign({}, { class: 'modal-dialog-centered' }) // Vertically centered adding the correspondent bootstrap class
-      );
+  /**
+   *
+   * @param template the modal window template
+   *
+   * @description Opens the file upload modal window based on the template provided
+   */
+  openFileUploadModal(template: TemplateRef<any>) {
+    this.fileUploadModalRef = this.showModalCentered(template);
   }
 
+  /**
+   *
+   * @param files HTML input file list
+   *
+   * @description Handles how we should proceed once the user has selected some files from the disk to be uploaded.L0
+   * First, we check if they fit the restrictions and if they do we upload them to the server. If they don't fit the requirements we show the correspondent error.
+   */
   async handleAssets(files: FileList) {
-    this.fileuploadModalRef.hide();
 
-    let filesCheck: IDictionary<any>;
-    filesCheck = await this.storeLitePresentation.isUploadValid(files);
+    // We hide the upload file modal window
+    this.fileUploadModalRef.hide();
+    // We check if the files selected fit the requirements to be uploaded
+    let filesCheck: IDictionary<any> = await this.storeLitePresentation.isUploadValid(files);
 
+    // If we can proceed with the upload
     if(filesCheck[this.storeLitePresentation.UPLOAD_VALID_KEY])
       alert("Ok");
     else{
+      // If there is an error with the number of files
       if(!filesCheck[this.storeLitePresentation.UPLOAD_NUMBER_OF_FILES_VALID_KEY]) {
-        this.maxFilesErrorModalRef = this.modalService.show(
-          this.maxFilesErrorModal,
-          Object.assign({}, { class: 'modal-dialog-centered' }) // Vertically centered adding the correspondent bootstrap class
-        );
+        this.showNumberOfFilesModalError();
       }
       else {
+        // If there is an error with the extensions allowed
         if(!filesCheck[this.storeLitePresentation.UPLOAD_FILE_TYPES_VALID_KEY]) {
-          this.extensionsErrorModalRef = this.modalService.show(
-            this.extensionsErrorModal,
-            Object.assign({}, { class: 'modal-dialog-centered' }) // Vertically centered adding the correspondent bootstrap class
-          );
+          this.showFileTypesModalError();
         }
       }
     }
   }
 
-  selectFiles(template: TemplateRef<any>) {
-    this.maxFilesErrorModalRef.hide();
-
-    this.fileUploadModal.show();
-    //this.openModal(template);
-
-
+  private showNumberOfFilesModalError() {
+    this.maxFilesErrorModalRef = this.showModalCentered(this.maxFilesErrorModal);
   }
 
-  submitFileUploadForm() {
-    console.log(this.myLinkedControl.value);
-    return false;
+  private showFileTypesModalError() {
+    this.extensionsErrorModalRef = this.showModalCentered(this.extensionsErrorModal);
+  }
+
+  private showModalCentered(modal: any) {
+    return this.modalService.show(
+      modal,
+      Object.assign({}, { class: 'modal-dialog-centered' }) // Vertically centered adding the correspondent bootstrap class
+    );
   }
 }
