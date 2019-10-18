@@ -12,9 +12,9 @@ import * as StatsActions from '../store/actions/stats.actions';
 export class StoreLitePresentation extends BasePresentation implements OnDestroy {
 
   public readonly ZIP_FILE_TYPE = 'zip';
-  public UPLOAD_VALID_KEY = 'isValid';
-  public UPLOAD_NUMBER_OF_FILES_VALID_KEY = 'isNumberOfFilesValid';
-  public UPLOAD_FILE_TYPES_VALID_KEY = 'isFileTypesValid';
+  public readonly UPLOAD_VALID_KEY = 'isValid';
+  public readonly UPLOAD_NUMBER_OF_FILES_VALID_KEY = 'isNumberOfFilesValid';
+  public readonly UPLOAD_FILE_TYPES_VALID_KEY = 'isFileTypesValid';
 
   public stats$ = this.storeLiteState$.select(storeLiteStore.selectStats);
   private subscriptions: Subscription = new Subscription();
