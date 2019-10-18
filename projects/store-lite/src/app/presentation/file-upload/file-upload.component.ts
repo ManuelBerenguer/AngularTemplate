@@ -22,7 +22,9 @@ export class FileUploadComponent implements OnInit {
   @ViewChild('maxFilesErrorModal', {static: false}) maxFilesErrorModal: BsModalRef;
   @ViewChild('extensionsErrorModal', {static: false}) extensionsErrorModal: BsModalRef;
 
-  constructor(private modalService: BsModalService, private fb: FormBuilder,
+  constructor(
+    private modalService: BsModalService,
+    private fb: FormBuilder,
     public storeLitePresentation: StoreLitePresentation) { }
 
   ngOnInit() {
@@ -62,26 +64,26 @@ export class FileUploadComponent implements OnInit {
    * @param files HTML input file list
    *
    * @description Handles how we should proceed once the user has selected some files from the disk to be uploaded.L0
-   * First, we check if they fit the restrictions and if they do we upload them to the server. If they don't fit the requirements we show the correspondent error.
+   * First, we check if they fit the restrictions and if they do we upload them to the server.
+   * If they don't fit the requirements we show the correspondent error.
    */
   async handleAssets(files: FileList) {
 
     // We hide the upload file modal window
     this.fileUploadModalRef.hide();
     // We check if the files selected fit the requirements to be uploaded
-    let filesCheck: IDictionary<any> = await this.storeLitePresentation.isUploadValid(files);
+    const filesCheck: IDictionary<any> = await this.storeLitePresentation.isUploadValid(files);
 
     // If we can proceed with the upload
-    if(filesCheck[this.storeLitePresentation.UPLOAD_VALID_KEY])
-      alert("Ok");
-    else{
+    if (filesCheck[this.storeLitePresentation.UPLOAD_VALID_KEY]) {
+      alert('Ok');
+    } else {
       // If there is an error with the number of files
-      if(!filesCheck[this.storeLitePresentation.UPLOAD_NUMBER_OF_FILES_VALID_KEY]) {
+      if (!filesCheck[this.storeLitePresentation.UPLOAD_NUMBER_OF_FILES_VALID_KEY]) {
         this.showNumberOfFilesModalError();
-      }
-      else {
+      } else {
         // If there is an error with the extensions allowed
-        if(!filesCheck[this.storeLitePresentation.UPLOAD_FILE_TYPES_VALID_KEY]) {
+        if (!filesCheck[this.storeLitePresentation.UPLOAD_FILE_TYPES_VALID_KEY]) {
           this.showFileTypesModalError();
         }
       }
