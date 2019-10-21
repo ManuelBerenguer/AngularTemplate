@@ -26,6 +26,7 @@ export class FileUploadComponent implements OnInit {
   @ViewChild('uploadBtn', {static: false}) uploadBtn: ElementRef<HTMLElement>;
 
   public showProgressBar = false;
+  public data: any;
 
   constructor(
     private modalService: BsModalService,
@@ -33,6 +34,23 @@ export class FileUploadComponent implements OnInit {
     public storeLitePresentation: StoreLitePresentation) {}
 
   ngOnInit() {
+    // We init the input data for the nested generic reactive form for radio buttons
+    this.data = {
+      name: 'linked',
+      selectors: ['partNumber', 'application'],
+      controls: [{
+        id: 'partNumberBtn',
+        value: 'partNumber',
+        text: 'By Part Number',
+        iconUrl: './assets/icons/iconVehicles.svg#iconVehicles'
+      }, {
+        id: 'applicationBtn',
+        value: 'application',
+        text: 'By Catalogue Application',
+        iconUrl: './assets/icons/iconCatalogue.svg#iconCatalogue'
+      }]
+    };
+
     // We init the Reactive Form
     this.fileUploadForm = this.fb.group({
       linked: ['', [Validators.required]], // radio button for linked control

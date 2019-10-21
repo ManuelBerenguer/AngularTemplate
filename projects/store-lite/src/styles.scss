@@ -71,21 +71,6 @@ h3 {
 .card-text-secondary {font-weight: bold; font-size: 16px; color: #414042; letter-spacing: 0px;}
 .card-text-tertiary {font-size: 13px; color: #B2B2B2; letter-spacing: 0px;}
 
-// .btnOrange {
-//   background-color: #e46e0c;
-//   color: #fff;
-// }
-
-// .storeBtn {
-//   padding: 8px 7px;
-//   text-decoration: none;
-//   font-weight: bold;
-//   font-size: 13px;
-//   min-width: 60px;
-//   display: inline-block;
-//   border: 0px;
-// }
-
 .btnUpload:before {
   content: url(../../../shared/assets/icons/iconUpload.svg);
   display: inline-block;
@@ -117,4 +102,14 @@ h3 {
 
 .progress-bar {
   border-radius: 0.50rem;
+}
+
+.no-select {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
 }
