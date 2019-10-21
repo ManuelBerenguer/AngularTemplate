@@ -5,6 +5,7 @@ import { StoreLitePresentation } from '../../core/services/store-lite.presentati
 import { IDictionary } from 'shared-lib';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
 import { take } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-file-upload',
@@ -101,7 +102,23 @@ export class FileUploadComponent implements OnInit {
     if (filesCheck[this.storeLitePresentation.UPLOAD_VALID_KEY]) {
       this.showProgressBar = true;
 
-      this.storeLitePresentation.uploadAssets(files);
+      const uploadSubscription: Subscription = this.storeLitePresentation.uploadAssets(files, null).subscribe(progressObj => {
+        if (progressObj.completed) {
+
+          uploadSubscription.unsubscribe();
+
+          if (progressObj.sucess) {
+            this.showNumberOfFilesModalError(); // TODO
+          } else {
+            this.showFileTypesModalError(); // TODO
+          }
+
+        } else {
+          if (progressObj.progress) {
+            console.log(progressObj.progress); // TODO
+          }
+        }
+      });
 
     } else {
       // If there is an error with the number of files
