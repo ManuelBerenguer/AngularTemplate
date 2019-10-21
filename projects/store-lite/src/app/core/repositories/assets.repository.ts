@@ -8,4 +8,5 @@ import { Stats } from '../models/stats.model';
  */
 export abstract class AssetsRepository {
   abstract getStats(): Observable<Stats>;
+  abstract uploadAssets(files: FileList): Observable<any>;
 }
