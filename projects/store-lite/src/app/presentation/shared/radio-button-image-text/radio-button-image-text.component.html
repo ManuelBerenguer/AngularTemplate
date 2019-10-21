@@ -1,10 +1,14 @@
-<ng-container>
-  <input type="radio" [id]="id" [name]="name" [value]="value" [attr.formGroup]="parentForm" [attr.formControlName]="name">
-  <label [for]="id" class="radioButtonLabel">
-    <svg class="genericIcon">
-      <use [attr.href]="iconUrl"></use> <!-- SVG elements doesn't have properties, therefore attribute binding is required most of the time -->
-    </svg>
-    <br />
-    {{text}}
-  </label>
-</ng-container>
+<div style="width: 100%; display: flex; justify-content: flex-end">
+
+  <div *ngFor="let control of data.controls">
+    <input type="radio" [id]="control.id" [name]="data.name" [value]="control.value" style="display: none" [checked]="value === control.value">
+    <label [for]="control.id" class="radioButtonLabel no-select" (click)="selectOption(control.value)">
+      <svg class="genericIcon">
+        <use [attr.href]="control.iconUrl"></use> <!-- SVG elements doesn't have properties, therefore attribute binding is required most of the time -->
+      </svg>
+      <br />
+      {{control.text}}
+    </label>
+  </div>
+
+</div>

@@ -33,47 +33,10 @@
       <form [formGroup]="fileUploadForm">
           <div class="modal-body" style="display: flex">
             <div style="width: 100%;">Please select how these files will be linked</div>
-            <div style="width: 100%; display: flex; justify-content: flex-end">
 
-                <div>
-                    <input type="radio" id="partNumberBtn" name="linked" value="partNumber" formControlName="linked" style="display:none" />
-                    <label for="partNumberBtn" class="radioButtonLabel">
-                      <svg class="genericIcon">
-                        <use href="./assets/icons/iconVehicles.svg#iconVehicles"></use>
-                      </svg>
-                      <br />
-                      By Part Number
-                    </label>
-                  </div>
+              <app-radio-button-image-text [data]="data" formControlName="linked"></app-radio-button-image-text>
+              <input #assets type="file" formControlName="assets" (change)="handleAssets(assets.files)" multiple style="display:none"/>
 
-                  <div>
-                      <input type="radio" id="applicationBtn" name="linked" value="application" formControlName="linked" style="display:none" />
-                      <label for="applicationBtn" class="radioButtonLabel">
-                        <svg class="genericIcon">
-                          <use href="./assets/icons/iconCatalogue.svg#iconCatalogue"></use>
-                        </svg>
-                        <br />
-                        By Catalogue Application
-                      </label>
-                    </div>
-
-                  <input #assets type="file" formControlName="assets" (change)="handleAssets(assets.files)" multiple style="display:none"/>
-
-                    <!-- <app-radio-button-image-text [iconUrl]="'./assets/icons/iconVehicles.svg#iconVehicles'"
-                    [id]="'partNumberBtn'"
-                    [value]="'partNumber'"
-                    [name]="'linked'"
-                    [text]="'By Part Number'"
-                    [parentForm]="fileUploadForm"></app-radio-button-image-text>
-
-                    <app-radio-button-image-text [iconUrl]="'./assets/icons/iconCatalogue.svg#iconCatalogue'"
-                    [id]="'applicationBtn'"
-                    [value]="'application'"
-                    [name]="'linked'"
-                    [text]="'By Catalogue Application'"
-                    [parentForm]="fileUploadForm"></app-radio-button-image-text> -->
-
-            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary mr-auto" (click)="fileUploadModalRef.hide()">Cancel Upload</button>
@@ -81,29 +44,3 @@
           </div>
         </form>
 </ng-template>
-
-<ng-template #maxFilesErrorModal>
-  <div class="modal-body text-center">
-    <h1>Your file contains more than 5 assets.</h1>
-    <p>Please adjust your file to only 5. <br />
-    Alternatively, to upgrade to Pro and unlimited uploads <br /> please contact your Account manager.</p>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-secondary mr-auto" (click)="maxFilesErrorModalRef.hide()">Back to Store</button>
-    <button type="button" class="btn btn-primary" (click)="maxFilesErrorModalRef.hide(); uploadBtn.click();">Select files again</button>
-  </div>
-</ng-template>
-
-<!-- <ng-template #extensionsErrorModal>
-    <div class="modal-body text-center">
-      <h1>Your file contains extensions not allowed.</h1>
-      <p>Please adjust your file to contain only: <br />
-        <span class="text-primary" *ngFor="let extension of storeLitePresentation.loggedUser.allowedAssetsFilesTypesList">{{extension}} </span>
-      </p>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary mr-auto" (click)="extensionsErrorModalRef.hide()">Back to Store</button>
-      <button type="button" class="btn btn-primary" (click)="extensionsErrorModalRef.hide(); uploadBtn.click();">Select files again</button>
-    </div>
-  </ng-template> -->
-<!-- <app-error-modal></app-error-modal> -->
