@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { StoreLitePresentation } from '../../../core/services/store-lite.presentation';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-error-modal',
@@ -9,9 +9,22 @@ import { BsModalRef } from 'ngx-bootstrap';
 })
 export class ErrorModalComponent implements OnInit {
 
-  constructor(/*public storeLitePresentation: StoreLitePresentation,*/ public bsModalRef: BsModalRef) { }
+  title: string;
+  body: string;
+  list: string[];
+
+  selectFilesAgainAction$: Subject<any>; // Observable to emit notification to parent
+
+  constructor(public bsModalRef: BsModalRef) { }
 
   ngOnInit() {
+    this.selectFilesAgainAction$ = new Subject();
   }
 
+  public selectFilesAgain() {
+    // We close the modal error window
+    this.bsModalRef.hide();
+    // We emit notification to parent component to show file selection again
+    this.selectFilesAgainAction$.next();
+  }
 }

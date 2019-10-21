@@ -81,29 +81,3 @@
           </div>
         </form>
 </ng-template>
-
-<ng-template #maxFilesErrorModal>
-  <div class="modal-body text-center">
-    <h1>Your file contains more than 5 assets.</h1>
-    <p>Please adjust your file to only 5. <br />
-    Alternatively, to upgrade to Pro and unlimited uploads <br /> please contact your Account manager.</p>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-secondary mr-auto" (click)="maxFilesErrorModalRef.hide()">Back to Store</button>
-    <button type="button" class="btn btn-primary" (click)="maxFilesErrorModalRef.hide(); uploadBtn.click();">Select files again</button>
-  </div>
-</ng-template>
-
-<!-- <ng-template #extensionsErrorModal>
-    <div class="modal-body text-center">
-      <h1>Your file contains extensions not allowed.</h1>
-      <p>Please adjust your file to contain only: <br />
-        <span class="text-primary" *ngFor="let extension of storeLitePresentation.loggedUser.allowedAssetsFilesTypesList">{{extension}} </span>
-      </p>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary mr-auto" (click)="extensionsErrorModalRef.hide()">Back to Store</button>
-      <button type="button" class="btn btn-primary" (click)="extensionsErrorModalRef.hide(); uploadBtn.click();">Select files again</button>
-    </div>
-  </ng-template> -->
-<!-- <app-error-modal></app-error-modal> -->

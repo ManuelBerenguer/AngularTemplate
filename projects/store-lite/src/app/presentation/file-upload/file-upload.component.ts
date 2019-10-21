@@ -4,6 +4,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { StoreLitePresentation } from '../../core/services/store-lite.presentation';
 import { IDictionary } from 'shared-lib';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-file-upload',
@@ -20,8 +21,9 @@ export class FileUploadComponent implements OnInit {
   fileUploadForm: FormGroup;
 
   @ViewChild(ModalDirective, { static: false }) fileUploadModal: ModalDirective;
-  @ViewChild('maxFilesErrorModal', {static: false}) maxFilesErrorModal: BsModalRef;
-  @ViewChild('extensionsErrorModal', {static: false}) extensionsErrorModal: BsModalRef;
+
+  // We get reference to upload button html element
+  @ViewChild('uploadBtn', {static: false}) uploadBtn: ElementRef<HTMLElement>;
 
   public showProgressBar = false;
 
@@ -59,7 +61,7 @@ export class FileUploadComponent implements OnInit {
    * @description Opens the file upload modal window based on the template provided
    */
   openFileUploadModal(template: TemplateRef<any>) {
-    this.fileUploadModalRef = this.showModalCentered(template);
+    this.fileUploadModalRef = this.showModalCentered(template, {});
   }
 
   /**
@@ -94,17 +96,44 @@ export class FileUploadComponent implements OnInit {
   }
 
   private showNumberOfFilesModalError() {
-    this.maxFilesErrorModalRef = this.showModalCentered(this.maxFilesErrorModal);
+
+    const initialState = {
+      title: 'Your file contains more than 5 assets.',
+      body: "Please adjust your file to only 5. <br /> Alternatively, to upgrade to Pro and unlimited uploads <br /> please contact your Account manager.",
+      list: []
+    };
+
+    const ref = this.showModalCentered(ErrorModalComponent, initialState);
+
+    this.handleSelectFilesAgain(ref);
   }
 
   private showFileTypesModalError() {
-    this.extensionsErrorModalRef = this.showModalCentered(/*this.extensionsErrorModal*/ErrorModalComponent);
+
+    const initialState = {
+      title: 'Your file contains extensions not allowed.',
+      body: 'Please adjust your file to contain only: ',
+      list: this.storeLitePresentation.loggedUser.allowedAssetsFilesTypesList
+    };
+
+    const ref = this.showModalCentered(ErrorModalComponent, initialState);
+
+    this.handleSelectFilesAgain(ref);
   }
 
-  private showModalCentered(modal: any) {
+  private handleSelectFilesAgain(ref: BsModalRef) {
+    // Specifying take(1) we are automatically unsubscribing after first value received
+    ref.content.selectFilesAgainAction$.pipe(take(1)).subscribe(
+      () => {
+        this.uploadBtn.nativeElement.click();
+      }
+    );
+  }
+
+  private showModalCentered(modal: any, initialState: any) {
     return this.modalService.show(
       modal,
-      Object.assign({}, { class: 'modal-dialog-centered' }) // Vertically centered adding the correspondent bootstrap class
+      Object.assign({}, { class: 'modal-dialog-centered', initialState }) // Vertically centered adding the correspondent bootstrap class
     );
   }
 }
