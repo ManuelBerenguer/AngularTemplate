@@ -1,7 +1,7 @@
-import { HttpClient, HttpRequest, HttpEventType, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
-import { Observable, Subscription, Subject } from 'rxjs';
-import { map, finalize } from 'rxjs/operators';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { finalize, map, retry } from 'rxjs/operators';
 import { IDictionary, User, UsersRepository } from 'shared-lib';
 import { Stats } from '../../../core/models/stats.model';
 import { AssetsRepository } from '../../../core/repositories/assets.repository';
@@ -13,6 +13,12 @@ export class AssetsMockApiRepository extends AssetsRepository implements OnDestr
   private loggedUser$ = this.usersRepository.getAuthenticatedUser();
   private user: User;
   private subscriptions: Array<Subscription> = [];
+
+  private retry = 5;
+
+  private assetsAPIBaseURL = 'https://localhost:44337/api/Assets/';
+  // 'https://storelitetest.azurewebsites.net/api/Assets/';
+  // 'https://localhost:44337/api/Assets/';
 
   constructor(
     private statsMapper: DictionaryStatsMapper,
@@ -38,10 +44,11 @@ export class AssetsMockApiRepository extends AssetsRepository implements OnDestr
 
   public getStats(): Observable<Stats> {
 
-    const getStatsUrl = `https://localhost:44337/api/Assets/GetStats/${this.user.clientId}`;
+    const getStatsUrl = `${this.assetsAPIBaseURL}GetStats/${this.user.clientId}`;
     const stats$ = this.httpClient.get<IDictionary<any>>(getStatsUrl);
 
     const result = stats$.pipe(
+      retry(this.retry),
       map(data => {
           console.log('AssetsMockApiRepository', data);
           return (this.statsMapper.mapTo(data));
@@ -57,151 +64,112 @@ export class AssetsMockApiRepository extends AssetsRepository implements OnDestr
     return result;
   }
 
-
-  public uploadAssets1(files: FileList): Observable<any> {
-
-    const formData: FormData = new FormData();
-
-    Array.from(files).forEach((file, index) => {
-        formData.append('files', file, file.name);
-      });
+  public uploadAssets(files: FileList, mode: any): Observable<{progress: number, completed: boolean, sucess: boolean}> {
 
 
+    const sub = new Subject<{progress: number, completed: boolean, sucess: boolean}>();
 
-    const uploadURL = `https://localhost:44337/api/Assets/UploadAssets/${this.user.clientId}/${this.user.userId}`;
-
-    return this.httpClient.post<any>(uploadURL, formData, {
-      reportProgress: true,
-      observe: 'events'
-    }).pipe(map((event) => {
-
-      console.log(event);
-      switch (event.type) {
-
-        case HttpEventType.UploadProgress:
-
-          const progress = Math.round(100 * event.loaded / event.total);
-
-          console.log(progress);
-
-          return { status: 'progress', message: progress };
-
-        case HttpEventType.Response:
-
-          console.log(event.body);
-
-          return event.body;
-        default:
-          return `Unhandled event: ${event.type}`;
-      }
-    })
-    );
-
-  }
-
-
-  public uploadAssets(files: FileList): Observable<any> {
-
-
-    const sub = new Subject<any>();
-
-    const request = this.createRequest(files);
-    this.httpClient.request(request)
-      .pipe(
-        finalize(() => {
-          // Upload beendet. Egal ob erfolgreich oder fehlgeschlagen.
-          sub.complete();
-          console.log('finalize');
-        })
-      )
-      .subscribe(event => {
-        if (event.type === HttpEventType.UploadProgress) {
-          const percentDone = Math.round(100 * event.loaded / event.total);
-          console.log('UploadProgress', percentDone);
-          sub.next(percentDone);
-        } else if (event instanceof HttpResponse) {
-          sub.complete();
-          console.log('HttpResponse', event);
-        }
-
-      }, (err: HttpErrorResponse) => {
-        if (err.error instanceof Error) {
-          console.log('Error', err.error);
-          // A client-side or network error occurred. Handle it accordingly.
-          sub.complete();
-        } else {
-          console.log('HttpErrorResponse', err);
-          // The backend returned an unsuccessful response code.
-          sub.complete();
-        }
-
-
-      }, () => {
-        console.log('????????');
-        sub.complete();
-      });
-
-    return sub.asObservable();
-  }
-
-
-  private createRequest(files: FileList): HttpRequest<FormData> {
     const formData: FormData = new FormData();
 
     Array.from(files).forEach(file => {
       formData.append('files', file, file.name);
     });
 
-    const uploadURL = `https://storelitetest.azurewebsites.net/api/Assets/UploadAssets/${this.user.clientId}/${this.user.userId}`;
+    const uploadURL = `${this.assetsAPIBaseURL}UploadAssets/${this.user.clientId}/${this.user.userId}`;
     const request = new HttpRequest('POST', uploadURL, formData, {
       reportProgress: true
     });
 
-    return request;
-  }
 
-  /*
+    // return this.httpClient.request(request).pipe(
+    //   map(event => this.getEventMessage(event, file)),
+    //   tap(message => this.showProgress(message)),
+    //   last(), // return last (completed) message to caller
+    //   catchError(this.handleError(file))
+    // );
 
-  public uploadAssets(files: FileList): Observable<number> {
+    const requestSubscription: Subscription = this.httpClient.request(request)
+      .pipe(
+        finalize(() => {
+          console.log('UploadRequest finalize');
+          // Upload finished. Whether successful or failed.
+          sub.complete();
+          requestSubscription.unsubscribe();
+        })
+      )
+      .subscribe(event => {
+        if (event.type === HttpEventType.UploadProgress) {
+          console.log('UploadRequest UploadProgress', event);
+          const percentDone = Math.round(100 * event.loaded / event.total);
+          // console.log('UploadProgress', percentDone);
+          sub.next({progress: percentDone, completed: false, sucess: false});
+        } else if (event instanceof HttpResponse) {
+          console.log('UploadRequest HttpResponse', event);
+          sub.next(({progress: 100, completed: true, sucess: true}));
+        }
 
-    const formData: FormData = new FormData();
+      }, (err: HttpErrorResponse) => {
+        if (err.error instanceof Error) {
+          console.log('UploadRequest Error', err.error);
+          // A client-side or network error occurred. Handle it accordingly.
+        } else {
+          console.log('UploadRequest HttpErrorResponse', err);
+          // The backend returned an unsuccessful response code.
+        }
 
-    Array.from(files).forEach((file, index) => {
-        formData.append('files', file, file.name);
+        sub.next({progress: null, completed: true, sucess: false});
+        sub.complete();
+
+      }, () => {
+        console.log('UploadRequest Complete');
+        sub.complete();
       });
 
-    // create a new progress-subject for every file
-    const progress = new Subject<number>();
-
-    // send the http-request and subscribe for progress-updates
-    this.httpClient.post(`https://localhost:44337/api/Assets/UploadAssets/${this.user.clientId}/${this.user.userId}`, formData)
-    .subscribe((event: any) => {
-
-      console.log(event);
-
-      if (event.type === HttpEventType.UploadProgress) {
-        // on progress code
-        console.log(Math.round(100 * event.loaded / event.total));
-        // calculate the progress percentage
-        const percentDone = Math.round(100 * event.loaded / event.total);
-        progress.next(percentDone);
-      }
-      if (event.type === HttpEventType.Response) {
-        // on response code
-        progress.complete();
-      }
-    }, error => {
-      // on error code
-      console.log(error);
-    });
-
-
-
-    // return the map of progress.observables
-    return progress.asObservable();
+    return sub.asObservable();
   }
 
-  */
+    // public uploadAssets1(files: FileList): Observable<any> {
+
+  //   const formData: FormData = new FormData();
+
+  //   Array.from(files).forEach((file, index) => {
+  //       formData.append('files', file, file.name);
+  //     });
+
+
+
+  //   const uploadURL = `${this.assetsAPIBaseURL}UploadAssets/${this.user.clientId}/${this.user.userId}`;
+
+  //   return this.httpClient.post<any>(uploadURL, formData, {
+  //     reportProgress: true,
+  //     observe: 'events'
+  //   }).pipe(map((event) => {
+
+  //     console.log(event);
+  //     switch (event.type) {
+
+  //       case HttpEventType.UploadProgress:
+
+  //         const progress = Math.round(100 * event.loaded / event.total);
+
+  //         console.log(progress);
+
+  //         return { status: 'progress', message: progress };
+
+  //       case HttpEventType.Response:
+
+  //         console.log(event.body);
+
+  //         return event.body;
+  //       default:
+  //         return `Unhandled event: ${event.type}`;
+  //     }
+  //   })
+  //   );
+
+  // }
+
+
 
   ngOnDestroy() {
     console.log('AssetsMockApiRepository', 'ngOnDestroy AssetsMockApiRepository');

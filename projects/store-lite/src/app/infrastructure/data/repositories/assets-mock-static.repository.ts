@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, Subject, timer } from 'rxjs';
+import { Observable, of, Subject, Subscription, timer } from 'rxjs';
 import { Stats } from '../../../core/models/stats.model';
 import { AssetsRepository } from '../../../core/repositories/assets.repository';
 
 @Injectable()
 export class AssetsMockStaticRepository extends AssetsRepository {
 
-  private every1Second: Observable<number> = timer(1000, 1000);
-  private ticks = 0;
-
-  private progress: Subject<number>;
+  private progress: Subject<{progress: number, completed: boolean, sucess: boolean}>;
 
   public getStats(): Observable<Stats> {
 
@@ -24,34 +21,36 @@ export class AssetsMockStaticRepository extends AssetsRepository {
   }
 
 
-  public uploadAssets(files: FileList): Observable<any> {
+  public uploadAssets(files: FileList, mode: any): Observable<{progress: number, completed: boolean, sucess: boolean}> {
 
-    this.progress = new Subject<number>();
-    this.timerHandler();
+    this.progress = new Subject<{progress: number, completed: boolean, sucess: boolean}>();
+    const timer$ = timer(1000, 1000);
+    const timerSubscription: Subscription = timer$.subscribe(tick => {
 
+      console.log('timer', tick);
+      try {
+        if (Math.random() > 0.98) { // decrease here to increase the probability of error
+          throw new Error('Simulate Network or API Error');
+        }
+
+        const progressVal =  10 * tick;
+        this.progress.next(({progress: progressVal, completed: false, sucess: false}));
+
+        if (progressVal >= 100) {
+          this.progress.next(({progress: 100, completed: true, sucess: true}));
+          this.progress.complete();
+          timerSubscription.unsubscribe();
+        }
+      } catch (e) {
+        this.progress.next(({progress: null, completed: true, sucess: false}));
+        this.progress.complete();
+        timerSubscription.unsubscribe();
+      }
+
+    });
 
     // return the map of progress.observables
     return this.progress.asObservable();
-  }
-
-  timerHandler() {
-    this.every1Second.subscribe((seconds) => {
-
-      if (this.ticks > 0) {
-        let progressVal = 0;
-        progressVal =  progressVal + 10;
-        this.progress.next(progressVal);
-
-        if (progressVal === 100) {
-          this.progress.complete();
-          return;
-        }
-
-      }
-
-      this.ticks = this.ticks + 1;
-
-    });
   }
 
 }
