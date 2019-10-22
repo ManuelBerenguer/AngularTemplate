@@ -1,5 +1,7 @@
 import { Observable } from 'rxjs';
+import { AssetLinkTypeEnum } from '../enums/asset-link-type.enum';
 import { Stats } from '../models/stats.model';
+import { UploadProgress } from '../models/upload-progress.model';
 
 /**
  * Abstract repository. We will inject this class into the usecases or services for retrieving data instead of injecting concrete classes.
@@ -8,4 +10,5 @@ import { Stats } from '../models/stats.model';
  */
 export abstract class AssetsRepository {
   abstract getStats(): Observable<Stats>;
+  abstract uploadAssets(files: FileList, mode: AssetLinkTypeEnum): Observable<UploadProgress>;
 }

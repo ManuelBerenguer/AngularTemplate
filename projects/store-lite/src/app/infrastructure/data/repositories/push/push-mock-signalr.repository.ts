@@ -14,6 +14,10 @@ export class PushMockSignalrRepository extends PushRepository implements OnDestr
   private user: User;
   private subscriptions: Array<Subscription> = [];
 
+  private storeLiteHubURL = 'https://localhost:44337/StoreLiteHub';
+  // 'https://storelitetest.azurewebsites.net/StoreLiteHub';
+  // 'https://localhost:44337/StoreLiteHub';
+
   constructor(private statsMapper: DictionaryStatsMapper, protected usersRepository: UsersRepository) {
     super();
 
@@ -23,7 +27,7 @@ export class PushMockSignalrRepository extends PushRepository implements OnDestr
     console.log(accessToken);
 
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl('https://localhost:44337/StoreLiteHub', {
+      .withUrl(this.storeLiteHubURL, {
         accessTokenFactory: () => accessToken
       })
       .build();

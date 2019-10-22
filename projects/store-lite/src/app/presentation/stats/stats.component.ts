@@ -3,7 +3,6 @@ import { StoreLitePresentation } from '../../core/services/store-lite.presentati
 
 @Component({
   selector: 'app-stats',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './stats.component.html',
   styleUrls: ['./stats.component.scss']
 })

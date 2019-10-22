@@ -1,0 +1,13 @@
+<div #extensionsErrorModal>
+    <div class="modal-body text-center">
+      <h1>{{title}}</h1>
+      <p [innerHtml]="body"></p>
+      <p>
+        <span class="text-primary" *ngFor="let item of list">{{item}} </span>
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary mr-auto" (click)="bsModalRef.hide()">Back to Store</button>
+      <button type="button" class="btn btn-primary" (click)="selectFilesAgain();">Select files again</button>
+    </div>
+  </div>

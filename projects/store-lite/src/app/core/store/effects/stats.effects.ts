@@ -8,8 +8,6 @@ import * as StatsActions from '../actions/stats.actions';
 Injectable();
 export class StatsEffects {
 
-  private retry = 0;
-
   constructor(
     private actions$: Actions,
     private getStatsUseCase: BaseGetStatsUseCase) {
@@ -37,25 +35,11 @@ export class StatsEffects {
         .pipe(
           map(statsObj => {
             console.log('StatsEffects OK', statsObj);
-            this.retry = 0;
             return (StatsActions.getStatsSuccessAction({ stats: statsObj }));
           }),
           catchError(errorObj => {
             console.log('StatsEffects ERROR', errorObj);
-
-            if (this.retry > 5) {
-              console.log('StatsEffects Max Retry reached', this.retry);
-
-              this.retry = 0;
-              return of(StatsActions.getStatsFailedAction({ error: errorObj }));
-            } else {
-              console.log('StatsEffects Retry', this.retry);
-
-              // TODO confirm that dispatch the same action as the effect will not cause issues
-              this.retry ++;
-              return of(StatsActions.getStatsAction());
-            }
-
+            return of(StatsActions.getStatsFailedAction({ error: errorObj }));
           })
         );
   }

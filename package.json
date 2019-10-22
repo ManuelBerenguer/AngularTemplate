@@ -26,7 +26,7 @@
     "bootstrap": "^4.3.1",
     "devextreme": "19.1.6",
     "devextreme-angular": "19.1.6",
-    "ngx-bootstrap": "^5.1.2",
+    "ngx-bootstrap": "^5.2.0",
     "rxjs": "~6.5.3",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"

@@ -3,7 +3,7 @@ import { BasicBarGaugeSerie } from './basic-bar-gauge-serie';
 
 @Component({
   selector: 'app-basic-bar-gauge',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush, // We should use this strategy only for components that depend only on their inputs
   templateUrl: './basic-bar-gauge.component.html',
   styleUrls: ['./basic-bar-gauge.component.scss']
 })

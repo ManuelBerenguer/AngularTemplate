@@ -3,7 +3,6 @@ import { StoreLitePresentation } from '../../core/services/store-lite.presentati
 
 @Component({
   selector: 'app-store-lite',
-  //changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './store-lite.component.html',
   styleUrls: ['./store-lite.component.scss']
 })
@@ -19,7 +18,5 @@ export class StoreLiteComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy() {
   }
-
-
 
 }

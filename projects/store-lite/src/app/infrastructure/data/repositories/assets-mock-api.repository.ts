@@ -1,9 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { finalize, map, retry } from 'rxjs/operators';
 import { IDictionary, User, UsersRepository } from 'shared-lib';
+import { AssetLinkTypeEnum } from '../../../core/enums/asset-link-type.enum';
 import { Stats } from '../../../core/models/stats.model';
+import { UploadProgress } from '../../../core/models/upload-progress.model';
 import { AssetsRepository } from '../../../core/repositories/assets.repository';
 import { DictionaryStatsMapper } from './mappers/dictionary-stats.mapper';
 
@@ -14,6 +16,12 @@ export class AssetsMockApiRepository extends AssetsRepository implements OnDestr
   private user: User;
   private subscriptions: Array<Subscription> = [];
 
+  private retry = 5;
+
+  private assetsAPIBaseURL = 'https://localhost:44337/api/Assets/';
+  // 'https://storelitetest.azurewebsites.net/api/Assets/';
+  // 'https://localhost:44337/api/Assets/';
+
   constructor(
     private statsMapper: DictionaryStatsMapper,
     protected usersRepository: UsersRepository,
@@ -22,12 +30,27 @@ export class AssetsMockApiRepository extends AssetsRepository implements OnDestr
     this.registerSubscriptions();
   }
 
-  getStats(): Observable<Stats> {
+  private registerSubscriptions(): void {
 
-    const getStatsUrl = `https://localhost:44337/api/Assets/GetStats/${this.user.clientId}`;
+    // Subscribe to user details
+    this.subscriptions.push(
+      this.loggedUser$.subscribe(
+        (user: any) => {
+          if (user) {
+            this.user = user;
+          }
+        }
+      )
+    );
+  }
+
+  public getStats(): Observable<Stats> {
+
+    const getStatsUrl = `${this.assetsAPIBaseURL}GetStats/${this.user.clientId}`;
     const stats$ = this.httpClient.get<IDictionary<any>>(getStatsUrl);
 
     const result = stats$.pipe(
+      retry(this.retry),
       map(data => {
           console.log('AssetsMockApiRepository', data);
           return (this.statsMapper.mapTo(data));
@@ -43,18 +66,70 @@ export class AssetsMockApiRepository extends AssetsRepository implements OnDestr
     return result;
   }
 
-  private registerSubscriptions(): void {
+  public uploadAssets(files: FileList, mode: AssetLinkTypeEnum): Observable<UploadProgress> {
 
-    // Subscribe to user details
-    this.subscriptions.push(
-      this.loggedUser$.subscribe(
-        (user: any) => {
-          if (user) {
-            this.user = user;
-          }
-        }
+
+    const sub = new Subject<UploadProgress>();
+
+    const formData: FormData = new FormData();
+
+    Array.from(files).forEach(file => {
+      formData.append('Files', file, file.name);
+    });
+
+    formData.append('LinkType', mode.toString());
+
+    const uploadURL = `${this.assetsAPIBaseURL}UploadAssets/${this.user.clientId}/${this.user.userId}`;
+    const request = new HttpRequest('POST', uploadURL, formData, {
+      reportProgress: true
+    });
+
+
+    // return this.httpClient.request(request).pipe(
+    //   map(event => this.getEventMessage(event, file)),
+    //   tap(message => this.showProgress(message)),
+    //   last(), // return last (completed) message to caller
+    //   catchError(this.handleError(file))
+    // );
+
+    const requestSubscription: Subscription = this.httpClient.request(request)
+      .pipe(
+        finalize(() => {
+          console.log('UploadRequest finalize');
+          // Upload finished. Whether successful or failed.
+          sub.complete();
+          requestSubscription.unsubscribe();
+        })
       )
-    );
+      .subscribe(event => {
+        if (event.type === HttpEventType.UploadProgress) {
+          console.log('UploadRequest UploadProgress', event);
+          const percentDone = Math.round(100 * event.loaded / event.total);
+          // console.log('UploadProgress', percentDone);
+          sub.next({progress: percentDone, completed: false, success: false});
+        } else if (event instanceof HttpResponse) {
+          console.log('UploadRequest HttpResponse', event);
+          sub.next(({progress: 100, completed: true, success: true}));
+        }
+
+      }, (err: HttpErrorResponse) => {
+        if (err.error instanceof Error) {
+          console.log('UploadRequest Error', err.error);
+          // A client-side or network error occurred. Handle it accordingly.
+        } else {
+          console.log('UploadRequest HttpErrorResponse', err);
+          // The backend returned an unsuccessful response code.
+        }
+
+        sub.next({progress: null, completed: true, success: false});
+        sub.complete();
+
+      }, () => {
+        console.log('UploadRequest Complete');
+        sub.complete();
+      });
+
+    return sub.asObservable();
   }
 
   ngOnDestroy() {
