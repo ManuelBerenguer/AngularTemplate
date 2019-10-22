@@ -3,6 +3,7 @@ import { Observable, of, Subject, Subscription, timer } from 'rxjs';
 import { Stats } from '../../../core/models/stats.model';
 import { AssetsRepository } from '../../../core/repositories/assets.repository';
 import { AssetLinkTypeEnum } from '../../../core/enums/asset-link-type.enum';
+import { UploadProgress } from '../../../core/models/upload-progress.model';
 
 @Injectable()
 export class AssetsMockStaticRepository extends AssetsRepository {
@@ -19,9 +20,9 @@ export class AssetsMockStaticRepository extends AssetsRepository {
     return of(testStats);
   }
 
-  public uploadAssets(files: FileList, mode: AssetLinkTypeEnum): Observable<{progress: number, completed: boolean, sucess: boolean}> {
+  public uploadAssets(files: FileList, mode: AssetLinkTypeEnum): Observable<UploadProgress> {
 
-    const progress = new Subject<{progress: number, completed: boolean, sucess: boolean}>();
+    const progress = new Subject<UploadProgress>();
     const timer$ = timer(1000, 1000);
     const timerSubscription: Subscription = timer$.subscribe(tick => {
 
@@ -32,22 +33,21 @@ export class AssetsMockStaticRepository extends AssetsRepository {
         }
 
         const progressVal =  10 * tick;
-        progress.next(({progress: progressVal, completed: false, sucess: false}));
+        progress.next(({progress: progressVal, completed: false, success: false}));
 
         if (progressVal >= 100) {
-          progress.next(({progress: 100, completed: true, sucess: true}));
+          progress.next(({progress: 100, completed: true, success: true}));
           progress.complete();
           timerSubscription.unsubscribe();
         }
       } catch (e) {
-        progress.next(({progress: null, completed: true, sucess: false}));
+        progress.next(({progress: null, completed: true, success: false}));
         progress.complete();
         timerSubscription.unsubscribe();
       }
 
     });
 
-    // return the map of progress.observables
     return progress.asObservable();
   }
 
