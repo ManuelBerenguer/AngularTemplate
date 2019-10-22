@@ -6,6 +6,7 @@ import { IDictionary } from 'shared-lib';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
 import { take } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { AssetLinkTypeEnum } from '../../core/enums/asset-link-type.enum';
 
 @Component({
   selector: 'app-file-upload',
@@ -38,15 +39,15 @@ export class FileUploadComponent implements OnInit {
     // We init the input data for the nested generic reactive form for radio buttons
     this.data = {
       name: 'linked',
-      selectors: ['partNumber', 'application'],
+      selectors: [AssetLinkTypeEnum.PartNumber, AssetLinkTypeEnum.Application],
       controls: [{
         id: 'partNumberBtn',
-        value: 'partNumber',
+        value: AssetLinkTypeEnum.PartNumber,
         text: 'By Part Number',
         iconUrl: './assets/icons/iconVehicles.svg#iconVehicles'
       }, {
         id: 'applicationBtn',
-        value: 'application',
+        value: AssetLinkTypeEnum.Application,
         text: 'By Catalogue Application',
         iconUrl: './assets/icons/iconCatalogue.svg#iconCatalogue'
       }]
@@ -54,7 +55,7 @@ export class FileUploadComponent implements OnInit {
 
     // We init the Reactive Form
     this.fileUploadForm = this.fb.group({
-      linked: ['', [Validators.required]], // radio button for linked control
+      linked: [null, [Validators.required]], // radio button for linked control
       assets: ['', [Validators.required]] // file input to select files from disk
     });
   }

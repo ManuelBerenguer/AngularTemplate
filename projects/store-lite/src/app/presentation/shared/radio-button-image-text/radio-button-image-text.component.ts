@@ -29,7 +29,7 @@ export class RadioButtonImageTextComponent implements OnInit, ControlValueAccess
   private onTouched: () => void;
 
   // The value associated to this custom form control
-  value = '';
+  value: number;
 
   constructor() {}
 
@@ -37,7 +37,7 @@ export class RadioButtonImageTextComponent implements OnInit, ControlValueAccess
   }
 
   // It triggers every time the selected option changes
-  selectOption(option: string) {
+  selectOption(option: number) {
     // We update the inner value of the custom control
     this.value = option;
 
@@ -47,7 +47,7 @@ export class RadioButtonImageTextComponent implements OnInit, ControlValueAccess
     this.onTouched();
   }
 
-  writeValue(obj: string): void {
+  writeValue(obj: number): void {
     // every time the form control is being updated from the parent
     this.value = obj;
   }
