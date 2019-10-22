@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, Subject, Subscription, timer } from 'rxjs';
 import { Stats } from '../../../core/models/stats.model';
 import { AssetsRepository } from '../../../core/repositories/assets.repository';
+import { AssetLinkTypeEnum } from '../../../core/enums/asset-link-type.enum';
 
 @Injectable()
 export class AssetsMockStaticRepository extends AssetsRepository {

@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs';
 import { Stats } from '../models/stats.model';
+import { AssetLinkTypeEnum } from '../enums/asset-link-type.enum';
 
 /**
  * Abstract repository. We will inject this class into the usecases or services for retrieving data instead of injecting concrete classes.

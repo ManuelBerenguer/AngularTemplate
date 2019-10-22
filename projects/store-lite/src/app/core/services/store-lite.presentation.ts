@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy, ViewChild } from '@angular/core';
+import { Injectable, OnDestroy, ViewChild, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription, Observable } from 'rxjs';
 import { BasePresentation, UsersRepository, IDictionary, User, FileUtilsService } from 'shared-lib';
@@ -8,6 +8,7 @@ import * as storeLiteStore from '../store';
 import { StoreLiteState } from '../store';
 import * as StatsActions from '../store/actions/stats.actions';
 import { AssetsRepository } from '../repositories/assets.repository';
+import { AssetLinkTypeEnum } from '../enums/asset-link-type.enum';
 
 @Injectable()
 export class StoreLitePresentation extends BasePresentation implements OnDestroy {
