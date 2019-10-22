@@ -33,6 +33,7 @@ import { BsModalService, ModalModule } from 'ngx-bootstrap';
 import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ErrorModalComponent } from './presentation/file-upload/error-modal/error-modal.component';
+import { AssetsMockStaticRepository } from './infrastructure/data/repositories/assets-mock-static.repository';
 
 
 @NgModule({
@@ -71,7 +72,7 @@ import { ErrorModalComponent } from './presentation/file-upload/error-modal/erro
     // Repositories
     {provide: UsersRepository, useClass: UsersMockRepository},
     {provide: BaseGetStatsUseCase, useClass: GetStatsUseCase},
-    {provide: AssetsRepository, useClass: AssetsMockApiRepository},
+    {provide: AssetsRepository, useClass: AssetsMockStaticRepository},
     {provide: PushRepository, useClass: PushMockSignalrRepository},
 
     StoreLitePresentation,

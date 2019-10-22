@@ -5,7 +5,6 @@ import { FormGroup, FormBuilder, Validators, NG_VALUE_ACCESSOR, NG_VALIDATORS, C
   selector: 'app-radio-button-image-text',
   templateUrl: './radio-button-image-text.component.html',
   styleUrls: ['./radio-button-image-text.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

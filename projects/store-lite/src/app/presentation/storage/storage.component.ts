@@ -6,7 +6,6 @@ import { BasicBarGaugeSerie } from '../shared/basic-bar-gauge/basic-bar-gauge-se
 
 @Component({
   selector: 'app-storage',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './storage.component.html',
   styleUrls: ['./storage.component.scss']
 })

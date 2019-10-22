@@ -4,15 +4,14 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { StoreLitePresentation } from '../../core/services/store-lite.presentation';
 import { IDictionary } from 'shared-lib';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
-import { take } from 'rxjs/operators';
+import { take, takeWhile } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { AssetLinkTypeEnum } from '../../core/enums/asset-link-type.enum';
 
 @Component({
   selector: 'app-file-upload',
   templateUrl: './file-upload.component.html',
-  styleUrls: ['./file-upload.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./file-upload.component.scss']
 })
 export class FileUploadComponent implements OnInit {
 
@@ -103,16 +102,21 @@ export class FileUploadComponent implements OnInit {
     if (filesCheck[this.storeLitePresentation.UPLOAD_VALID_KEY]) {
       this.showProgressBar = true;
 
+      /**
+       * Notice that with takeWhile we unsubscribe at some condition.
+       */
       const uploadSubscription: Subscription = this.storeLitePresentation.uploadAssets(files, this.myLinkedControl.value)
-      .subscribe(progressObj => {
+      .pipe(takeWhile(progressObj => !progressObj.completed, true)).subscribe(progressObj => {
+
         if (progressObj.completed) {
 
-          uploadSubscription.unsubscribe();
+          // We hide the progress bar widget
+          this.showProgressBar = false;
 
           if (progressObj.sucess) {
-            this.showNumberOfFilesModalError(); // TODO
+            this.showUploadSuccessModal();
           } else {
-            this.showFileTypesModalError(); // TODO
+            this.showUploadFailedModalError();
           }
 
         } else {
@@ -133,6 +137,28 @@ export class FileUploadComponent implements OnInit {
         }
       }
     }
+  }
+
+  private showUploadSuccessModal() {
+    const initialState = {
+      title: 'Your files have been uploaded succesfully.',
+      body: 'The server is now processing your files. <br /> You can view your progress and next actions from the navigation bar at the top.',
+      list: []
+    };
+
+    const ref = this.showModalCentered(ErrorModalComponent, initialState);
+  }
+
+  private showUploadFailedModalError() {
+    const initialState = {
+      title: 'There was an error trying to upload your files.',
+      body: "Please, retry in a few seconds.",
+      list: []
+    };
+
+    const ref = this.showModalCentered(ErrorModalComponent, initialState);
+
+    this.handleSelectFilesAgain(ref);
   }
 
   private showNumberOfFilesModalError() {
