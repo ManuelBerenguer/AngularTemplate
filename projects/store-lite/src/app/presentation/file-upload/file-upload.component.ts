@@ -88,7 +88,7 @@ export class FileUploadComponent implements OnInit {
    *
    * @param files HTML input file list
    *
-   * @description Handles how we should proceed once the user has selected some files from the disk to be uploaded.L0
+   * @description Handles how we should proceed once the user has selected some files from the disk to be uploaded.
    * First, we check if they fit the restrictions and if they do we upload them to the server.
    * If they don't fit the requirements we show the correspondent error.
    */
@@ -103,7 +103,7 @@ export class FileUploadComponent implements OnInit {
     if (filesCheck[this.storeLitePresentation.UPLOAD_VALID_KEY]) {
       this.showProgressBar = true;
 
-      const uploadSubscription: Subscription = this.storeLitePresentation.uploadAssets(files, AssetLinkTypeEnum.Application)
+      const uploadSubscription: Subscription = this.storeLitePresentation.uploadAssets(files, this.myLinkedControl.value)
       .subscribe(progressObj => {
         if (progressObj.completed) {
 
