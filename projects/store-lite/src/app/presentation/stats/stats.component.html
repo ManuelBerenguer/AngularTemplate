@@ -1,4 +1,4 @@
-<ng-container *ngIf="this.storeLitePresentation.stats$ | async as stats"><!-- subscribe in the template with async pipe automaticly unsubcrives on destroy -->
+<ng-container *ngIf="this.storeLitePresentation.stats$ | async as stats"><!-- subscribe in the template with async pipe automaticly unsubscribes on destroy -->
   <table cellpadding="15">
     <tr>
       <td>

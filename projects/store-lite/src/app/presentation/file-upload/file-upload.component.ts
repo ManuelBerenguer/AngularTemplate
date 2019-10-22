@@ -4,9 +4,10 @@ import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
 import { Subscription } from 'rxjs';
 import { take, takeWhile } from 'rxjs/operators';
 import { IDictionary } from 'shared-lib';
-import { AssetLinkTypeEnum } from '../../core/enums/asset-link-type.enum';
+import { AssetLinkTypeEnum, AssetLinkTypeTextEnum } from '../../core/enums/asset-link-type.enum';
 import { StoreLitePresentation } from '../../core/services/store-lite.presentation';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
+import { NotificationsConstants } from '../../core/constants/notifications.constants';
 
 @Component({
   selector: 'app-file-upload',
@@ -14,6 +15,11 @@ import { ErrorModalComponent } from './error-modal/error-modal.component';
   styleUrls: ['./file-upload.component.scss']
 })
 export class FileUploadComponent implements OnInit {
+  private readonly linkedControlName = 'linked';
+  private readonly assetsControlName = 'assets';
+  private readonly uploadBtnId = 'uploadBtn';
+  private readonly partNumberBtnId = 'partNumberBtn';
+  private readonly applicationBtnId = 'applicationBtn';
 
   fileUploadModalRef: BsModalRef;
   maxFilesErrorModalRef: BsModalRef;
@@ -37,17 +43,17 @@ export class FileUploadComponent implements OnInit {
   ngOnInit() {
     // We init the input data for the nested generic reactive form for radio buttons
     this.data = {
-      name: 'linked',
+      name: this.linkedControlName,
       selectors: [AssetLinkTypeEnum.PartNumber, AssetLinkTypeEnum.Application],
       controls: [{
-        id: 'partNumberBtn',
+        id: this.partNumberBtnId,
         value: AssetLinkTypeEnum.PartNumber,
-        text: 'By Part Number',
+        text: AssetLinkTypeTextEnum.PartNumber,
         iconUrl: './assets/icons/iconVehicles.svg#iconVehicles'
       }, {
-        id: 'applicationBtn',
+        id: this.applicationBtnId,
         value: AssetLinkTypeEnum.Application,
-        text: 'By Catalogue Application',
+        text: AssetLinkTypeTextEnum.Application,
         iconUrl: './assets/icons/iconCatalogue.svg#iconCatalogue'
       }]
     };
@@ -63,14 +69,14 @@ export class FileUploadComponent implements OnInit {
    * getter to acces the linked control
    */
   get myLinkedControl() {
-    return this.fileUploadForm.get('linked');
+    return this.fileUploadForm.get(this.linkedControlName);
   }
 
   /**
    * getter to acces the file control
    */
   get myFilesControl() {
-    return this.fileUploadForm.get('assets');
+    return this.fileUploadForm.get(this.assetsControlName);
   }
 
   /**
@@ -141,8 +147,8 @@ export class FileUploadComponent implements OnInit {
 
   private showUploadSuccessModal() {
     const initialState = {
-      title: 'Your files have been uploaded succesfully.',
-      body: 'The server is now processing your files. <br /> You can view your progress and next actions from the navigation bar at the top.',
+      title: NotificationsConstants.filesUploadSuccessTitle,
+      body: NotificationsConstants.filesUploadSuccessBody,
       list: []
     };
 
@@ -151,8 +157,8 @@ export class FileUploadComponent implements OnInit {
 
   private showUploadFailedModalError() {
     const initialState = {
-      title: 'There was an error trying to upload your files.',
-      body: "Please, retry in a few seconds.",
+      title: NotificationsConstants.filesUploadErrorTitle,
+      body: NotificationsConstants.filesUploadErrorBody,
       list: []
     };
 
@@ -164,8 +170,8 @@ export class FileUploadComponent implements OnInit {
   private showNumberOfFilesModalError() {
 
     const initialState = {
-      title: 'Your file contains more than 5 assets.',
-      body: "Please adjust your file to only 5. <br /> Alternatively, to upgrade to Pro and unlimited uploads <br /> please contact your Account manager.",
+      title: NotificationsConstants.NumberOfFilesUploadedErrorTitle,
+      body: NotificationsConstants.NumberOfFilesUploadedErrorBody,
       list: []
     };
 
@@ -177,8 +183,8 @@ export class FileUploadComponent implements OnInit {
   private showFileTypesModalError() {
 
     const initialState = {
-      title: 'Your file contains extensions not allowed.',
-      body: 'Please adjust your file to contain only: ',
+      title: NotificationsConstants.FileTypesUploadErrorTitle,
+      body: NotificationsConstants.FileTypesUploadErrorBody,
       list: this.storeLitePresentation.loggedUser.allowedAssetsFilesTypesList
     };
 

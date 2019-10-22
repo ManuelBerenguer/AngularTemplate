@@ -8,14 +8,14 @@ import { UploadProgress } from '../../../core/models/upload-progress.model';
 @Injectable()
 export class AssetsMockStaticRepository extends AssetsRepository {
 
+  stats$ = new Subject();
+
   public getStats(): Observable<Stats> {
 
     const testStats = new Stats();
     testStats.unlinkedAssets = 5;
     testStats.unresolvedConflicts = 3;
     testStats.tooSmallImages = 8;
-
-    // return throwError('sdfsdf');
 
     return of(testStats);
   }
