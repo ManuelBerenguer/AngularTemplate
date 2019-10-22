@@ -6,6 +6,7 @@ import { IDictionary } from 'shared-lib';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
 import { take } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { AssetLinkTypeEnum } from '../../core/enums/asset-link-type.enum';
 
 @Component({
   selector: 'app-file-upload',
@@ -102,7 +103,8 @@ export class FileUploadComponent implements OnInit {
     if (filesCheck[this.storeLitePresentation.UPLOAD_VALID_KEY]) {
       this.showProgressBar = true;
 
-      const uploadSubscription: Subscription = this.storeLitePresentation.uploadAssets(files, null).subscribe(progressObj => {
+      const uploadSubscription: Subscription = this.storeLitePresentation.uploadAssets(files, AssetLinkTypeEnum.Application)
+      .subscribe(progressObj => {
         if (progressObj.completed) {
 
           uploadSubscription.unsubscribe();

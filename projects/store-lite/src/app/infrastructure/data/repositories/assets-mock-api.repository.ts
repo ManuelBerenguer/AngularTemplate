@@ -6,6 +6,7 @@ import { IDictionary, User, UsersRepository } from 'shared-lib';
 import { Stats } from '../../../core/models/stats.model';
 import { AssetsRepository } from '../../../core/repositories/assets.repository';
 import { DictionaryStatsMapper } from './mappers/dictionary-stats.mapper';
+import { AssetLinkTypeEnum } from '../../../core/enums/asset-link-type.enum';
 
 @Injectable()
 export class AssetsMockApiRepository extends AssetsRepository implements OnDestroy {
@@ -64,7 +65,7 @@ export class AssetsMockApiRepository extends AssetsRepository implements OnDestr
     return result;
   }
 
-  public uploadAssets(files: FileList, mode: any): Observable<{progress: number, completed: boolean, sucess: boolean}> {
+  public uploadAssets(files: FileList, mode: AssetLinkTypeEnum): Observable<{progress: number, completed: boolean, sucess: boolean}> {
 
 
     const sub = new Subject<{progress: number, completed: boolean, sucess: boolean}>();
@@ -72,8 +73,10 @@ export class AssetsMockApiRepository extends AssetsRepository implements OnDestr
     const formData: FormData = new FormData();
 
     Array.from(files).forEach(file => {
-      formData.append('files', file, file.name);
+      formData.append('Files', file, file.name);
     });
+
+    formData.append('LinkType', mode.toString());
 
     const uploadURL = `${this.assetsAPIBaseURL}UploadAssets/${this.user.clientId}/${this.user.userId}`;
     const request = new HttpRequest('POST', uploadURL, formData, {
@@ -127,49 +130,6 @@ export class AssetsMockApiRepository extends AssetsRepository implements OnDestr
 
     return sub.asObservable();
   }
-
-    // public uploadAssets1(files: FileList): Observable<any> {
-
-  //   const formData: FormData = new FormData();
-
-  //   Array.from(files).forEach((file, index) => {
-  //       formData.append('files', file, file.name);
-  //     });
-
-
-
-  //   const uploadURL = `${this.assetsAPIBaseURL}UploadAssets/${this.user.clientId}/${this.user.userId}`;
-
-  //   return this.httpClient.post<any>(uploadURL, formData, {
-  //     reportProgress: true,
-  //     observe: 'events'
-  //   }).pipe(map((event) => {
-
-  //     console.log(event);
-  //     switch (event.type) {
-
-  //       case HttpEventType.UploadProgress:
-
-  //         const progress = Math.round(100 * event.loaded / event.total);
-
-  //         console.log(progress);
-
-  //         return { status: 'progress', message: progress };
-
-  //       case HttpEventType.Response:
-
-  //         console.log(event.body);
-
-  //         return event.body;
-  //       default:
-  //         return `Unhandled event: ${event.type}`;
-  //     }
-  //   })
-  //   );
-
-  // }
-
-
 
   ngOnDestroy() {
     console.log('AssetsMockApiRepository', 'ngOnDestroy AssetsMockApiRepository');

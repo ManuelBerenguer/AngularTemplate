@@ -6,8 +6,6 @@ import { AssetsRepository } from '../../../core/repositories/assets.repository';
 @Injectable()
 export class AssetsMockStaticRepository extends AssetsRepository {
 
-  private progress: Subject<{progress: number, completed: boolean, sucess: boolean}>;
-
   public getStats(): Observable<Stats> {
 
     const testStats = new Stats();
@@ -20,10 +18,9 @@ export class AssetsMockStaticRepository extends AssetsRepository {
     return of(testStats);
   }
 
+  public uploadAssets(files: FileList, mode: AssetLinkTypeEnum): Observable<{progress: number, completed: boolean, sucess: boolean}> {
 
-  public uploadAssets(files: FileList, mode: any): Observable<{progress: number, completed: boolean, sucess: boolean}> {
-
-    this.progress = new Subject<{progress: number, completed: boolean, sucess: boolean}>();
+    const progress = new Subject<{progress: number, completed: boolean, sucess: boolean}>();
     const timer$ = timer(1000, 1000);
     const timerSubscription: Subscription = timer$.subscribe(tick => {
 
@@ -34,23 +31,23 @@ export class AssetsMockStaticRepository extends AssetsRepository {
         }
 
         const progressVal =  10 * tick;
-        this.progress.next(({progress: progressVal, completed: false, sucess: false}));
+        progress.next(({progress: progressVal, completed: false, sucess: false}));
 
         if (progressVal >= 100) {
-          this.progress.next(({progress: 100, completed: true, sucess: true}));
-          this.progress.complete();
+          progress.next(({progress: 100, completed: true, sucess: true}));
+          progress.complete();
           timerSubscription.unsubscribe();
         }
       } catch (e) {
-        this.progress.next(({progress: null, completed: true, sucess: false}));
-        this.progress.complete();
+        progress.next(({progress: null, completed: true, sucess: false}));
+        progress.complete();
         timerSubscription.unsubscribe();
       }
 
     });
 
     // return the map of progress.observables
-    return this.progress.asObservable();
+    return progress.asObservable();
   }
 
 }

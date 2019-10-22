@@ -1,4 +1,5 @@
 enum AssetLinkTypeEnum {
   PartNumber = 1,
-  Application
+  Application = 2
 }
+export { AssetLinkTypeEnum };
