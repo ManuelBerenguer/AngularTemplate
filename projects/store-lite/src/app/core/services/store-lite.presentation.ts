@@ -1,14 +1,15 @@
-import { Injectable, OnDestroy, ViewChild, OnInit } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subscription, Observable } from 'rxjs';
-import { BasePresentation, UsersRepository, IDictionary, User, FileUtilsService } from 'shared-lib';
+import { Observable, Subscription } from 'rxjs';
+import { BasePresentation, FileUtilsService, IDictionary, User, UsersRepository } from 'shared-lib';
+import { AssetLinkTypeEnum } from '../enums/asset-link-type.enum';
 import { Stats } from '../models/stats.model';
+import { UploadProgress } from '../models/upload-progress.model';
 import { PushRepository } from '../repositories/push.repository';
 import * as storeLiteStore from '../store';
 import { StoreLiteState } from '../store';
 import * as StatsActions from '../store/actions/stats.actions';
-import { AssetsRepository } from '../repositories/assets.repository';
-import { AssetLinkTypeEnum } from '../enums/asset-link-type.enum';
+import { BaseUploadUseCase } from '../use-cases/upload/base-upload.usecase';
 
 @Injectable()
 export class StoreLitePresentation extends BasePresentation implements OnDestroy {
@@ -28,7 +29,7 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     public storeLiteState$: Store<StoreLiteState>,
     protected serverPushRespository: PushRepository,
     protected fileUtilsService: FileUtilsService,
-    protected assetsRepository: AssetsRepository
+    protected uploadUseCase: BaseUploadUseCase
     ) {
     super(usersRepository);
 
@@ -159,8 +160,8 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
   /**
    * Upload Assets
    */
-  public uploadAssets(files: FileList, mode: AssetLinkTypeEnum): Observable<{progress: number, completed: boolean, sucess: boolean}> {
-    return this.assetsRepository.uploadAssets(files, mode);
+  public uploadAssets(files: FileList, mode: AssetLinkTypeEnum): Observable<UploadProgress> {
+    return this.uploadUseCase.execute(files, mode);
   }
 
   /*

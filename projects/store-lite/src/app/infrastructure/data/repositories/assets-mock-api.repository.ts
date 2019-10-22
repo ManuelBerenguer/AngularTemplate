@@ -3,10 +3,11 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { finalize, map, retry } from 'rxjs/operators';
 import { IDictionary, User, UsersRepository } from 'shared-lib';
+import { AssetLinkTypeEnum } from '../../../core/enums/asset-link-type.enum';
 import { Stats } from '../../../core/models/stats.model';
+import { UploadProgress } from '../../../core/models/upload-progress.model';
 import { AssetsRepository } from '../../../core/repositories/assets.repository';
 import { DictionaryStatsMapper } from './mappers/dictionary-stats.mapper';
-import { AssetLinkTypeEnum } from '../../../core/enums/asset-link-type.enum';
 
 @Injectable()
 export class AssetsMockApiRepository extends AssetsRepository implements OnDestroy {
@@ -65,10 +66,10 @@ export class AssetsMockApiRepository extends AssetsRepository implements OnDestr
     return result;
   }
 
-  public uploadAssets(files: FileList, mode: AssetLinkTypeEnum): Observable<{progress: number, completed: boolean, sucess: boolean}> {
+  public uploadAssets(files: FileList, mode: AssetLinkTypeEnum): Observable<UploadProgress> {
 
 
-    const sub = new Subject<{progress: number, completed: boolean, sucess: boolean}>();
+    const sub = new Subject<UploadProgress>();
 
     const formData: FormData = new FormData();
 
@@ -105,10 +106,10 @@ export class AssetsMockApiRepository extends AssetsRepository implements OnDestr
           console.log('UploadRequest UploadProgress', event);
           const percentDone = Math.round(100 * event.loaded / event.total);
           // console.log('UploadProgress', percentDone);
-          sub.next({progress: percentDone, completed: false, sucess: false});
+          sub.next({progress: percentDone, completed: false, success: false});
         } else if (event instanceof HttpResponse) {
           console.log('UploadRequest HttpResponse', event);
-          sub.next(({progress: 100, completed: true, sucess: true}));
+          sub.next(({progress: 100, completed: true, success: true}));
         }
 
       }, (err: HttpErrorResponse) => {
@@ -120,7 +121,7 @@ export class AssetsMockApiRepository extends AssetsRepository implements OnDestr
           // The backend returned an unsuccessful response code.
         }
 
-        sub.next({progress: null, completed: true, sucess: false});
+        sub.next({progress: null, completed: true, success: false});
         sub.complete();
 
       }, () => {

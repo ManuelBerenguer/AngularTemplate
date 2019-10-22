@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, switchMap, retry } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { BaseGetStatsUseCase } from '../../use-cases/stats/get-stats.base-usecase';
 import * as StatsActions from '../actions/stats.actions';
 

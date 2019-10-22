@@ -1,12 +1,12 @@
-import { Component, OnInit, TemplateRef, ChangeDetectionStrategy, ViewChild, ElementRef } from '@angular/core';
-import { BsModalRef, BsModalService, ModalDirective} from 'ngx-bootstrap/modal';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { StoreLitePresentation } from '../../core/services/store-lite.presentation';
-import { IDictionary } from 'shared-lib';
-import { ErrorModalComponent } from './error-modal/error-modal.component';
-import { take } from 'rxjs/operators';
+import { ChangeDetectionStrategy, Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { IDictionary } from 'shared-lib';
 import { AssetLinkTypeEnum } from '../../core/enums/asset-link-type.enum';
+import { StoreLitePresentation } from '../../core/services/store-lite.presentation';
+import { ErrorModalComponent } from './error-modal/error-modal.component';
 
 @Component({
   selector: 'app-file-upload',
@@ -109,7 +109,7 @@ export class FileUploadComponent implements OnInit {
 
           uploadSubscription.unsubscribe();
 
-          if (progressObj.sucess) {
+          if (progressObj.success) {
             this.showNumberOfFilesModalError(); // TODO
           } else {
             this.showFileTypesModalError(); // TODO
