@@ -159,7 +159,7 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
    * Upload Assets
    */
   public uploadAssets(files: FileList, mode: any): Observable<{progress: number, completed: boolean, sucess: boolean}> {
-    return this.assetsRepository.uploadAssets(files, mode);
+    return this.assetsRepository.uploadAssets(files, '');
   }
 
   /*
