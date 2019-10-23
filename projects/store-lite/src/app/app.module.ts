@@ -35,6 +35,7 @@ import { BasicStatComponent } from './presentation/shared/basic-stat/basic-stat.
 import { RadioButtonImageTextComponent } from './presentation/shared/radio-button-image-text/radio-button-image-text.component';
 import { StatsComponent } from './presentation/stats/stats.component';
 import { StorageComponent } from './presentation/storage/storage.component';
+import { AssetsMockStaticRepository } from './infrastructure/data/repositories/assets-mock-static.repository';
 
 
 @NgModule({
@@ -74,7 +75,7 @@ import { StorageComponent } from './presentation/storage/storage.component';
     {provide: UsersRepository, useClass: UsersMockRepository},
     {provide: BaseGetStatsUseCase, useClass: GetStatsUseCase},
     {provide: BaseUploadUseCase, useClass: UploadUseCase},
-    {provide: AssetsRepository, useClass: AssetsMockApiRepository},
+    {provide: AssetsRepository, useClass: AssetsMockStaticRepository},
     {provide: PushRepository, useClass: PushMockSignalrRepository},
 
     StoreLitePresentation,
