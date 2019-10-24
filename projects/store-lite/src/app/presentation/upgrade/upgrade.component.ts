@@ -17,6 +17,8 @@ export class UpgradeComponent {
   public readonly bulkText = 'Would you rather link your images via a bulk upload?';
   public readonly publishText = 'Want to publish your assets to more places?';
 
+  public readonly upgradeText = 'Store<span class="text-primary">PRO</span> can help you achieve all these things';
+
   public readonly upgradeBtnText = 'Talk to us to upgrade';
   public readonly upgradeBtnHref: string;
 
