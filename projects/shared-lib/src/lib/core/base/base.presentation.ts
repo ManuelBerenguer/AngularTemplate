@@ -12,7 +12,7 @@ import { UsersRepository } from '../repositories/user.repository';
 export abstract class BasePresentation {
 
   // We provide access to user data for all feature applications
-  public loggedUser$ = this.usersRepository.getAuthenticatedUser();
+  protected loggedUser$ = this.usersRepository.getAuthenticatedUser();
 
   constructor(protected usersRepository: UsersRepository) {}
 }

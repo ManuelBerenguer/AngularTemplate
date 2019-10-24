@@ -17,7 +17,7 @@ h1, h2, h3 {
 h1 {
   font-weight: bold;
   font-size: 20px;
-  color: #414042;
+  color: $once-gray;
   margin-top: 10px;
   margin-bottom: 10px;
 }
@@ -25,12 +25,18 @@ h1 {
 h1.dash {
   margin-bottom: 0;
   font-size: 45px;
-  color: #414042;
+  color: $once-gray;
   margin-top: 10px;
 }
 
 h3 {
-  color: #414042;
+  color: $once-gray;
+}
+
+h5 {
+  color: $once-gray;
+  font-size: 11px;
+	font-weight: 600;
 }
 
 .storeContainer {
@@ -67,8 +73,8 @@ h3 {
 
 .card-grey {box-shadow: inset 0px 0px 0px 20px #dcddde}
 
-.card-text-primary {font-weight: bold; font-size: 20px; color: #414042; letter-spacing: 0px;}
-.card-text-secondary {font-weight: bold; font-size: 16px; color: #414042; letter-spacing: 0px;}
+.card-text-primary {font-weight: bold; font-size: 20px; color: $once-gray; letter-spacing: 0px;}
+.card-text-secondary {font-weight: bold; font-size: 16px; color: $once-gray; letter-spacing: 0px;}
 .card-text-tertiary {font-size: 13px; color: #B2B2B2; letter-spacing: 0px;}
 
 .btnUpload:before {
@@ -112,4 +118,8 @@ h3 {
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
+}
+
+.fill-primary {
+  fill: $primary;
 }

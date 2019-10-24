@@ -36,6 +36,8 @@ import { RadioButtonImageTextComponent } from './presentation/shared/radio-butto
 import { StatsComponent } from './presentation/stats/stats.component';
 import { StorageComponent } from './presentation/storage/storage.component';
 import { AssetsMockStaticRepository } from './infrastructure/data/repositories/assets-mock-static.repository';
+import { ImageTextComponent } from './presentation/shared/image-text/image-text.component';
+import { UpgradeComponent } from './presentation/upgrade/upgrade.component';
 
 
 @NgModule({
@@ -48,7 +50,9 @@ import { AssetsMockStaticRepository } from './infrastructure/data/repositories/a
     BasicBarGaugeComponent,
     RadioButtonImageTextComponent,
     FileUploadComponent,
-    ErrorModalComponent
+    ErrorModalComponent,
+    ImageTextComponent,
+    UpgradeComponent
   ],
   imports: [
     BrowserModule,
