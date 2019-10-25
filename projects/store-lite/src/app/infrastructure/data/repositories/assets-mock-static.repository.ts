@@ -35,11 +35,16 @@ export class AssetsMockStaticRepository extends AssetsRepository {
         const progressVal =  10 * tick;
         progress.next(({progress: progressVal, completed: false, success: false}));
 
-        if (progressVal >= 100) {
+        if (progressVal === 100) {
+          progress.next(({progress: 100, completed: false, success: false}));
+        }
+
+        if (progressVal > 100) {
           progress.next(({progress: 100, completed: true, success: true}));
           progress.complete();
           timerSubscription.unsubscribe();
         }
+
       } catch (e) {
         progress.next(({progress: null, completed: true, success: false}));
         progress.complete();

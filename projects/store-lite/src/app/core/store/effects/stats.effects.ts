@@ -24,12 +24,10 @@ export class StatsEffects {
   doStats$ = createEffect(() => this.actions$
    .pipe(
       ofType(StatsActions.getStatsAction),
-      switchMap(action => this.executeGetStats(action)) // there must be a better way to infer the action type insted of infering any
+      switchMap(action => this.executeGetStats())
     ));
 
-  private executeGetStats(action: any) { // there must be a better way to infer the action type insted of infering any
-
-    // console.log('StatsEffects Action', action);
+  private executeGetStats() {
 
     return this.getStatsUseCase.execute()
         .pipe(
