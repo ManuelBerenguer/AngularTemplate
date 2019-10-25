@@ -1,0 +1,17 @@
+<div class="upgradeContainer">
+  <div class="upgradeItem">
+    <app-image-text [iconUrl]="this.graphicLimitUrl" [text]="this.limitText"></app-image-text>
+  </div>
+  <div class="upgradeItem">
+    <app-image-text [iconUrl]="this.graphicBulkUrl" [text]="this.bulkText"></app-image-text>
+  </div>
+  <div class="upgradeItem">
+    <app-image-text [iconUrl]="this.graphicPublishUrl" [text]="this.publishText"></app-image-text>
+  </div>
+</div>
+<h3 class="card-text-primary" [innerHTML]="this.upgradeText"></h3>
+<div style="margin-top: 15px;">
+  <a class="btn btn-primary" role="button" [href]="this.upgradeBtnHref">
+    {{this.upgradeBtnText}}
+  </a>
+</div>

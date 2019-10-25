@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BasicBarGaugeComponent } from './basic-bar-gauge.component';
+import { BarGaugeComponent } from './bar-gauge.component';
 
-describe('BasicBarGaugeComponent', () => {
-  let component: BasicBarGaugeComponent;
-  let fixture: ComponentFixture<BasicBarGaugeComponent>;
+describe('BarGaugeComponent', () => {
+  let component: BarGaugeComponent;
+  let fixture: ComponentFixture<BarGaugeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BasicBarGaugeComponent ]
+      declarations: [ BarGaugeComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BasicBarGaugeComponent);
+    fixture = TestBed.createComponent(BarGaugeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

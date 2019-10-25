@@ -2,7 +2,8 @@ import { Component, OnChanges, OnDestroy, OnInit, ChangeDetectionStrategy } from
 // import { Subscription } from 'rxjs';
 import { Stats } from '../../core/models/stats.model';
 import { StoreLitePresentation } from '../../core/services/store-lite.presentation';
-import { BasicBarGaugeSerie } from '../shared/basic-bar-gauge/basic-bar-gauge-serie';
+import { BarGaugeSerie } from '../shared/bar-gauge/bar-gauge-serie';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-storage',
@@ -11,47 +12,58 @@ import { BasicBarGaugeSerie } from '../shared/basic-bar-gauge/basic-bar-gauge-se
 })
 export class StorageComponent implements OnInit, OnDestroy, OnChanges {
 
-  // private subscritions: Subscription = new Subscription();
-  // public seriesList: BasicBarGaugeSerie[];
+  private subscriptions: Subscription = new Subscription();
+  public seriesList: BarGaugeSerie[] = new Array();
 
   constructor(public storeLitePresentation: StoreLitePresentation) {
   }
 
   ngOnInit() {
-    // this.subscribeToStatsObs();
+    this.subscriptions.add(
+      this.storeLitePresentation.stats$
+      .subscribe(
+        (statsObj: Stats) => {
+          if (statsObj) {
+            this.getSeries(statsObj);
+          }
+        }
+      )
+    );
+    // console.log('StorageComponent ngOnInit');
   }
 
   ngOnChanges(changes) {
-    // console.log('StorageComponent ngOnChanges', changes);
+    console.log('StorageComponent ngOnChanges', changes);
   }
 
   /*
    * When the component is destroyed we unsubscribe to all
    */
   ngOnDestroy() {
-    // this.subscritions.unsubscribe();
+    console.log('StorageComponent ngOnDestroy');
+    this.subscriptions.unsubscribe();
   }
 
-  public getSeries(stats: Stats): BasicBarGaugeSerie[] {
-    const resultSeriesList: BasicBarGaugeSerie[] = [];
+  public getSeries(stats: Stats) { // : BarGaugeSerie[] {
+    this.seriesList = [];
 
     if (stats) {
 
-      resultSeriesList.push({
+      this.seriesList.push({
         value: stats.currentAssets,
         total: stats.maxAssets,
         labelText: `${stats.currentAssets ? stats.currentAssets : ''}<br>of ${stats.maxAssets ? stats.maxAssets : ''} assets stored`,
         tooltipText: '',
         serieColor: '#ee2b37'
       });
-      resultSeriesList.push({
+      this.seriesList.push({
         value: stats.currentStorage,
         total: stats.maxStorage,
         labelText: `${stats.currentStorage ? stats.currentStorage : ''}Gb<br>of ${stats.maxStorage ? stats.maxStorage : ''}Gb used`,
         tooltipText: '',
         serieColor: '#e46e0c'
       });
-      resultSeriesList.push({
+      this.seriesList.push({
         value: stats.totalNotLive,
         total: stats.currentAssets === 0 ? 100 : stats.currentAssets,
         labelText: `${stats.totalNotLive ? stats.totalNotLive : ''}<br>Assets used on non-live parts`,
@@ -60,44 +72,6 @@ export class StorageComponent implements OnInit, OnDestroy, OnChanges {
       });
     }
 
-    return resultSeriesList;
   }
-
-  // private subscribeToStatsObs() {
-  //   this.subscritions.add(
-  //     this.storeLitePresentation.stats$
-  //     // .pipe(takeUntil(this.ngUnsubscribe$))
-  //     .subscribe((stats: Stats) => {
-  //       const tmpSeriesList: BasicBarGaugeSerie[] = [];
-  //       // console.log('StorageComponent seriesList1', tmpSeriesList);
-  //       if (stats) {
-  //         // console.log('StorageComponent seriesList1', stats);
-  //         tmpSeriesList.push({
-  //           value: stats.currentAssets,
-  //           total: stats.maxAssets,
-  //           labelText: `${stats.currentAssets ? stats.currentAssets : ''}<br>of ${stats.maxAssets ? stats.maxAssets : ''} assets stored`,
-  //           tooltipText: '',
-  //           serieColor: '#ee2b37'
-  //         });
-  //         tmpSeriesList.push({
-  //           value: stats.currentStorage,
-  //           total: stats.maxStorage,
-  //           labelText: `${stats.currentStorage ? stats.currentStorage : ''}Gb<br>of ${stats.maxStorage ? stats.maxStorage : ''}Gb used`,
-  //           tooltipText: '',
-  //           serieColor: '#e46e0c'
-  //         });
-  //         tmpSeriesList.push({
-  //           value: stats.totalNotLive,
-  //           total: stats.currentAssets === 0 ? 100 : stats.currentAssets,
-  //           labelText: `${stats.totalNotLive ? stats.totalNotLive : ''}<br>Assets used on non-live parts`,
-  //           tooltipText: '',
-  //           serieColor: '#59cbe8'
-  //         });
-  //       }
-  //       // console.log('StorageComponent seriesList2', tmpSeriesList);
-  //       this.seriesList = tmpSeriesList;
-  //     })
-  //   );
-  // }
 
 }

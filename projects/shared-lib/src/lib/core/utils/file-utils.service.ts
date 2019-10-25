@@ -10,9 +10,9 @@ export class FileUtilsService {
 
   public getExtension(file: File | string): string {
     if (typeof file === 'string') {
-      return (file && file.indexOf('.') > 0 ? file.split('.').pop() : '').trim().toLowerCase();
+      return (file && file.indexOf('.') > -1 ? file.split('.').pop() : '').trim().toLowerCase();
     } else {
-      return (file && file.name && file.name.indexOf('.') > 0 ? file.name.split('.').pop() : '').trim().toLowerCase();
+      return (file && file.name && file.name.indexOf('.') > -1 ? file.name.split('.').pop() : '').trim().toLowerCase();
     }
   }
 
@@ -31,9 +31,12 @@ export class FileUtilsService {
 
   public areExtensionsAllowed(fileNames: string[], allowedExtensions: string[]): boolean {
     if (fileNames && fileNames.length > 0 && allowedExtensions && allowedExtensions.length > 0) {
-      const allowedExtensionsClean = allowedExtensions.filter(ext => ext && ext.trim() !== '');
+      const allowedExtensionsClean = allowedExtensions.filter(ext => ext && ext.trim() !== '')
+      .map(ext => (ext.indexOf('.') > -1 ? ext.split('.').pop() : ext).trim().toLowerCase())
+      .filter(ext => ext && ext.trim() !== '');
+
       for (const fileName of fileNames) {
-        if (!fileName || !allowedExtensionsClean.some(ext1 => ext1.trim().toLowerCase() === this.getExtension(fileName))) {
+        if (!fileName || !allowedExtensionsClean.some(ext1 => ext1 === this.getExtension(fileName))) {
           return false;
         }
       }

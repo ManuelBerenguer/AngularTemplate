@@ -20,6 +20,12 @@ describe('FileUtilsService', () => {
       expect(response).toEqual(true);
     });
 
+    it('should return true, all valid but the provided extensions have dots or file names', () => {
+      const response: boolean = service.areExtensionsAllowed(['asdasdasd.pdf', 'asda.sdasd.JPG ', 'asdasdasd.png'],
+      ['.jpg', 'sdfss.sdfdsf ... pdf', 'dfd.sf.png']);
+      expect(response).toEqual(true);
+    });
+
     it('should return false, not allowed file', () => {
       const response: boolean = service.areExtensionsAllowed(['asdasdasd.txt', 'asda.sdasd.JPG ', 'asdasdasd.png'],
       ['jpg', 'png', 'TIFF ']);
@@ -146,6 +152,16 @@ describe('FileUtilsService', () => {
     it('should return empty, input empty', () => {
       const response: string = service.getExtension('');
       expect(response).toEqual('');
+    });
+
+    it('should return png, one dot at the beginning', () => {
+      const response: string = service.getExtension('.png');
+      expect(response).toEqual('png');
+    });
+
+    it('should return png, one dot at the beginning, and more trash in the middle', () => {
+      const response: string = service.getExtension('. ... sadasd . .. pnG');
+      expect(response).toEqual('png');
     });
 
     it('should return png, multiple dots, spaces and upper and lower cases', () => {

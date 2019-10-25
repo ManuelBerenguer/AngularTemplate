@@ -30,7 +30,7 @@ import { UsersMockRepository } from './infrastructure/data/repositories/users-mo
 import { ErrorModalComponent } from './presentation/file-upload/error-modal/error-modal.component';
 import { FileUploadComponent } from './presentation/file-upload/file-upload.component';
 import { StoreLiteComponent } from './presentation/home/store-lite.component';
-import { BasicBarGaugeComponent } from './presentation/shared/basic-bar-gauge/basic-bar-gauge.component';
+import { BarGaugeComponent } from './presentation/shared/bar-gauge/bar-gauge.component';
 import { BasicStatComponent } from './presentation/shared/basic-stat/basic-stat.component';
 import { RadioButtonImageTextComponent } from './presentation/shared/radio-button-image-text/radio-button-image-text.component';
 import { StatsComponent } from './presentation/stats/stats.component';
@@ -41,6 +41,8 @@ import { IsUploadValidUseCase } from './core/use-cases/upload/is-upload-valid.us
 import { BaseCheckNumberOfFilesUseCase } from './core/use-cases/upload/check-number-files.base-usecase';
 import { CheckNumberOfFilesUseCase } from './core/use-cases/upload/check-number-files.usecase';
 import { FileUploadEffects } from './core/store/effects/file-upload.effects';
+import { ImageTextComponent } from './presentation/shared/image-text/image-text.component';
+import { UpgradeComponent } from './presentation/upgrade/upgrade.component';
 
 
 @NgModule({
@@ -50,10 +52,12 @@ import { FileUploadEffects } from './core/store/effects/file-upload.effects';
     StatsComponent,
     BasicStatComponent,
     StorageComponent,
-    BasicBarGaugeComponent,
+    BarGaugeComponent,
     RadioButtonImageTextComponent,
     FileUploadComponent,
-    ErrorModalComponent
+    ErrorModalComponent,
+    ImageTextComponent,
+    UpgradeComponent
   ],
   imports: [
     BrowserModule,
@@ -80,7 +84,7 @@ import { FileUploadEffects } from './core/store/effects/file-upload.effects';
     {provide: UsersRepository, useClass: UsersMockRepository},
     {provide: BaseGetStatsUseCase, useClass: GetStatsUseCase},
     {provide: BaseUploadUseCase, useClass: UploadUseCase},
-    {provide: AssetsRepository, useClass: AssetsMockStaticRepository},
+    {provide: AssetsRepository, useClass: AssetsMockApiRepository},
     {provide: PushRepository, useClass: PushMockSignalrRepository},
     {provide: BaseIsUploadValidUseCase, useClass: IsUploadValidUseCase},
     {provide: BaseCheckNumberOfFilesUseCase, useClass: CheckNumberOfFilesUseCase},

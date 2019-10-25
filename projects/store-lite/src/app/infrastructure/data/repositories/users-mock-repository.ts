@@ -15,6 +15,9 @@ export class UsersMockRepository extends UsersRepository {
     user.clientId = 1; // 1 Elta, 2 APEC, 3 Denso
     user.userId = 1;
     user.clientName = 'Elta';
+    user.email = 'jose.cabral@elcome-espana.es';
+
+    user.accountManagerEmail = 'jose.cabral@elcome.ltd.uk';
 
     user.usesStoreLite = true;
     user.maxAssetsPerUpload = 5;
