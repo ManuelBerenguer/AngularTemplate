@@ -36,6 +36,11 @@ import { RadioButtonImageTextComponent } from './presentation/shared/radio-butto
 import { StatsComponent } from './presentation/stats/stats.component';
 import { StorageComponent } from './presentation/storage/storage.component';
 import { AssetsMockStaticRepository } from './infrastructure/data/repositories/assets-mock-static.repository';
+import { BaseIsUploadValidUseCase } from './core/use-cases/upload/is-upload-valid.base-usecase';
+import { IsUploadValidUseCase } from './core/use-cases/upload/is-upload-valid.usecase';
+import { BaseCheckNumberOfFilesUseCase } from './core/use-cases/upload/check-number-files.base-usecase';
+import { CheckNumberOfFilesUseCase } from './core/use-cases/upload/check-number-files.usecase';
+import { FileUploadEffects } from './core/store/effects/file-upload.effects';
 
 
 @NgModule({
@@ -61,7 +66,7 @@ import { AssetsMockStaticRepository } from './infrastructure/data/repositories/a
     * The goal is that each feature module contributes it’s own little part to the global state.
     */
     StoreModule.forRoot(StoreLiteReducers),  // TODO remove @ngrx/store: runtime checks are currently ... warning
-    EffectsModule.forRoot([StatsEffects]),
+    EffectsModule.forRoot([StatsEffects, FileUploadEffects]),
 
     DxBarGaugeModule,
     ModalModule.forRoot(),
@@ -77,6 +82,8 @@ import { AssetsMockStaticRepository } from './infrastructure/data/repositories/a
     {provide: BaseUploadUseCase, useClass: UploadUseCase},
     {provide: AssetsRepository, useClass: AssetsMockStaticRepository},
     {provide: PushRepository, useClass: PushMockSignalrRepository},
+    {provide: BaseIsUploadValidUseCase, useClass: IsUploadValidUseCase},
+    {provide: BaseCheckNumberOfFilesUseCase, useClass: CheckNumberOfFilesUseCase},
 
     StoreLitePresentation,
     DictionaryStatsMapper,
@@ -121,7 +128,7 @@ export class AppModule { }
     // Repositories
     {provide: UsersRepository, useClass: UsersMockRepository},
     {provide: BaseGetStatsUseCase, useClass: GetStatsUseCase},
-    {provide: AssetsRepository, useClass: AssetsMockApiRepository},
+    {provide: AssetsRepository, useClass: AssetsMockStaticRepository},
     {provide: PushRepository, useClass: PushMockSignalrRepository},
 
     StoreLitePresentation,

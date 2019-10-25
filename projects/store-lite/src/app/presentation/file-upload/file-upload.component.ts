@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, TemplateRef, ViewChild, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
@@ -8,18 +8,22 @@ import { AssetLinkTypeEnum, AssetLinkTypeTextEnum } from '../../core/enums/asset
 import { StoreLitePresentation } from '../../core/services/store-lite.presentation';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
 import { NotificationsConstants } from '../../core/constants/notifications.constants';
+import { UploadErrorTypes } from '../../core/enums/upload-error-types.enum';
 
 @Component({
   selector: 'app-file-upload',
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.scss']
 })
-export class FileUploadComponent implements OnInit {
+export class FileUploadComponent implements OnInit, OnDestroy {
+
   private readonly linkedControlName = 'linked';
   private readonly assetsControlName = 'assets';
   private readonly uploadBtnId = 'uploadBtn';
   private readonly partNumberBtnId = 'partNumberBtn';
   private readonly applicationBtnId = 'applicationBtn';
+  private readonly vehicleIconUrl = './assets/icons/iconVehicles.svg#iconVehicles';
+  private readonly catalogueIconUrl = './assets/icons/iconCatalogue.svg#iconCatalogue';
 
   fileUploadModalRef: BsModalRef;
   maxFilesErrorModalRef: BsModalRef;
@@ -33,7 +37,11 @@ export class FileUploadComponent implements OnInit {
   @ViewChild('uploadBtn', {static: false}) uploadBtn: ElementRef<HTMLElement>;
 
   public showProgressBar = false;
+  public progressBarPercentage = 0;
   public data: any;
+  // public filesUploadError: any;
+
+  private subscriptions: Subscription = new Subscription();
 
   constructor(
     private modalService: BsModalService,
@@ -49,12 +57,12 @@ export class FileUploadComponent implements OnInit {
         id: this.partNumberBtnId,
         value: AssetLinkTypeEnum.PartNumber,
         text: AssetLinkTypeTextEnum.PartNumber,
-        iconUrl: './assets/icons/iconVehicles.svg#iconVehicles'
+        iconUrl: this.vehicleIconUrl
       }, {
         id: this.applicationBtnId,
         value: AssetLinkTypeEnum.Application,
         text: AssetLinkTypeTextEnum.Application,
-        iconUrl: './assets/icons/iconCatalogue.svg#iconCatalogue'
+        iconUrl: this.catalogueIconUrl
       }]
     };
 
@@ -63,6 +71,73 @@ export class FileUploadComponent implements OnInit {
       linked: [null, [Validators.required]], // radio button for linked control
       assets: ['', [Validators.required]] // file input to select files from disk
     });
+
+    this.subscriptions.add(
+      this.storeLitePresentation.filesUploadError$.subscribe(
+        (error: any) => {
+
+          if (error) {
+            this.fileUploadModalRef.hide();
+
+            switch (error.type) {
+              case UploadErrorTypes.MaxNumberOfFiles:
+                    this.showNumberOfFilesModalError();
+                    break;
+                case UploadErrorTypes.FileTypesNotAllowed:
+                    this.showFileTypesModalError();
+                    break;
+                case UploadErrorTypes.ApiError:
+                    this.showUploadFailedModalError();
+                    break;
+            }
+          }
+
+        }
+      )
+    );
+
+    this.subscriptions.add(
+      this.storeLitePresentation.filesUploadSuccess$.subscribe(
+        (success: boolean) => {
+          if (success) {
+            this.showUploadSuccessModal();
+          }
+        }
+      )
+    );
+
+    this.subscriptions.add(
+      this.storeLitePresentation.filesUploadReady$.subscribe(
+        (ready: boolean) => {
+          this.showProgressBar = !ready;
+        }
+      )
+    );
+
+    this.subscriptions.add(
+      this.storeLitePresentation.filesUploadProgress$.subscribe(
+        (percentage: number) => {
+          this.progressBarPercentage = percentage;
+        }
+      )
+    );
+
+    this.subscriptions.add(
+      this.storeLitePresentation.filesUploadUploading$.subscribe(
+        (uploading: boolean) => {
+          if (uploading) {
+            this.fileUploadModalRef.hide();
+          }
+        }
+      )
+    );
+  }
+
+  /**
+   * @description Unsubscribes from all subscriptions to avoid memory leak
+   */
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   /**
@@ -94,55 +169,11 @@ export class FileUploadComponent implements OnInit {
    * @param files HTML input file list
    *
    * @description Handles how we should proceed once the user has selected some files from the disk to be uploaded.
-   * First, we check if they fit the restrictions and if they do we upload them to the server.
-   * If they don't fit the requirements we show the correspondent error.
+   *
    */
   async handleAssets(files: FileList) {
-
-    // We hide the upload file modal window
-    this.fileUploadModalRef.hide();
-    // We check if the files selected fit the requirements to be uploaded
-    const filesCheck: IDictionary<any> = await this.storeLitePresentation.isUploadValid(files);
-
-    // If we can proceed with the upload
-    if (filesCheck[this.storeLitePresentation.UPLOAD_VALID_KEY]) {
-      this.showProgressBar = true;
-
-      /**
-       * Notice that with takeWhile we unsubscribe at some condition.
-       */
-      const uploadSubscription: Subscription = this.storeLitePresentation.uploadAssets(files, this.myLinkedControl.value)
-      .pipe(takeWhile(progressObj => !progressObj.completed, true)).subscribe(progressObj => {
-
-        if (progressObj.completed) {
-
-          // We hide the progress bar widget
-          this.showProgressBar = false;
-
-          if (progressObj.success) {
-            this.showUploadSuccessModal();
-          } else {
-            this.showUploadFailedModalError();
-          }
-
-        } else {
-          if (progressObj.progress) {
-            console.log(progressObj.progress); // TODO
-          }
-        }
-      });
-
-    } else {
-      // If there is an error with the number of files
-      if (!filesCheck[this.storeLitePresentation.UPLOAD_NUMBER_OF_FILES_VALID_KEY]) {
-        this.showNumberOfFilesModalError();
-      } else {
-        // If there is an error with the extensions allowed
-        if (!filesCheck[this.storeLitePresentation.UPLOAD_FILE_TYPES_VALID_KEY]) {
-          this.showFileTypesModalError();
-        }
-      }
-    }
+    // We call our presentation service to do the job
+    this.storeLitePresentation.uploadAssets(files, this.myLinkedControl.value);
   }
 
   private showUploadSuccessModal() {
