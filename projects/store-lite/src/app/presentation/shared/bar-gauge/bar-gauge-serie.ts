@@ -1,4 +1,4 @@
-export class BasicBarGaugeSerie {
+export class BarGaugeSerie {
 
   public value: number;
   public total: number;

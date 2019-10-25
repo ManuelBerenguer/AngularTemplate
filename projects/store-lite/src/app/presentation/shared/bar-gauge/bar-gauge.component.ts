@@ -1,15 +1,15 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy, OnChanges } from '@angular/core';
-import { BasicBarGaugeSerie } from './basic-bar-gauge-serie';
+import { BarGaugeSerie } from './bar-gauge-serie';
 
 @Component({
-  selector: 'app-basic-bar-gauge',
+  selector: 'app-bar-gauge',
   changeDetection: ChangeDetectionStrategy.OnPush, // We should use this strategy only for components that depend only on their inputs
-  templateUrl: './basic-bar-gauge.component.html',
-  styleUrls: ['./basic-bar-gauge.component.scss']
+  templateUrl: './bar-gauge.component.html',
+  styleUrls: ['./bar-gauge.component.scss']
 })
-export class BasicBarGaugeComponent implements OnInit, OnChanges {
+export class BarGaugeComponent implements OnInit, OnChanges {
 
-  @Input() seriesList: BasicBarGaugeSerie[];
+  @Input() seriesList: BarGaugeSerie[];
   seriesValues: number[] = [];
   seriesPalette: number[] = [];
 
@@ -34,7 +34,7 @@ export class BasicBarGaugeComponent implements OnInit, OnChanges {
     const values = [];
     const palette = [];
     if (this.seriesList) {
-      this.seriesList.forEach((item: BasicBarGaugeSerie) => {
+      this.seriesList.forEach((item: BarGaugeSerie) => {
         // console.log('BasicBarGaugeComponent serieListToArray', item);
         values.push((item.value * 100) / (item.total === 0 ? item.value : item.total));
         palette.push(item.serieColor);
@@ -65,7 +65,7 @@ export class BasicBarGaugeComponent implements OnInit, OnChanges {
         serieItemIndex = 0;
         // console.log(ex);
       }
-      const item: BasicBarGaugeSerie = this.seriesList[serieItemIndex];
+      const item: BarGaugeSerie = this.seriesList[serieItemIndex];
       // console.log(this.seriesList[serieItemIndex]);
       return item ? (item.labelText ? item.labelText : '') : '';
     } else {

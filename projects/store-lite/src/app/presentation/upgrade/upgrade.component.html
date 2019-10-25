@@ -9,7 +9,7 @@
     <app-image-text [iconUrl]="this.graphicPublishUrl" [text]="this.publishText"></app-image-text>
   </div>
 </div>
-<h3 class="card-text-primary">{{this.upgradeText}}</h3>
+<h3 class="card-text-primary" [innerHTML]="this.upgradeText"></h3>
 <div style="margin-top: 15px;">
   <a class="btn btn-primary" role="button" [href]="this.upgradeBtnHref">
     {{this.upgradeBtnText}}

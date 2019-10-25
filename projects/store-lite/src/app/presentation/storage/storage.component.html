@@ -1,5 +1,5 @@
 <ng-container *ngIf="this.storeLitePresentation.stats$ | async as stats"><!-- subscribe in the template with async pipe automaticly unsubcrives on destroy -->
-  <app-basic-bar-gauge [seriesList]="getSeries(stats)"></app-basic-bar-gauge>
+  <app-bar-gauge [seriesList]="getSeries(stats)"></app-bar-gauge>
 </ng-container>
 
 

@@ -30,7 +30,7 @@ import { UsersMockRepository } from './infrastructure/data/repositories/users-mo
 import { ErrorModalComponent } from './presentation/file-upload/error-modal/error-modal.component';
 import { FileUploadComponent } from './presentation/file-upload/file-upload.component';
 import { StoreLiteComponent } from './presentation/home/store-lite.component';
-import { BasicBarGaugeComponent } from './presentation/shared/basic-bar-gauge/basic-bar-gauge.component';
+import { BarGaugeComponent } from './presentation/shared/bar-gauge/bar-gauge.component';
 import { BasicStatComponent } from './presentation/shared/basic-stat/basic-stat.component';
 import { RadioButtonImageTextComponent } from './presentation/shared/radio-button-image-text/radio-button-image-text.component';
 import { StatsComponent } from './presentation/stats/stats.component';
@@ -47,7 +47,7 @@ import { UpgradeComponent } from './presentation/upgrade/upgrade.component';
     StatsComponent,
     BasicStatComponent,
     StorageComponent,
-    BasicBarGaugeComponent,
+    BarGaugeComponent,
     RadioButtonImageTextComponent,
     FileUploadComponent,
     ErrorModalComponent,
@@ -79,7 +79,7 @@ import { UpgradeComponent } from './presentation/upgrade/upgrade.component';
     {provide: UsersRepository, useClass: UsersMockRepository},
     {provide: BaseGetStatsUseCase, useClass: GetStatsUseCase},
     {provide: BaseUploadUseCase, useClass: UploadUseCase},
-    {provide: AssetsRepository, useClass: AssetsMockStaticRepository},
+    {provide: AssetsRepository, useClass: AssetsMockApiRepository},
     {provide: PushRepository, useClass: PushMockSignalrRepository},
 
     StoreLitePresentation,
