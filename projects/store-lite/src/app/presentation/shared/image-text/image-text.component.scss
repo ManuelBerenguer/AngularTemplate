@@ -1,4 +1,9 @@
-.graphicClass {
+::ng-deep .graphicClass {
   max-width: 93px;
   max-height: 105px;
+}
+
+::ng-deep .adjustIcon {
+  margin-top: -20px;
+  margin-bottom: 20px;
 }

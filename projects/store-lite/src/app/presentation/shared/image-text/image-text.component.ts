@@ -11,6 +11,7 @@ export class ImageTextComponent implements OnInit {
   @Input() text: string;
   @Input() iconUrl: string;
   @Input() iconClass: string;
+  @Input() adjustIcon: boolean;
 
   constructor() {}
 

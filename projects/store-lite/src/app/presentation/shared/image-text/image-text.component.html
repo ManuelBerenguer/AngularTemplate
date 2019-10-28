@@ -1,4 +1,4 @@
-<svg class="graphicClass fill-primary">
+<svg [ngClass]="{'graphicClass': true, 'fill-primary': true, 'adjustIcon': adjustIcon}">
   <use [attr.href]="iconUrl"></use>
 </svg>
 <h5>{{text}}</h5>
