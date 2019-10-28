@@ -1,0 +1,10 @@
+::ng-deep .basic-stat-number {
+  font-size: 40px;
+  font-weight: bold;
+}
+
+::ng-deep .basic-stat-img {
+  height: 60px; display: flex;
+  align-items: center;
+  justify-content: center;
+}

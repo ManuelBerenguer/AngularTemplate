@@ -1,5 +1,16 @@
-<p *ngIf="iconUrl; else elseBlock"><img [src]="iconUrl" alt="" /></p>
+<!-- If iconUrl is provided we show the icon, otherwise we show the 'elseBlock' template -->
+<!-- <p *ngIf="iconUrl; else elseBlock"><img [src]="iconUrl" alt="" /></p>
 <ng-template #elseBlock><p style="font-size: 38px; margin-top: 16px; margin-bottom: 16px; text-align:center;">{{number}}</p></ng-template>
 <p style="text-align:center;">{{text}}</p>
-<p style="text-align:center;"><a [href]="viewUrl">View</a></p>
+<p style="text-align:center;"><a [href]="viewUrl">View</a></p> -->
+
+<div>
+  <div *ngIf="iconUrl && number > 0; else elseBlock" class="basic-stat-img"><img [src]="iconUrl" alt=""/></div>
+  <ng-template #elseBlock>
+    <span [ngClass]="{'text-primary': number > 0, 'text-success': number <= 0, 'basic-stat-number': true}">{{number}}</span><br />
+  </ng-template>
+  <span>{{text}}</span>
+  <br />
+  <a style="padding-top: 7px; display:block" [href]="viewUrl">View</a>
+</div>
 

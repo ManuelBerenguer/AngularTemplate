@@ -42,6 +42,7 @@ $purple:  #6f42c1;
 $pink:    #e83e8c;
 $red:     #dc3545;
 $orange:  #e46e0c;
+$orange_lighter: #ec8a1a;
 $yellow:  #ffc107;
 $green:   #28a745;
 $teal:    #20c997;
@@ -69,6 +70,7 @@ $colors: map-merge(
 );
 
 $primary:       $orange;
+$primary-hover: $orange_lighter;
 $secondary:     #58585a;
 $success:       $green;
 $info:          $cyan;
