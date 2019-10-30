@@ -16,42 +16,38 @@ export class StatsComponent extends BaseComponent {
   public readonly textForTooSmall = 'Assets are too small';
 
   public stats: Stats;
-  public showLoading: boolean;
-  public showError: boolean;
 
   constructor(public storeLitePresentation: StoreLitePresentation) {
     super();
-
-    this.showLoading = false;
-    this.showError = false;
   }
 
   // tslint:disable-next-line: use-lifecycle-interface
   ngOnInit() {
     super.ngOnInit();
 
-    this.subscriptions.add(
+    this.addSubscriptions(
 
       this.storeLitePresentation.statsFailed$.subscribe(
         (failed: boolean) => {
           this.showError = failed;
         }
+      ),
+
+      this.storeLitePresentation.statsLoading$.subscribe(
+        (loading: boolean) => {
+            this.showLoading = loading && !this.stats;
+        }
+      ),
+
+      this.storeLitePresentation.stats$.subscribe(
+        (stats: Stats) => {
+          if (stats) {
+            this.stats = stats;
+          }
+        }
       )
     );
 
-    this.storeLitePresentation.statsLoading$.subscribe(
-      (loading: boolean) => {
-          this.showLoading = loading && !this.stats;
-      }
-    );
-
-    this.storeLitePresentation.stats$.subscribe(
-      (stats: Stats) => {
-        if (stats) {
-          this.stats = stats;
-        }
-      }
-    );
   }
 
   /**

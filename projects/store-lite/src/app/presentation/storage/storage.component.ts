@@ -4,44 +4,49 @@ import { Stats } from '../../core/models/stats.model';
 import { StoreLitePresentation } from '../../core/services/store-lite.presentation';
 import { BarGaugeSerie } from '../shared/bar-gauge/bar-gauge-serie';
 import { Subscription } from 'rxjs';
+import { BaseComponent } from '../../core/base/base.component';
 
 @Component({
   selector: 'app-storage',
   templateUrl: './storage.component.html',
   styleUrls: ['./storage.component.scss']
 })
-export class StorageComponent implements OnInit, OnDestroy, OnChanges {
+export class StorageComponent extends BaseComponent {
 
-  private subscriptions: Subscription = new Subscription();
   public seriesList: BarGaugeSerie[] = new Array();
 
   constructor(public storeLitePresentation: StoreLitePresentation) {
+    super();
   }
 
+  // tslint:disable-next-line: use-lifecycle-interface
   ngOnInit() {
-    this.subscriptions.add(
-      this.storeLitePresentation.stats$
-      .subscribe(
-        (statsObj: Stats) => {
-          if (statsObj) {
-            this.getSeries(statsObj);
+    super.ngOnInit();
+
+    this.addSubscriptions(
+
+      this.storeLitePresentation.statsFailed$.subscribe(
+        (failed: boolean) => {
+          this.showError = failed;
+        }
+      ),
+
+      this.storeLitePresentation.statsLoading$.subscribe(
+        (loading: boolean) => {
+          this.showLoading = loading && (!this.seriesList || this.seriesList.length === 0);
+        }
+      ),
+
+      this.storeLitePresentation.stats$.subscribe(
+        (stats: Stats) => {
+          if (stats) {
+            this.getSeries(stats);
           }
         }
       )
+
     );
-    // console.log('StorageComponent ngOnInit');
-  }
 
-  ngOnChanges(changes) {
-    console.log('StorageComponent ngOnChanges', changes);
-  }
-
-  /*
-   * When the component is destroyed we unsubscribe to all
-   */
-  ngOnDestroy() {
-    console.log('StorageComponent ngOnDestroy');
-    this.subscriptions.unsubscribe();
   }
 
   public getSeries(stats: Stats) { // : BarGaugeSerie[] {
@@ -72,6 +77,13 @@ export class StorageComponent implements OnInit, OnDestroy, OnChanges {
       });
     }
 
+  }
+
+  /**
+   * @description Reload stats data
+   */
+  public reloadStats(): void {
+    this.storeLitePresentation.loadStats();
   }
 
 }

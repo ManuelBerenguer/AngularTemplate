@@ -1,3 +1,11 @@
-<app-bar-gauge [seriesList]="this.seriesList"></app-bar-gauge>
+<ng-container *ngIf="this.seriesList && this.seriesList.length > 0">
+    <app-bar-gauge [seriesList]="this.seriesList"></app-bar-gauge>
+</ng-container>
 
+<ng-container *ngIf="this.showLoading">
+  <app-loading></app-loading>
+</ng-container>
 
+<ng-container *ngIf="this.showError">
+  <app-component-error (tryAgainEmitter)="reloadStats();"></app-component-error>
+</ng-container>

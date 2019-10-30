@@ -43,6 +43,8 @@ import { CheckNumberOfFilesUseCase } from './core/use-cases/upload/check-number-
 import { FileUploadEffects } from './core/store/effects/file-upload.effects';
 import { ImageTextComponent } from './presentation/shared/image-text/image-text.component';
 import { UpgradeComponent } from './presentation/upgrade/upgrade.component';
+import { ComponentErrorComponent } from './presentation/shared/component-error/component-error.component';
+import { LoadingComponent } from './presentation/shared/loading/loading.component';
 
 
 @NgModule({
@@ -57,7 +59,11 @@ import { UpgradeComponent } from './presentation/upgrade/upgrade.component';
     FileUploadComponent,
     ErrorModalComponent,
     ImageTextComponent,
-    UpgradeComponent
+    UpgradeComponent,
+    ComponentErrorComponent,
+    ComponentErrorComponent,
+    LoadingComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,
