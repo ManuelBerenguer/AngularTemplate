@@ -2,21 +2,27 @@ import { Action, createReducer, on } from '@ngrx/store';
 import { Stats } from '../../models/stats.model';
 import * as StatsActions from '../actions/stats.actions';
 
+/**
+ * Enum representing the different process states
+ */
+export enum StatsStatus {
+  Ready = 'Ready', // Ready to start getting the stats from server
+  Loading = 'Loading', // Loading stats from server
+  Loaded = 'Loaded', // Stats loaded successfully
+  Error = 'Error', // An error occurred while retrieving stats from server
+}
+
 export interface StatsState {
-  loading: boolean;
-  loaded: boolean;
-  failed: boolean;
+  status: StatsStatus;
   stats: Stats;
-  error: any;
+  error: any | null;
 }
 
 export const storeLiteStatsFeatureKey = 'storelite stats';
 
 const initialState: StatsState = {
-  loading: false,
-  loaded: false,
-  failed: false,
-  stats: null, // new Stats(),
+  status: StatsStatus.Ready,
+  stats: null,
   error: null
 };
 
@@ -25,24 +31,32 @@ const statsReducer = createReducer(
   // on(StatsActions.getStatsAction, state => ({ ...state, loading: true, loaded: false, failed: false, stats: new Stats(), error: null })),
   on(StatsActions.getStatsAction, state => ({
     ...state,
-    loading: true,
-    loaded: false,
-    failed: false,
-    stats: state && state.loaded && state.loaded === true && state.stats ? {...state.stats} : new Stats(),
-    // if previus state is loaded use a clone stats else new Stats() but I wanted null, but the gauge gets affected
+    status: StatsStatus.Loading,
+    // if previus state has stats we clone it
+    stats: state.stats ? {...state.stats} : null,
     error: null
   })),
   on(StatsActions.getStatsSuccessAction,
-    (state, { stats }) => ({ ...state, loading: false, loaded: true, failed: false, stats, error: null })
+    (state, { stats }) => ({
+      ...state,
+      status: StatsStatus.Loaded, stats, error: null })
   ),
   on(StatsActions.getStatsFailedAction,
-      (state, { error }) => ({ ...state, loading: false, loaded: false, failed: true, stats: null, error })
+    (state, { error }) => ({ ...state,
+      status: StatsStatus.Error, stats: null, error })
   ),
-  on(StatsActions.clearStatsAction, state => ({ ...state, loading: false, loaded: false, failed: false, stats: null, error: null }))
+  on(StatsActions.getClearStatsAction, state => ({
+    ...state,
+    status: StatsStatus.Ready, stats: null, error: null })
+  ),
+  on(StatsActions.getReadyStatsAction, state => ({
+    ...state,
+    status: StatsStatus.Ready,
+    stats: state.stats ? {...state.stats} : null,
+    error: null
+  }))
 );
 
 export function reducer(state: StatsState | undefined, action: Action) {
-  // console.log('reducer', state);
-  // console.log('reducer', action);
   return statsReducer(state, action);
 }

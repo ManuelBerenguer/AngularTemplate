@@ -1,4 +1,4 @@
-<ng-container *ngIf="this.storeLitePresentation.stats$ | async as stats" style="display: flex;"><!-- subscribe in the template with async pipe automatically unsubscribes on destroy -->
+<ng-container *ngIf="this.stats as stats" style="display: flex;">
 
   <div style="display: flex;">
 
@@ -23,4 +23,17 @@
 
   </div>
 
+</ng-container>
+
+<ng-container *ngIf="this.showLoading">
+  <div>
+    <h1 class="text-primary">LOADING ...</h1>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="this.showError">
+  <div>
+    <h1 class="text-danger">An error has occurred</h1>
+    <a style="padding-top: 7px; display:block" href="#" (click)="reloadStats();">Try again</a>
+  </div>
 </ng-container>

@@ -1,29 +1,63 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { StoreLitePresentation } from '../../core/services/store-lite.presentation';
+import { BaseComponent } from '../../core/base/base.component';
+import { Stats } from '../../core/models/stats.model';
 
 @Component({
   selector: 'app-stats',
   templateUrl: './stats.component.html',
   styleUrls: ['./stats.component.scss']
 })
-export class StatsComponent implements OnInit, OnDestroy {
-
-
+export class StatsComponent extends BaseComponent {
   // TODO solve the asset icon issue!
 
-  public textForUnlinked = 'Assets are unlinked';
-  public textForUnresolved = 'Unresolved conflicts';
-  public textForTooSmall = 'Assets are too small';
+  public readonly textForUnlinked = 'Assets are unlinked';
+  public readonly textForUnresolved = 'Unresolved conflicts';
+  public readonly textForTooSmall = 'Assets are too small';
 
-  constructor(public storeLitePresentation: StoreLitePresentation) { }
+  public stats: Stats;
+  public showLoading: boolean;
+  public showError: boolean;
 
+  constructor(public storeLitePresentation: StoreLitePresentation) {
+    super();
+
+    this.showLoading = false;
+    this.showError = false;
+  }
+
+  // tslint:disable-next-line: use-lifecycle-interface
   ngOnInit() {
+    super.ngOnInit();
+
+    this.subscriptions.add(
+
+      this.storeLitePresentation.statsFailed$.subscribe(
+        (failed: boolean) => {
+          this.showError = failed;
+        }
+      )
+    );
+
+    this.storeLitePresentation.statsLoading$.subscribe(
+      (loading: boolean) => {
+          this.showLoading = loading && !this.stats;
+      }
+    );
+
+    this.storeLitePresentation.stats$.subscribe(
+      (stats: Stats) => {
+        if (stats) {
+          this.stats = stats;
+        }
+      }
+    );
   }
 
-  /*
-   * When the component is destroyed we unsubscribe to all
+  /**
+   * @description Reload stats data
    */
-  ngOnDestroy() {
+  public reloadStats(): void {
+    this.storeLitePresentation.loadStats();
   }
-
 }

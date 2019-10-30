@@ -14,6 +14,26 @@ export class StatsEffects {
   }
 
   /**
+   * @description
+   * This effect listen for actions of type GET_STATS_FAILED and dispatch a READY action to allow to
+   * retry again after any error
+   */
+  // getStatsFailedEffect$ = createEffect(() => this.actions$.pipe(
+  //   ofType(StatsActions.getStatsFailedAction),
+  //   map(action => (StatsActions.getReadyStatsAction())
+  // )));
+
+  /**
+   * @description
+   * This effect listen for actions of type GET_STATS_SUCCESS and dispatch a READY action to allow to
+   * retry again after any error
+   */
+  // getStatsSuccessEffect$ = createEffect(() => this.actions$.pipe(
+  //   ofType(StatsActions.getStatsSuccessAction),
+  //   map(action => (StatsActions.getReadyStatsAction())
+  // )));
+
+  /**
    * Get Stats effect
    *
    * @description
@@ -29,7 +49,8 @@ export class StatsEffects {
 
   private executeGetStats() {
 
-    return this.getStatsUseCase.execute()
+    try {
+      return this.getStatsUseCase.execute()
         .pipe(
           map(statsObj => {
             console.log('StatsEffects OK', statsObj);
@@ -40,6 +61,9 @@ export class StatsEffects {
             return of(StatsActions.getStatsFailedAction({ error: errorObj }));
           })
         );
+    } catch (exception) {
+      return of(StatsActions.getStatsFailedAction({ error: exception }));
+    }
   }
 
 }

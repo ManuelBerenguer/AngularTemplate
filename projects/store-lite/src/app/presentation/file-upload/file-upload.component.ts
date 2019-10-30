@@ -2,8 +2,7 @@ import { Component, ElementRef, OnInit, TemplateRef, ViewChild, OnDestroy } from
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
-import { take, takeWhile } from 'rxjs/operators';
-import { IDictionary } from 'shared-lib';
+import { take } from 'rxjs/operators';
 import { AssetLinkTypeEnum, AssetLinkTypeTextEnum } from '../../core/enums/asset-link-type.enum';
 import { StoreLitePresentation } from '../../core/services/store-lite.presentation';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
@@ -39,7 +38,6 @@ export class FileUploadComponent implements OnInit, OnDestroy {
   public showProgressBar = false;
   public progressBarPercentage = 0;
   public data: any;
-  // public filesUploadError: any;
 
   private subscriptions: Subscription = new Subscription();
 
@@ -75,7 +73,7 @@ export class FileUploadComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.storeLitePresentation.filesUploadError$.subscribe(
         (error: any) => {
-
+          // If the error is not null
           if (error) {
             this.fileUploadModalRef.hide();
 

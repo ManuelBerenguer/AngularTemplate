@@ -26,12 +26,17 @@ export const StoreLiteReducers: ActionReducerMap<StoreLiteState> = {
 // than the type we would receive if we run StoreLite as a child application inside ONCE
 export const getStatsState = (state: any) => state.stats === undefined ? state.storeLite.stats : state.stats;
 
-// define Selectors
+// Since status property is an enum we will create a selector for each enum choice
 export const selectStats = createSelector(getStatsState, (state: StatsReducer.StatsState) => state.stats);
-export const selectStatsLoading = createSelector(getStatsState, (state: StatsReducer.StatsState) => state.loading);
-export const selectStatsLoaded = createSelector(getStatsState, (state: StatsReducer.StatsState) => state.loaded);
-export const selectStatsFailed = createSelector(getStatsState, (state: StatsReducer.StatsState) => state.failed);
 export const selectError = createSelector(getStatsState, (state: StatsReducer.StatsState) => state.error);
+export const selectStatsReady = createSelector(getStatsState,
+  (state: StatsReducer.StatsState) => state.status === StatsReducer.StatsStatus.Ready);
+export const selectStatsLoading = createSelector(getStatsState,
+  (state: StatsReducer.StatsState) => state.status === StatsReducer.StatsStatus.Loading);
+export const selectStatsLoaded = createSelector(getStatsState,
+  (state: StatsReducer.StatsState) => state.status === StatsReducer.StatsStatus.Loaded);
+export const selectStatsFailed = createSelector(getStatsState,
+  (state: StatsReducer.StatsState) => state.status === StatsReducer.StatsStatus.Error);
 
 
 /**

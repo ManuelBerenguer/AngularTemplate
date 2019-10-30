@@ -13,7 +13,15 @@ import * as FileUploadActions from '../store/actions/file-upload.actions';
 @Injectable()
 export class StoreLitePresentation extends BasePresentation implements OnDestroy {
 
+  // Stats observables
   public stats$ = this.storeLiteState$.select(storeLiteStore.selectStats);
+  public statsReady$ = this.storeLiteState$.select(storeLiteStore.selectStatsReady);
+  public statsLoading$ = this.storeLiteState$.select(storeLiteStore.selectStatsLoading);
+  public statsFailed$ = this.storeLiteState$.select(storeLiteStore.selectStatsFailed);
+  public statsLoaded$ = this.storeLiteState$.select(storeLiteStore.selectStatsLoaded);
+  public statsError$ = this.storeLiteState$.select(storeLiteStore.selectError);
+
+  // Files upload observables
   public filesUploadChecking$ = this.storeLiteState$.select(storeLiteStore.selectUploadFilesChecking);
   public filesUploadUploading$ = this.storeLiteState$.select(storeLiteStore.selectUploadFilesUploading);
   public filesUploadProgress$ = this.storeLiteState$.select(storeLiteStore.selectUploadFilesProgress);
@@ -43,14 +51,16 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
   }
 
   /**
-   * Loads stats
+   * @description Dispatch the action to get stats from server
    */
   public loadStats(): void {
     this.storeLiteState$.dispatch(StatsActions.getStatsAction());
   }
 
   /**
-   * Push stats
+   * @description Listens to notifications from server with new stats data.
+   * After each notification, it dispatches the same action we dispatch when we get the
+   * stats from server so the stats will be updated in the same way.
    */
   private listenPushStats(): void {
     this.subscriptions.add(
@@ -66,7 +76,8 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
   }
 
   /**
-   * Push get stats signal
+   * @description Listens to notifications from server indicating new stats are available.
+   * After each notification, it dispatches the action to get stats from server.
    */
   private listenPushGetStatsSignal(): void {
     this.subscriptions.add(
@@ -81,6 +92,10 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     );
   }
 
+  /**
+   * @description It subscribes to user observable and updates the internal user object
+   * everytime the observable emits a new value for user
+   */
   private subscribeToUser() {
 
     this.subscriptions.add(
@@ -108,14 +123,14 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
 
   }
 
-  /*
-   * When the service is destroyed we unsubscribe to all ?????????
+  /**
+   * @description When the service is destroyed we unsubscribe to all the subscriptions done previously
    */
   ngOnDestroy() {
     console.log('ngOnDestroy StoreLitePresentation');
 
     // TODO confirm that this works or find a better place to clear the subapplication store (logout, route leave)
-    this.storeLiteState$.dispatch(StatsActions.clearStatsAction());
+    this.storeLiteState$.dispatch(StatsActions.getClearStatsAction());
 
     this.subscriptions.unsubscribe();
   }
