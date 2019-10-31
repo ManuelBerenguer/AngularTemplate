@@ -59,21 +59,21 @@ export class StorageComponent extends BaseComponent {
       this.seriesList.push({
         value: stats.currentAssets,
         total: stats.maxAssets,
-        labelText: `${stats.currentAssets ? stats.currentAssets : ''}<br>of ${stats.maxAssets ? stats.maxAssets : ''} assets stored`,
+        labelText: `of ${stats.maxAssets ? stats.maxAssets : ''} assets stored`,
         tooltipText: '',
         serieColor: '#ee2b37'
       });
       this.seriesList.push({
         value: stats.currentStorage,
         total: stats.maxStorage,
-        labelText: `${stats.currentStorage ? stats.currentStorage : ''}Gb<br>of ${stats.maxStorage ? stats.maxStorage : ''}Gb used`,
+        labelText: `of ${stats.maxStorage ? stats.maxStorage : ''}Gb used`,
         tooltipText: '',
         serieColor: '#e46e0c'
       });
       this.seriesList.push({
         value: stats.totalNotLive,
         total: stats.currentAssets === 0 ? 100 : stats.currentAssets,
-        labelText: `${stats.totalNotLive ? stats.totalNotLive : ''}<br>Assets used on non-live parts`,
+        labelText: `Assets used on non-live parts`,
         tooltipText: '',
         serieColor: '#59cbe8'
       });
