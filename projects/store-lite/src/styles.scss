@@ -8,6 +8,7 @@ body {
   margin: 0;
   font-size: 18px;
   height: 100vh; // expand body to use all the vertical space
+  font-family: $font-family-base;
 }
 
 h1, h2, h3 {
@@ -28,6 +29,8 @@ h1.dash {
   color: $once-gray;
   margin-top: 10px;
 }
+
+
 
 h3 {
   color: $once-gray;
@@ -63,7 +66,7 @@ h5 {
   flex-direction: column;
 }
 
-.card-block-header{
+.card-block-header {
   font-size: 15px;
   font-weight: 600;
 }
@@ -82,8 +85,8 @@ h5 {
 .card-grey {box-shadow: inset 0px 0px 0px 20px #dcddde}
 
 .card-text-primary {font-weight: bold; font-size: 20px; color: $once-gray; letter-spacing: 0px;}
-.card-text-secondary {font-weight: bold; font-size: 16px; color: $once-gray; letter-spacing: 0px;}
-.card-text-tertiary {font-size: 13px; color: #B2B2B2; letter-spacing: 0px;}
+.card-text-secondary {font-weight: bold; font-size: 18px; color: #58585a; letter-spacing: 0px;}
+.card-text-tertiary {font-size: 14px; color: #B2B2B2; letter-spacing: 0px; font-weight: normal;}
 
 .btnUpload:before {
   content: url(../../../shared/assets/icons/iconUpload.svg);

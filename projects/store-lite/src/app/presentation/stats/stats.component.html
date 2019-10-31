@@ -30,5 +30,5 @@
 </ng-container>
 
 <ng-container *ngIf="this.showError">
-  <app-component-error (tryAgainEmitter)="reloadStats();"></app-component-error>
+  <app-component-error [text]="errorText" (tryAgainEmitter)="reloadStats();"></app-component-error>
 </ng-container>

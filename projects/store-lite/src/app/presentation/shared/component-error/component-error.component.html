@@ -1,4 +1,7 @@
 <div>
-  <h1 class="text-danger">An error has occurred</h1>
-  <a style="padding-top: 7px; display:block" href="#" (click)="tryAgain();">Try again</a>
+  <svg class="errorIcon">
+    <use href="./assets/icons/warning-triangle.svg#iconWarningTriangle"></use>
+  </svg>
+  <div style=" margin-top: 10px; margin-bottom: 10px;"><span class="card-text-secondary">{{text}}</span></div>
+  <a style="font-size: 15px;" href="#" (click)="tryAgain();">Refresh?</a>
 </div>

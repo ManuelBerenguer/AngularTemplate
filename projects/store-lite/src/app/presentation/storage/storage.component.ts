@@ -13,6 +13,8 @@ import { BaseComponent } from '../../core/base/base.component';
 })
 export class StorageComponent extends BaseComponent {
 
+  public readonly errorText = 'Problem loading Storage';
+
   public seriesList: BarGaugeSerie[] = new Array();
 
   constructor(public storeLitePresentation: StoreLitePresentation) {

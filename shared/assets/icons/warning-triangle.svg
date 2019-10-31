@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="42.454" height="41" viewBox="0 0 42.454 41">
+  <symbol id="iconWarningTriangle" width="42.454" height="41" viewBox="0 0 42.454 41">
+    <g transform="translate(0 1.055)">
+      <path d="M305.468,223.23h-15.7a5.517,5.517,0,0,1-4.777-8.275l7.851-13.6,7.851-13.6a5.516,5.516,0,0,1,9.555,0l7.851,13.6,7.851,13.6a5.517,5.517,0,0,1-4.777,8.275Z" transform="translate(-284.241 -184.815)"/>
+      <text fill="currentColor" transform="translate(17.284 30.945)">
+        <tspan x="0" y="0">!</tspan>
+      </text>
+    </g>
+  </symbol>
+</svg>

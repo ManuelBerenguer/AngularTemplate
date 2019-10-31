@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 
 @Component({
   selector: 'app-component-error',
@@ -8,6 +8,9 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 export class ComponentErrorComponent implements OnInit {
 
   constructor() { }
+
+  // The text to be displayed
+  @Input() public text: string;
 
   // To emit an event to the parent to inform we want to retry
   @Output() public tryAgainEmitter = new EventEmitter();

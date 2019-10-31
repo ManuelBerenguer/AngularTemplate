@@ -14,6 +14,7 @@ export class StatsComponent extends BaseComponent {
   public readonly textForUnlinked = 'Assets are unlinked';
   public readonly textForUnresolved = 'Unresolved conflicts';
   public readonly textForTooSmall = 'Assets are too small';
+  public readonly errorText = 'Problem loading Store Stats';
 
   public stats: Stats;
 

@@ -11,8 +11,8 @@ export abstract class BaseComponent implements OnInit, OnDestroy {
   // We provide an array to store all subscriptions
   protected subscriptions: Subscription;
 
-  protected showLoading: boolean;
-  protected showError: boolean;
+  public showLoading: boolean;
+  public showError: boolean;
 
   constructor() {
     this.subscriptions = new Subscription();
