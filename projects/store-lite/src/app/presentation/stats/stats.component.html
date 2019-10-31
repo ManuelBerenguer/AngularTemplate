@@ -1,4 +1,4 @@
-<ng-container *ngIf="this.stats" style="display: flex;">
+<ng-container *ngIf="this.stats" style="display: flex; width: 100%;">
 
   <div style="display: flex;">
 
@@ -26,7 +26,7 @@
 </ng-container>
 
 <ng-container *ngIf="this.showLoading">
-  <app-loading></app-loading>
+  <app-loading style="width: 100%;"></app-loading>
 </ng-container>
 
 <ng-container *ngIf="this.showError">
