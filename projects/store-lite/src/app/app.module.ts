@@ -7,6 +7,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { DxBarGaugeModule } from 'devextreme-angular';
 import { BsModalService, ModalModule } from 'ngx-bootstrap';
+import { PopoverModule } from 'ngx-bootstrap/popover';
 import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
 import { SharedLibModule, UsersRepository } from 'shared-lib';
 import { AppRoutingExpModule, AppRoutingModule } from './app-routing.module';
@@ -81,6 +82,7 @@ import { LoadingComponent } from './presentation/shared/loading/loading.componen
     DxBarGaugeModule,
     ModalModule.forRoot(),
     ProgressbarModule.forRoot(),
+    PopoverModule.forRoot(),
     FormsModule,
     ReactiveFormsModule
   ],

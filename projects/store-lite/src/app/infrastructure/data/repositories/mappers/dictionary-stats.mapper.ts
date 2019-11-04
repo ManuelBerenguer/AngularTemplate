@@ -20,6 +20,10 @@ export class DictionaryStatsMapper extends Mapper <IDictionary<any>, Stats> {
         maxStorage: param.maxSize,
         currentAssets: param.totalAssets,
         currentStorage: param.size,
+        numberOfImages: param.totalImage,
+        numberOfPdf: param.totalPdf,
+        numberOfUrl: param.totalUrl,
+        numberOf360: param.total360,
         totalNotLive: param.totalNotLive,
 
         tooSmallImages: param.tooSmall,

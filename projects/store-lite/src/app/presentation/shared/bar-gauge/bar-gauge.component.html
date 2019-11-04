@@ -14,9 +14,10 @@
     <div class="col-5">
 
       <div *ngFor="let serie of seriesList" style="text-align: left; margin-bottom: 10px;">
-        <span [ngStyle]="{'font-size': '25px', 'color': serie.serieColor}"
-        popover="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."
-        placement="right">{{serie.value}}</span>
+        <ng-template #popupContent><div [innerHtml]="serie.tooltipText"></div></ng-template>
+        <span [ngStyle]="{'font-size': '25px', 'color': serie.serieColor}" class="cursor-pointer no-select"
+        [popover]="popupContent" triggers="mouseenter:mouseleave"
+        placement="right" container="body" containerClass="popUpCustom">{{serie.value | number}}</span>
         <br />
         <span [ngStyle]="{'font-size': '11px', 'color': serie.serieColor}">{{serie.labelText}}</span>
       </div>

@@ -4,6 +4,10 @@ export class Stats {
   public currentAssets: number;
   public maxStorage: number;
   public currentStorage: number;
+  public numberOfImages: number;
+  public numberOfPdf: number;
+  public numberOfUrl: number;
+  public numberOf360: number;
   public totalNotLive: number;
 
   public unlinkedAssets: number;

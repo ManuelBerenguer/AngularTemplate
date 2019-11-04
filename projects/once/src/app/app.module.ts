@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PopoverModule } from 'ngx-bootstrap/popover';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
     EffectsModule.forRoot([]),
 
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+
+    PopoverModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
