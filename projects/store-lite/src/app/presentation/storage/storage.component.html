@@ -1,4 +1,4 @@
-<ng-container *ngIf="this.seriesList && this.seriesList.length > 0">
+<ng-container *ngIf="this.seriesList && this.seriesList.length > 0  && !(this.showLoading || this.showError)">
     <app-bar-gauge [seriesList]="this.seriesList"></app-bar-gauge>
 </ng-container>
 

@@ -20,7 +20,7 @@ export interface StatsState {
 
 export const storeLiteStatsFeatureKey = 'storelite stats';
 
-const initialState: StatsState = {
+export const initialState: StatsState = {
   status: StatsStatus.Ready,
   stats: null,
   error: null
@@ -57,6 +57,6 @@ const statsReducer = createReducer(
   }))
 );
 
-export function reducer(state: StatsState | undefined, action: Action) {
+export function reducer(state: StatsState | undefined | undefined, action: Action) {
   return statsReducer(state, action);
 }
