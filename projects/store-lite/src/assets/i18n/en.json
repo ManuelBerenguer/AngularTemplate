@@ -1,0 +1,56 @@
+{
+  "storeLite": {
+    "home": {
+      "title": "Store",
+      "subTitle": "Upload any electronic file",
+      "storeStats": {
+        "title": "Store Stats"
+      },
+      "storage": {
+        "title": "Storage"
+      }
+    },
+    "storeStats": {
+      "errorText": "Problem loading store stats",
+      "tooSmallText": "Assets are too small",
+      "unresolvedText": "Unresolved conflicts",
+      "unlinkedText": "Assets are unlinked"
+    },
+    "storage": {
+      "errorText": "Problem loading storage",
+      "legend1": "of {0} assets stored",
+      "tooltip1": "Contact your BDM about upgrading to more storage.",
+      "legend2": "of {0}Gb used",
+      "legend3": "Assets used on non-live parts",
+      "tooltip3": "Deleted;Superseded"
+    },
+    "basicStat": {
+      "linkText": "View"
+    },
+    "fileUpload": {
+      "text1": "Please ensure your upload file contains only one product group at a time.",
+      "text2": "You can select up to 5 files per upload",
+      "uploadFiles": "Upload Files",
+      "uploadModalText1": "Please select how these files will be linked",
+      "selectFilesAgain": "Select files again",
+      "uploadedSuccessfully": "Your files have been uploaded succesfully.",
+      "uploadSuccessfullyBody": "The server is now processing your files. <br /> You can view your progress and next actions from the navigation bar at the top.",
+      "filesUploadErrorTitle": "Something unexpected happened.",
+      "filesUploadErrorBody": "Please try again.",
+      "NumberOfFilesUploadedErrorTitle": "Your file contains more than 5 assets.",
+      "NumberOfFilesUploadedErrorBody": "Please adjust your file to only 5. <br /> Alternatively, to upgrade to Pro and unlimited uploads <br /> please contact your Account manager.",
+      "FileTypesUploadErrorTitle": "The file extension you have chosen is not supported.",
+      "FileTypesUploadErrorBody": "Please make sure your files are one of the following: "
+    },
+    "shared": {
+      "componentError": {
+        "refresh": "Refresh?"
+      },
+      "images": "Images",
+      "upload": "Upload",
+      "cancelUpload": "Cancel Upload",
+      "continueUpload": "Continue Upload",
+      "backToStore": "Back to Store"
+    }
+  }
+}

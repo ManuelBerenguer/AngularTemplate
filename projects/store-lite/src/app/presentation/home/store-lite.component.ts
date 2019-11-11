@@ -13,6 +13,10 @@ export class StoreLiteComponent implements OnInit, OnDestroy {
   ngOnInit() {
   }
 
+  setLang(langCode: string) {
+    this.storeLitePresentation.setLang(langCode);
+  }
+
   /*
    * When the component is destroyed we unsubscribe to all
    */

@@ -1,8 +1,12 @@
 <div class="container storeContainer">
   <div class="row">
     <div class="col">
-      <h1 class="dash">Store</h1>
-      <p>Upload any electronic file</p>
+      <h1 class="dash">{{ 'storeLite.home.title' | translate }}</h1>
+      <p>{{ 'storeLite.home.subTitle' | translate }}</p>
+    </div>
+    <div>
+      <button class="btn btn-default" (click)="setLang('es')">Language: ES</button>
+      <button class="btn btn-default" (click)="setLang('en')">Language: EN</button>
     </div>
   </div>
   <div class="row">

@@ -5,6 +5,7 @@ import { StoreLitePresentation } from '../../core/services/store-lite.presentati
 import { BarGaugeSerie } from '../shared/bar-gauge/bar-gauge-serie';
 import { Subscription } from 'rxjs';
 import { BaseComponent } from '../../core/base/base.component';
+import { doesNotThrow } from 'assert';
 
 @Component({
   selector: 'app-storage',
@@ -14,7 +15,9 @@ import { BaseComponent } from '../../core/base/base.component';
 export class StorageComponent extends BaseComponent {
 
   public readonly errorText = 'Problem loading Storage';
+  public tooltipText1 = '';
 
+  public stats: Stats;
   public seriesList: BarGaugeSerie[] = new Array();
 
   constructor(public storeLitePresentation: StoreLitePresentation) {
@@ -42,8 +45,16 @@ export class StorageComponent extends BaseComponent {
       this.storeLitePresentation.stats$.subscribe(
         (stats: Stats) => {
           if (stats) {
+            this.stats = stats;
             this.getSeries(stats);
           }
+        }
+      ),
+
+      this.storeLitePresentation.translateStream('storeLite.storage.tooltip1').subscribe(
+        (res: any) => {
+          this.tooltipText1 = res;
+          this.getSeries(this.stats);
         }
       )
 
@@ -59,7 +70,7 @@ export class StorageComponent extends BaseComponent {
       this.seriesList.push({
         value: stats.currentAssets,
         total: stats.maxAssets,
-        labelText: `of ${stats.maxAssets ? stats.maxAssets : ''} assets stored`,
+        labelText: this.storeLitePresentation.translate('storeLite.storage.legend1', (stats.maxAssets ? stats.maxAssets.toString() : '')),
         tooltipText: 'Contact your BDM about upgrading to more storage.',
         serieColor: '#ee2b37'
       });

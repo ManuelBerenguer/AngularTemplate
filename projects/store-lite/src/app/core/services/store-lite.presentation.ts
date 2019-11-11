@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { BasePresentation, User, UsersRepository } from 'shared-lib';
 import { AssetLinkTypeEnum } from '../enums/asset-link-type.enum';
 import { Stats } from '../models/stats.model';
@@ -9,6 +9,7 @@ import * as storeLiteStore from '../store';
 import { StoreLiteState } from '../store';
 import * as StatsActions from '../store/actions/stats.actions';
 import * as FileUploadActions from '../store/actions/file-upload.actions';
+import { TranslateService } from '../../localization/services/translate.service';
 
 @Injectable()
 export class StoreLitePresentation extends BasePresentation implements OnDestroy {
@@ -36,7 +37,8 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
   constructor(
     protected usersRepository: UsersRepository,
     public storeLiteState$: Store<StoreLiteState>,
-    protected serverPushRespository: PushRepository
+    protected serverPushRespository: PushRepository,
+    public translateService: TranslateService
     ) {
     super(usersRepository);
 
@@ -48,6 +50,34 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     // Listen for Pushes
     this.listenPushStats();
     this.listenPushGetStatsSignal();
+  }
+
+  /**
+   *
+   * @param key Key to translate
+   * @param ...args Array with values for replace the translated text placeholders
+   * @description Translates a key to the corresponding text
+   */
+  public translate(key: string, ...args: string[]): string {
+    return this.translateService.instant(key).format(...args);
+  }
+
+  public observeTranslate(key: string): Observable<string> {
+    return this.translateService.getTranslation(key);
+  }
+
+  public translateStream(key: string): Observable<string> {
+    return this.translateService.stream(key);
+  }
+
+  public setLang(langCode: string): void {
+    this.translateService.use(langCode).then(
+      (result: boolean) => {
+        if (result) {
+          //
+        }
+      }
+    );
   }
 
   /**
@@ -134,4 +164,22 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
 
     this.subscriptions.unsubscribe();
   }
+}
+
+declare global {
+  interface String {
+    format(...replacements: string[]): string;
+  }
+}
+
+if (!String.prototype.format) {
+  String.prototype.format = function() {
+    const args = arguments;
+    return this.replace(/{(\d+)}/g, (match: any, index: number) => {
+      return typeof args[index] !== 'undefined'
+        ? args[index]
+        : match
+      ;
+    });
+  };
 }
