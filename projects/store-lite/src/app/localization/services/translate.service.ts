@@ -121,6 +121,23 @@ export class TranslateService {
   }
 
   /**
+   * @description Gets the translated values of an array of keys
+   * @param keys Array with keys to translate
+   */
+  public getTranslations(keys: Array<string>): Observable<Array<string>> {
+    if (!isDefined(keys) || !keys.length) {
+      throw new Error(`Parameter "key" required`);
+    }
+
+    const result: any = {};
+    for (const key of keys) {
+      result[key] = this.get(key);
+    }
+
+    return of(result);
+  }
+
+  /**
    * Gets the translated value of a key (or an array of keys)
    * @returns the translated key, or an object of translated keys
    */
@@ -139,17 +156,27 @@ export class TranslateService {
    * whenever the language changes.
    * @returns A stream of the translated key, or an object of translated keys
    */
-  public stream(key: string): Observable<string | any> {
+  public stream(key: string | Array<string>): Observable<string | Array<string> | any> {
     if (!isDefined(key) || !key.length) {
       throw new Error(`Parameter "key" required`);
     }
 
-    return concat(
-      this.getTranslation(key),
-      this.onLangChange.pipe(
-        switchMap((event: LangChangeEvent) => {
-          return this.getTranslation(key);
-        })
-      ));
+    if ( key instanceof Array ) {
+      return concat(
+        this.getTranslations(key),
+        this.onLangChange.pipe(
+          switchMap((event: LangChangeEvent) => {
+            return this.getTranslations(key);
+          })
+        ));
+    } else {
+      return concat(
+        this.getTranslation(key),
+        this.onLangChange.pipe(
+          switchMap((event: LangChangeEvent) => {
+            return this.getTranslation(key);
+          })
+        ));
+    }
   }
 }

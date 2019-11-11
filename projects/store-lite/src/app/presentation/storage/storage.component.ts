@@ -3,9 +3,7 @@ import { Component, OnChanges, OnDestroy, OnInit, ChangeDetectionStrategy } from
 import { Stats } from '../../core/models/stats.model';
 import { StoreLitePresentation } from '../../core/services/store-lite.presentation';
 import { BarGaugeSerie } from '../shared/bar-gauge/bar-gauge-serie';
-import { Subscription } from 'rxjs';
 import { BaseComponent } from '../../core/base/base.component';
-import { doesNotThrow } from 'assert';
 
 @Component({
   selector: 'app-storage',
@@ -14,8 +12,7 @@ import { doesNotThrow } from 'assert';
 })
 export class StorageComponent extends BaseComponent {
 
-  public readonly errorText = 'Problem loading Storage';
-  public tooltipText1 = '';
+  public errorText: string;
 
   public stats: Stats;
   public seriesList: BarGaugeSerie[] = new Array();
@@ -54,6 +51,12 @@ export class StorageComponent extends BaseComponent {
       this.storeLitePresentation.onLangChanges().subscribe(
         (res: any) => {
           this.getSeries(this.stats);
+        }
+      ),
+
+      this.storeLitePresentation.translateStream('storeLite.storage.errorText').subscribe(
+        (res: any) => {
+          this.errorText = res;
         }
       )
 
