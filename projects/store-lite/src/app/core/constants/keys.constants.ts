@@ -6,5 +6,21 @@ export class KeysConstants {
   public static readonly textForUnlinkedKey = 'storeLite.storeStats.unlinkedText';
   public static readonly textForUnresolvedKey = 'storeLite.storeStats.unresolvedText';
   public static readonly textForTooSmallKey = 'storeLite.storeStats.tooSmallText';
-  public static readonly errorTextKey = 'storeLite.storeStats.errorText';
+  public static readonly storeStatsErrorTextKey = 'storeLite.storeStats.errorText';
+
+  /**
+   * @description Storage
+   */
+  public static readonly storageErrorTextKey = 'storeLite.storage.errorText';
+  public static readonly storageLegend1 = 'storeLite.storage.legend1';
+  public static readonly storageTooltip1 = 'storeLite.storage.tooltip1';
+  public static readonly storageLegend2 = 'storeLite.storage.legend2';
+  public static readonly storageLegend3 = 'storeLite.storage.legend3';
+  public static readonly storageTooltip3 = 'storeLite.storage.tooltip3';
+
+  /**
+   * @description General texts
+   */
+  public static readonly images = 'storeLite.shared.images';
+
 }

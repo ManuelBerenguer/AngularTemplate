@@ -47,13 +47,13 @@ export class StatsComponent extends BaseComponent {
       ),
 
       this.storeLitePresentation.translateStream([KeysConstants.textForUnlinkedKey, KeysConstants.textForUnresolvedKey,
-        KeysConstants.textForTooSmallKey, KeysConstants.errorTextKey]).subscribe(
+        KeysConstants.textForTooSmallKey, KeysConstants.storeStatsErrorTextKey]).subscribe(
 
         (res: Array<string>) => {
           this.textForUnlinked = res[KeysConstants.textForUnlinkedKey];
           this.textForUnresolved = res[KeysConstants.textForUnresolvedKey];
           this.textForTooSmall = res[KeysConstants.textForTooSmallKey];
-          this.errorText = res[KeysConstants.errorTextKey];
+          this.errorText = res[KeysConstants.storeStatsErrorTextKey];
         }
 
       )

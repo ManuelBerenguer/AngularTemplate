@@ -4,6 +4,7 @@ import { Stats } from '../../core/models/stats.model';
 import { StoreLitePresentation } from '../../core/services/store-lite.presentation';
 import { BarGaugeSerie } from '../shared/bar-gauge/bar-gauge-serie';
 import { BaseComponent } from '../../core/base/base.component';
+import { KeysConstants } from '../../core/constants/keys.constants';
 
 @Component({
   selector: 'app-storage',
@@ -54,7 +55,7 @@ export class StorageComponent extends BaseComponent {
         }
       ),
 
-      this.storeLitePresentation.translateStream('storeLite.storage.errorText').subscribe(
+      this.storeLitePresentation.translateStream(KeysConstants.storageErrorTextKey).subscribe(
         (res: any) => {
           this.errorText = res;
         }
@@ -72,17 +73,18 @@ export class StorageComponent extends BaseComponent {
       this.seriesList.push({
         value: stats.currentAssets,
         total: stats.maxAssets,
-        labelText: this.storeLitePresentation.translate('storeLite.storage.legend1', (stats.maxAssets ? stats.maxAssets.toString() : '')),
-        tooltipText: this.storeLitePresentation.translate('storeLite.storage.tooltip1'),
+        labelText: this.storeLitePresentation.translate(KeysConstants.storageLegend1, (stats.maxAssets ? stats.maxAssets.toString() : '')),
+        tooltipText: this.storeLitePresentation.translate(KeysConstants.storageTooltip1),
         serieColor: '#ee2b37'
       });
       this.seriesList.push({
         value: stats.currentStorage,
         total: stats.maxStorage,
-        labelText: this.storeLitePresentation.translate('storeLite.storage.legend2', (stats.maxStorage ? stats.maxStorage.toString() : '')),
+        labelText: this.storeLitePresentation.translate(KeysConstants.storageLegend2,
+          (stats.maxStorage ? stats.maxStorage.toString() : '')),
         tooltipText: `<table>
         <tr><td align="right">${stats.numberOfImages}</td><td>&nbsp;</td><td><b>`
-        + this.storeLitePresentation.translate('storeLite.shared.images') + `</b></td></tr>
+        + this.storeLitePresentation.translate(KeysConstants.images) + `</b></td></tr>
         <tr><td align="right">${stats.numberOfPdf}</td><td>&nbsp;</td><td><b>PDFs</b></td></tr>
         <tr><td align="right">${stats.numberOfUrl}</td><td>&nbsp;</td><td><b>Url</b></td></tr>
         <tr><td align="right">${stats.numberOf360}</td><td>&nbsp;</td><td><b>360</b></td></tr>
@@ -92,8 +94,8 @@ export class StorageComponent extends BaseComponent {
       this.seriesList.push({
         value: stats.totalNotLive,
         total: stats.currentAssets === 0 ? 100 : stats.currentAssets,
-        labelText: this.storeLitePresentation.translate('storeLite.storage.legend3'),
-        tooltipText: this.storeLitePresentation.translate('storeLite.storage.tooltip3'),
+        labelText: this.storeLitePresentation.translate(KeysConstants.storageLegend3),
+        tooltipText: this.storeLitePresentation.translate(KeysConstants.storageTooltip3),
         serieColor: '#59cbe8'
       });
     }

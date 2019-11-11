@@ -40,7 +40,11 @@
       "NumberOfFilesUploadedErrorTitle": "Su fichero contiene más de 5 activos.",
       "NumberOfFilesUploadedErrorBody": "Por favor, ajuste su fichero a únicamente 5. <br /> Alternativamente, para actualizar a Pro y disponer de cargas ilimitadas <br /> por favor, contacte con el administrador de su cuenta.",
       "FileTypesUploadErrorTitle": "Una de las extensiones seleccionadas no está permitida.",
-      "FileTypesUploadErrorBody": "Por favor, asegúrese que sus ficheros son de uno de los tipos siguientes: "
+      "FileTypesUploadErrorBody": "Por favor, asegúrese que sus ficheros son de uno de los tipos siguientes: ",
+      "filesUploadingText1": "¡Sus ficheros se están cargando!",
+      "filesUploadingText2": "Puede ver el proceso y las siguientes acciones en la barra superior de navigación.",
+      "linkFilesOption1": "By Part Number",
+      "linkFilesOption2": "By Catalogue Application"
     },
     "shared": {
       "componentError": {

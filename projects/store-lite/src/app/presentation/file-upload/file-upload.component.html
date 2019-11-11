@@ -2,45 +2,45 @@
 
   <div [hidden]="showProgressBar" class="card-body card-block-content">
     <div class="card-text-primary" i18n="">
-      Please ensure your upload file contains only one product group at a time.
+      {{ 'storeLite.fileUpload.text1' | translate }}
     </div>
     <div class="card-text-tertiary" style="margin-top: 10px;">
-      You can select up to 5 files per upload
+      {{ 'storeLite.fileUpload.text2' | translate }}
     </div>
     <br />
     <div>
       <button #uploadBtn type="button" class="btn btn-primary btnUpload" (click)="openFileUploadModal(fileUploadModal)">
-        &nbsp;Upload
+        &nbsp;{{ 'storeLite.shared.upload' | translate }}
       </button>
     </div>
   </div>
 
   <div [hidden]="!showProgressBar" class="card-body card-block-content">
     <progressbar [value]="progressBarPercentage"></progressbar>
-    <h1>Your files are uploading!</h1>
-    <p>You can view your progress and next actions from the navigation bar at the top.</p>
+    <h1>{{ 'storeLite.fileUpload.filesUploadingText1' | translate }}</h1>
+    <p>{{ 'storeLite.fileUpload.filesUploadingText2' | translate }}</p>
   </div>
 
 </div>
 
 <ng-template #fileUploadModal >
     <div class="modal-header">
-        <h1 class="modal-title" id="fileUploadModalTitle">Upload Files</h1>
+        <h1 class="modal-title" id="fileUploadModalTitle">{{ 'storeLite.fileUpload.uploadFiles' | translate }}</h1>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="fileUploadModalRef.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <form [formGroup]="fileUploadForm">
           <div class="modal-body" style="display: flex">
-            <div style="width: 100%;">Please select how these files will be linked</div>
+            <div style="width: 100%;">{{ 'storeLite.fileUpload.uploadModalText1' | translate }}</div>
 
               <app-radio-button-image-text [data]="data" formControlName="linked"></app-radio-button-image-text>
               <input #assets type="file" formControlName="assets" (change)="handleAssets(assets.files)" multiple style="display:none"/>
 
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary mr-auto" (click)="fileUploadModalRef.hide()">Cancel Upload</button>
-            <button type="button" class="btn btn-primary" (click)="assets.click()" [disabled]="myLinkedControl.invalid">Continue Upload</button>
+            <button type="button" class="btn btn-secondary mr-auto" (click)="fileUploadModalRef.hide()">{{ 'storeLite.shared.cancelUpload' | translate }}</button>
+            <button type="button" class="btn btn-primary" (click)="assets.click()" [disabled]="myLinkedControl.invalid">{{ 'storeLite.shared.continueUpload' | translate }}</button>
           </div>
-        </form>
+      </form>
 </ng-template>

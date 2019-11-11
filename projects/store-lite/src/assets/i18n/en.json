@@ -40,7 +40,11 @@
       "NumberOfFilesUploadedErrorTitle": "Your file contains more than 5 assets.",
       "NumberOfFilesUploadedErrorBody": "Please adjust your file to only 5. <br /> Alternatively, to upgrade to Pro and unlimited uploads <br /> please contact your Account manager.",
       "FileTypesUploadErrorTitle": "The file extension you have chosen is not supported.",
-      "FileTypesUploadErrorBody": "Please make sure your files are one of the following: "
+      "FileTypesUploadErrorBody": "Please make sure your files are one of the following: ",
+      "filesUploadingText1": "Your files are uploading!",
+      "filesUploadingText2": "You can view your progress and next actions from the navigation bar at the top.",
+      "linkFilesOption1": "By Part Number",
+      "linkFilesOption2": "By Catalogue Application"
     },
     "shared": {
       "componentError": {

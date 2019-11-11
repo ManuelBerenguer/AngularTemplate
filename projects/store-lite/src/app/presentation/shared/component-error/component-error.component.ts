@@ -1,9 +1,10 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-component-error',
   templateUrl: './component-error.component.html',
-  styleUrls: ['./component-error.component.scss']
+  styleUrls: ['./component-error.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush, // We should use this strategy only for components that depend only on their inputs
 })
 export class ComponentErrorComponent implements OnInit {
 
