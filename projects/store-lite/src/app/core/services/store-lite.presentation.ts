@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription, Observable, Subject } from 'rxjs';
 import { BasePresentation, User, UsersRepository } from 'shared-lib';
 import { AssetLinkTypeEnum } from '../enums/asset-link-type.enum';
 import { Stats } from '../models/stats.model';
@@ -50,6 +50,8 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     // Listen for Pushes
     this.listenPushStats();
     this.listenPushGetStatsSignal();
+
+    //
   }
 
   /**
@@ -68,6 +70,10 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
 
   public translateStream(key: string): Observable<string> {
     return this.translateService.stream(key);
+  }
+
+  public onLangChanges() {
+    return this.translateService.onLangChange;
   }
 
   public setLang(langCode: string): void {

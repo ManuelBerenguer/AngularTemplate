@@ -51,9 +51,8 @@ export class StorageComponent extends BaseComponent {
         }
       ),
 
-      this.storeLitePresentation.translateStream('storeLite.storage.tooltip1').subscribe(
+      this.storeLitePresentation.onLangChanges().subscribe(
         (res: any) => {
-          this.tooltipText1 = res;
           this.getSeries(this.stats);
         }
       )
@@ -71,15 +70,16 @@ export class StorageComponent extends BaseComponent {
         value: stats.currentAssets,
         total: stats.maxAssets,
         labelText: this.storeLitePresentation.translate('storeLite.storage.legend1', (stats.maxAssets ? stats.maxAssets.toString() : '')),
-        tooltipText: 'Contact your BDM about upgrading to more storage.',
+        tooltipText: this.storeLitePresentation.translate('storeLite.storage.tooltip1'),
         serieColor: '#ee2b37'
       });
       this.seriesList.push({
         value: stats.currentStorage,
         total: stats.maxStorage,
-        labelText: `of ${stats.maxStorage ? stats.maxStorage : ''}Gb used`,
+        labelText: this.storeLitePresentation.translate('storeLite.storage.legend2', (stats.maxStorage ? stats.maxStorage.toString() : '')),
         tooltipText: `<table>
-        <tr><td align="right">${stats.numberOfImages}</td><td>&nbsp;</td><td><b>Images</b></td></tr>
+        <tr><td align="right">${stats.numberOfImages}</td><td>&nbsp;</td><td><b>`
+        + this.storeLitePresentation.translate('storeLite.shared.images') + `</b></td></tr>
         <tr><td align="right">${stats.numberOfPdf}</td><td>&nbsp;</td><td><b>PDFs</b></td></tr>
         <tr><td align="right">${stats.numberOfUrl}</td><td>&nbsp;</td><td><b>Url</b></td></tr>
         <tr><td align="right">${stats.numberOf360}</td><td>&nbsp;</td><td><b>360</b></td></tr>
@@ -89,8 +89,8 @@ export class StorageComponent extends BaseComponent {
       this.seriesList.push({
         value: stats.totalNotLive,
         total: stats.currentAssets === 0 ? 100 : stats.currentAssets,
-        labelText: `Assets used on non-live parts`,
-        tooltipText: 'Seleted;Superseded',
+        labelText: this.storeLitePresentation.translate('storeLite.storage.legend3'),
+        tooltipText: this.storeLitePresentation.translate('storeLite.storage.tooltip3'),
         serieColor: '#59cbe8'
       });
     }
