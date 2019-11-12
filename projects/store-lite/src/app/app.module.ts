@@ -87,7 +87,7 @@ import { LocalizationModule } from './localization/localization.module';
     FormsModule,
     ReactiveFormsModule,
 
-    LocalizationModule
+    LocalizationModule.forRoot({ defaultLang: 'es', basePath: 'assets/i18n' })
   ],
   entryComponents: [ErrorModalComponent],
   providers: [

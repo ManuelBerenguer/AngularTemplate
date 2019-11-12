@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, EventEmitter, Inject, InjectionToken } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject, Observable, of, concat } from 'rxjs';
 import { isDefined } from '../utils/utils';
@@ -8,31 +8,34 @@ export interface LangChangeEvent {
   lang: string;
 }
 
+export const DEFAULT_LANG = new InjectionToken<string>('DEFAULT_LANG');
+export const BASE_PATH = new InjectionToken<string>('BASE_PATH');
+
 @Injectable()
 export class TranslateService {
-
-  // The default lang
-  private _defaultLang: string;
 
   // The lang currently used
   private _currentLang: string;
 
   private _onLangChange: EventEmitter<LangChangeEvent> = new EventEmitter<LangChangeEvent>();
 
-  // this will contain all the strings in hierarchical a.b... structure
+  // This will contain all the strings in hierarchical a.b... structure
   private translations: any = null;
 
-  constructor(private httpCli: HttpClient) { }
+  constructor( private httpCli: HttpClient, @Inject(DEFAULT_LANG) private defaultLang,
+               @Inject(BASE_PATH) private basePath ) {
+    this.use(defaultLang);
+  }
 
   /**
    * The default lang to fallback when translations are missing on the current lang
    */
-  get defaultLang(): string {
-    return this._defaultLang;
+  get defaultLanguage(): string {
+    return this.defaultLang;
   }
 
-  set defaultLang(defaultLang: string) {
-    this._defaultLang = defaultLang;
+  set defaultLanguage(defaultLang: string) {
+    this.defaultLang = defaultLang;
   }
 
   /**
@@ -66,7 +69,7 @@ export class TranslateService {
     return new Promise<{}>((resolve, reject) => {
 
       // Path to the language resource file
-      const langPath = `assets/i18n/${lang || 'en'}.json`;
+      const langPath = `${this.basePath}/${lang || 'en'}.json`;
 
       this.httpCli.get(langPath).subscribe(
         txs => {
@@ -141,14 +144,18 @@ export class TranslateService {
    * Gets the translated value of a key (or an array of keys)
    * @returns the translated key, or an object of translated keys
    */
-  public getTranslation(key: string): Observable<string | any> {
+  public getTranslation(key: string | Array<string>): Observable<string | Array<string> | any> {
     if (!isDefined(key) || !key.length) {
       throw new Error(`Parameter "key" required`);
     }
 
-    const translation = this.get(key);
+    if (key instanceof Array) {
+      return this.getTranslations(key);
+    } else {
+      const translation = this.get(key);
 
-    return of(translation);
+      return of(translation);
+    }
   }
 
   /**
@@ -161,22 +168,14 @@ export class TranslateService {
       throw new Error(`Parameter "key" required`);
     }
 
-    if ( key instanceof Array ) {
-      return concat(
-        this.getTranslations(key),
-        this.onLangChange.pipe(
-          switchMap((event: LangChangeEvent) => {
-            return this.getTranslations(key);
-          })
-        ));
-    } else {
-      return concat(
-        this.getTranslation(key),
-        this.onLangChange.pipe(
-          switchMap((event: LangChangeEvent) => {
-            return this.getTranslation(key);
-          })
-        ));
-    }
+    // we concat two observables: the current translation for the key and the potential new translation after language change
+    return concat(
+      this.getTranslation(key),
+      this.onLangChange.pipe(
+        // We change the observable corresponding to language change with the observable corresponding to the new translations for the key
+        switchMap((event: LangChangeEvent) => {
+          return this.getTranslation(key);
+        })
+      ));
   }
 }
