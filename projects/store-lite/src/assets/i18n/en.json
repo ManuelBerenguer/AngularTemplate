@@ -46,6 +46,13 @@
       "linkFilesOption1": "By Part Number",
       "linkFilesOption2": "By Catalogue Application"
     },
+    "upgrade": {
+      "limitText": "Are you almost at your storage limit?",
+      "bulkText": "Would you rather link your images via a bulk upload?",
+      "publishText": "Want to publish your assets to more places?",
+      "upgradeText": "Store<span class='text-primary'>PRO</span> can help you achieve all these things",
+      "upgradeBtnText": "Talk to us to upgrade"
+    },
     "shared": {
       "componentError": {
         "refresh": "Refresh?"

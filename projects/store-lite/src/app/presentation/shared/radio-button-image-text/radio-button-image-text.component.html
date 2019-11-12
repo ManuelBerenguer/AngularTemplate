@@ -7,7 +7,7 @@
         <use [attr.href]="control.iconUrl"></use> <!-- SVG elements doesn't have properties, therefore attribute binding is required most of the time -->
       </svg>
       <br />
-      {{control.text}}
+      {{ control.text | translate }}
     </label>
   </div>
 

@@ -19,6 +19,14 @@ export class KeysConstants {
   public static readonly storageTooltip3 = 'storeLite.storage.tooltip3';
 
   /**
+   * @description Upgrade
+   */
+  public static readonly upgradeLimitTextKey = 'storeLite.upgrade.limitText';
+  public static readonly upgradeBulkTextKey = 'storeLite.upgrade.bulkText';
+  public static readonly upgradePublishTextKey = 'storeLite.upgrade.publishText';
+  public static readonly upgradeTextKey = 'storeLite.upgrade.upgradeText';
+
+  /**
    * @description General texts
    */
   public static readonly images = 'storeLite.shared.images';

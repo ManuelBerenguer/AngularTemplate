@@ -43,8 +43,15 @@
       "FileTypesUploadErrorBody": "Por favor, asegúrese que sus ficheros son de uno de los tipos siguientes: ",
       "filesUploadingText1": "¡Sus ficheros se están cargando!",
       "filesUploadingText2": "Puede ver el proceso y las siguientes acciones en la barra superior de navigación.",
-      "linkFilesOption1": "By Part Number",
-      "linkFilesOption2": "By Catalogue Application"
+      "linkFilesOption1": "Por Número De Producto",
+      "linkFilesOption2": "Por Aplicación De Catálogo"
+    },
+    "upgrade": {
+      "limitText": "¿Está alcanzando su límite de almacenamiento?",
+      "bulkText": "¿Prefiere vincular sus imágenes a través de una carga masiva?",
+      "publishText": "¿Desea publicar sus activos en más sitios?",
+      "upgradeText": "Store<span class='text-primary'>PRO</span> le puede ayudar a lograr todas estas cosas",
+      "upgradeBtnText": "Hable con nosotros para actualizar"
     },
     "shared": {
       "componentError": {

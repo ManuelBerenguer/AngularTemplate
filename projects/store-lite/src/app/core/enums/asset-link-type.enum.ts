@@ -8,7 +8,7 @@ enum AssetLinkTypeEnum {
  */
 enum AssetLinkTypeTextEnum {
   PartNumber = 'storeLite.fileUpload.linkFilesOption1',
-  Application = 'storeLite.fileUpload.linkFilesOption1'
+  Application = 'storeLite.fileUpload.linkFilesOption2'
 }
 
 export { AssetLinkTypeEnum };
