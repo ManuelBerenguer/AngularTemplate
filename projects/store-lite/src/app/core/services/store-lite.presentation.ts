@@ -47,6 +47,9 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     ) {
     super(usersRepository);
 
+    // Listen for Language changes
+    this.subscribeToOnLangChanges();
+
     // Get logged user
     this.subscribeToUser();
 
@@ -55,9 +58,6 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     // Listen for Pushes
     this.listenPushStats();
     this.listenPushGetStatsSignal();
-
-    // Set default language meta data
-    this.setDocumentMetaData();
 
   }
 
@@ -83,7 +83,6 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     this.translateService.use(langCode).then(
       (result: boolean) => {
         if (result) {
-          this.setDocumentMetaData();
         }
       }
     );
@@ -94,23 +93,31 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     this.addMetaTag(SystemConstants.descriptionMetaTag, KeysConstants.homeDocumentMetaDescriptionKey);
   }
 
-  private setTitle(key: string) {
+  private setTitle(key: string) { // possibly public in the future
     const titleText = this.translate(key);
-    if (titleText !== key) {
-      this.titleService.setTitle(titleText);
+    this.titleService.setTitle(titleText);
+  }
+
+  private addMetaTag(tagName: string, contentKey: string) { // possibly public in the future
+    const contentText = this.translate(contentKey);
+    const metaElment: HTMLMetaElement = this.metaService.getTag(`name="${tagName}"`);
+    if (metaElment) {
+      this.metaService.updateTag({ name: tagName, content: contentText});
+    } else {
+      this.metaService.addTag({ name: tagName, content: contentText});
     }
   }
 
-  private addMetaTag(tagName: string, contentKey: string) {
-    const contentText = this.translate(contentKey);
-    if (contentText !== contentKey) {
-      const metaElment: HTMLMetaElement = this.metaService.getTag(`name= "${tagName}"`);
-      if (metaElment) {
-        this.metaService.updateTag({ name: tagName, content: contentText});
-      } else {
-        this.metaService.addTag({ name: tagName, content: contentText});
-      }
-    }
+  /**
+   * @description Subscribe to to language changes.
+   */
+  private subscribeToOnLangChanges(): void {
+    this.subscriptions.add(
+      this.onLangChanges().subscribe(
+        (res: any) => {
+          this.setDocumentMetaData();
+        })
+    );
   }
 
   /**
@@ -160,7 +167,6 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
    * everytime the observable emits a new value for user
    */
   private subscribeToUser() {
-
     this.subscriptions.add(
       this.loggedUser$.subscribe(
         (user: User) => {
@@ -168,7 +174,6 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
         }
       )
     );
-
   }
 
   /**
@@ -176,14 +181,12 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
    * Triggers the initial action corresponding to the upload files process
    */
   public uploadAssets(filesList: FileList, mode: AssetLinkTypeEnum): void {
-
     this.storeLiteState$.dispatch(FileUploadActions.getDoChecksAction({
       files: filesList,
       maxNumberOfFiles: this.loggedUser.maxAssetsPerUpload,
       fileTypesList: this.loggedUser.allowedAssetsFilesTypesList,
       mode
     }));
-
   }
 
   /**
