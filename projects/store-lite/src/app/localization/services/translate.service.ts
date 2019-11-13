@@ -4,6 +4,8 @@ import { Subject, Observable, of, concat } from 'rxjs';
 import { isDefined } from '../utils/utils';
 import { switchMap } from 'rxjs/operators';
 import { MissingTranslationHandler, MissingTranslationHandlerParams } from '../handlers/missing-translation.handler';
+import { BaseTranslateParser } from '../parser/base-translate.parser';
+import { BaseTranslateFormatter } from '../formatters/base-translate.formatter';
 
 // Event emitted after any lang change
 export interface LangChangeEvent {
@@ -39,7 +41,9 @@ export class TranslateService {
   constructor( private httpCli: HttpClient,
                @Inject(DEFAULT_LANG) private defaultLang,
                @Inject(BASE_PATH) private basePath,
-               public missingTranslationHandler: MissingTranslationHandler ) {
+               public missingTranslationHandler: MissingTranslationHandler,
+               public parser: BaseTranslateParser,
+               public formatter: BaseTranslateFormatter ) {
 
     this.use(defaultLang);
   }
@@ -113,33 +117,13 @@ export class TranslateService {
    * If key doesn't exist we delegate to missingTranslationHandler to obtain something to return.
    */
   instant(key: string, ...args: string[]): string {
-    let got = this.get(key);
+    let got = this.formatter.format(this.parser.getValue(this.translations, key), ...args);
     if (!got) {
       const params: MissingTranslationHandlerParams = { key, translateService: this };
       got = this.missingTranslationHandler.handle(params);
     }
 
     return got;
-  }
-
-  /**
-   *
-   * @param path to the property
-   * @description Gets the value of one property in the object tree according to the path
-   */
-  private get(path: string): any {
-
-    // We split the path using dot character as separator
-    const pathSplitted = path.split('.');
-
-    /**
-     * We use the reduce function to iterate acrross all subpaths and accumulate the result of accessing the property.
-     * Corresponding to the subpath in an array notation.
-     */
-    return this.translations && pathSplitted.reduce(
-      (result, subPath) => result == null ? undefined : result[subPath],
-      this.translations
-    );
   }
 
   /**
@@ -153,7 +137,7 @@ export class TranslateService {
 
     const result: any = {};
     for (const key of keys) {
-      result[key] = this.get(key);
+      result[key] = this.parser.getValue(this.translations, key);
       if (!result[key]) {
         this.missingTranslationHandler.handle({ key, translateService: this });
       }
@@ -174,7 +158,7 @@ export class TranslateService {
     if (key instanceof Array) {
       return this.getTranslations(key);
     } else {
-      let translation = this.get(key);
+      let translation = this.parser.getValue(this.translations, key);
       if (!translation) {
         translation = this.missingTranslationHandler.handle({ key, translateService: this });
       }

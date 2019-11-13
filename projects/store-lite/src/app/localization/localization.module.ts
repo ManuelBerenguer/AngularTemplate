@@ -5,6 +5,10 @@ import { TranslatePipe } from './pipes/translate.pipe';
 import { TranslateDirective } from './directives/translate.directive';
 import { ModuleWithProviders, Provider } from '@angular/compiler/src/core';
 import { MissingTranslationHandler, FakeMissingTranslationHandler } from './handlers/missing-translation.handler';
+import { BaseTranslateParser } from './parser/base-translate.parser';
+import { ObjectNotationParser } from './parser/object-notation.parser';
+import { BaseTranslateFormatter } from './formatters/base-translate.formatter';
+import { DefaultFormatter } from './formatters/default.formatter';
 
 /**
  * @description interface for configuration object for Localization module
@@ -13,6 +17,8 @@ export interface LocalizationModuleConfig {
   defaultLang: string;
   basePath: string;
   missingTranslationHandler?: Provider;
+  parser?: Provider;
+  formatter?: Provider;
 }
 
 @NgModule({
@@ -37,7 +43,9 @@ export class LocalizationModule {
           provide: BASE_PATH,
           useValue: config.basePath
         },
-        config.missingTranslationHandler || {provide: MissingTranslationHandler, useClass: FakeMissingTranslationHandler},
+        config.missingTranslationHandler || { provide: MissingTranslationHandler, useClass: FakeMissingTranslationHandler },
+        config.parser || { provide: BaseTranslateParser, useClass: ObjectNotationParser },
+        config.formatter || { provide: BaseTranslateFormatter, useClass: DefaultFormatter }
       ]
     };
   }
@@ -55,7 +63,9 @@ export class LocalizationModule {
           provide: BASE_PATH,
           useValue: config.basePath
         },
-        config.missingTranslationHandler || {provide: MissingTranslationHandler, useClass: FakeMissingTranslationHandler},
+        config.missingTranslationHandler || { provide: MissingTranslationHandler, useClass: FakeMissingTranslationHandler },
+        config.parser || { provide: BaseTranslateParser, useClass: ObjectNotationParser },
+        config.formatter || { provide: BaseTranslateFormatter, useClass: DefaultFormatter }
       ]
     };
   }
