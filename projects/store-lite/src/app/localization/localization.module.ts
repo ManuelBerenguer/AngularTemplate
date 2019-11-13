@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { TranslateService, DEFAULT_LANG, BASE_PATH } from './services/translate.service';
 import { TranslatePipe } from './pipes/translate.pipe';
 import { TranslateDirective } from './directives/translate.directive';
-import { ModuleWithProviders } from '@angular/compiler/src/core';
+import { ModuleWithProviders, Provider } from '@angular/compiler/src/core';
+import { MissingTranslationHandler, FakeMissingTranslationHandler } from './handlers/missing-translation.handler';
 
 /**
  * @description interface for configuration object for Localization module
@@ -11,6 +12,7 @@ import { ModuleWithProviders } from '@angular/compiler/src/core';
 export interface LocalizationModuleConfig {
   defaultLang: string;
   basePath: string;
+  missingTranslationHandler?: Provider;
 }
 
 @NgModule({
@@ -34,7 +36,8 @@ export class LocalizationModule {
         {
           provide: BASE_PATH,
           useValue: config.basePath
-        }
+        },
+        config.missingTranslationHandler || {provide: MissingTranslationHandler, useClass: FakeMissingTranslationHandler},
       ]
     };
   }
@@ -51,7 +54,8 @@ export class LocalizationModule {
         {
           provide: BASE_PATH,
           useValue: config.basePath
-        }
+        },
+        config.missingTranslationHandler || {provide: MissingTranslationHandler, useClass: FakeMissingTranslationHandler},
       ]
     };
   }

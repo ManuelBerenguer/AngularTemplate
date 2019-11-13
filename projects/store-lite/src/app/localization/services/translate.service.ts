@@ -3,27 +3,44 @@ import { HttpClient } from '@angular/common/http';
 import { Subject, Observable, of, concat } from 'rxjs';
 import { isDefined } from '../utils/utils';
 import { switchMap } from 'rxjs/operators';
+import { MissingTranslationHandler, MissingTranslationHandlerParams } from '../handlers/missing-translation.handler';
 
+// Event emitted after any lang change
 export interface LangChangeEvent {
   lang: string;
 }
 
+// Parameters injected into the constructor (setted when loading module)
+
+// The default lang to fallback when translations are missing on the current lang
 export const DEFAULT_LANG = new InjectionToken<string>('DEFAULT_LANG');
+// Base path to the json files that contain the translations
 export const BASE_PATH = new InjectionToken<string>('BASE_PATH');
 
 @Injectable()
 export class TranslateService {
 
   // The lang currently used
-  private _currentLang: string;
+  private currentLang: string;
 
-  private _onLangChange: EventEmitter<LangChangeEvent> = new EventEmitter<LangChangeEvent>();
+  // An event emitter to inform about lang changes
+  private onLangChange: EventEmitter<LangChangeEvent> = new EventEmitter<LangChangeEvent>();
 
   // This will contain all the strings in hierarchical a.b... structure
   private translations: any = null;
 
-  constructor( private httpCli: HttpClient, @Inject(DEFAULT_LANG) private defaultLang,
-               @Inject(BASE_PATH) private basePath ) {
+  /**
+   *
+   * @param httpCli Http client to get the json files
+   * @param defaultLang The default lang to be used by the service
+   * @param basePath The base path to the json files
+   * @param missingTranslationHandler A handler for missing translations
+   */
+  constructor( private httpCli: HttpClient,
+               @Inject(DEFAULT_LANG) private defaultLang,
+               @Inject(BASE_PATH) private basePath,
+               public missingTranslationHandler: MissingTranslationHandler ) {
+
     this.use(defaultLang);
   }
 
@@ -41,22 +58,22 @@ export class TranslateService {
   /**
    * The lang currently used
    */
-  get currentLang(): string {
-    return this._currentLang;
+  get currentLanguage(): string {
+    return this.currentLang;
   }
 
-  set currentLang(currentLang: string) {
-    this._currentLang = currentLang;
+  set currentLanguage(currentLang: string) {
+    this.currentLang = currentLang;
   }
 
   /**
    * An EventEmitter to listen to lang change events
-   * onLangChange.subscribe((params: LangChangeEvent) => {
+   * onLanguageChange.subscribe((params: LangChangeEvent) => {
    *     // do something
    * });
    */
-  get onLangChange(): EventEmitter<LangChangeEvent> {
-    return this._onLangChange;
+  get onLanguageChange(): EventEmitter<LangChangeEvent> {
+    return this.onLangChange;
   }
 
   /**
@@ -73,6 +90,7 @@ export class TranslateService {
 
       this.httpCli.get(langPath).subscribe(
         txs => {
+          this.currentLang = lang;
           this.translations = Object.assign({}, txs || {});
           this.onLangChange.emit({lang});
           resolve(true);
@@ -89,15 +107,16 @@ export class TranslateService {
 
   /**
    *
-   * @param toTranslate The key to get translation from
+   * @param key The key to get translation from
    * @description
    * Returns the translation corresponding to the parameter key and in function of current localization.
-   * If key doesn't exist returns 'Translation Missed' string.
+   * If key doesn't exist we delegate to missingTranslationHandler to obtain something to return.
    */
-  instant(toTranslate: string, ...args: string[]): string {
-    let got = this.get(toTranslate);
+  instant(key: string, ...args: string[]): string {
+    let got = this.get(key);
     if (!got) {
-      got = 'Translation Missed';
+      const params: MissingTranslationHandlerParams = { key, translateService: this };
+      got = this.missingTranslationHandler.handle(params);
     }
 
     return got;
@@ -135,6 +154,9 @@ export class TranslateService {
     const result: any = {};
     for (const key of keys) {
       result[key] = this.get(key);
+      if (!result[key]) {
+        this.missingTranslationHandler.handle({ key, translateService: this });
+      }
     }
 
     return of(result);
@@ -152,8 +174,10 @@ export class TranslateService {
     if (key instanceof Array) {
       return this.getTranslations(key);
     } else {
-      const translation = this.get(key);
-
+      let translation = this.get(key);
+      if (!translation) {
+        translation = this.missingTranslationHandler.handle({ key, translateService: this });
+      }
       return of(translation);
     }
   }
