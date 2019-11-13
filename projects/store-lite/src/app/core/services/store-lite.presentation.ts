@@ -69,7 +69,7 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
   }
 
   public onLangChanges() {
-    return this.translateService.onLangChange;
+    return this.translateService.onLanguageChange;
   }
 
   public setLang(langCode: string): void {

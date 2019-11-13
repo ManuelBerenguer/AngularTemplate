@@ -1,4 +1,4 @@
-import { Directive, OnInit, ElementRef, Input } from "@angular/core";
+import { Directive, OnInit, ElementRef, Input } from '@angular/core';
 import { TranslateService } from '../services/translate.service';
 
 @Directive({
