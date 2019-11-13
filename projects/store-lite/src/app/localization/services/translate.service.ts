@@ -5,6 +5,7 @@ import { isDefined } from '../utils/utils';
 import { switchMap } from 'rxjs/operators';
 import { MissingTranslationHandler, MissingTranslationHandlerParams } from '../handlers/missing-translation.handler';
 import { BaseTranslateParser } from '../parser/base-translate.parser';
+import { BaseTranslateFormatter } from '../formatters/base-translate.formatter';
 
 // Event emitted after any lang change
 export interface LangChangeEvent {
@@ -41,7 +42,8 @@ export class TranslateService {
                @Inject(DEFAULT_LANG) private defaultLang,
                @Inject(BASE_PATH) private basePath,
                public missingTranslationHandler: MissingTranslationHandler,
-               public parser: BaseTranslateParser ) {
+               public parser: BaseTranslateParser,
+               public formatter: BaseTranslateFormatter ) {
 
     this.use(defaultLang);
   }
@@ -115,7 +117,7 @@ export class TranslateService {
    * If key doesn't exist we delegate to missingTranslationHandler to obtain something to return.
    */
   instant(key: string, ...args: string[]): string {
-    let got = this.parser.getValue(this.translations, key);
+    let got = this.formatter.format(this.parser.getValue(this.translations, key), ...args);
     if (!got) {
       const params: MissingTranslationHandlerParams = { key, translateService: this };
       got = this.missingTranslationHandler.handle(params);
