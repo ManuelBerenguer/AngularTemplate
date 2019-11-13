@@ -10,6 +10,9 @@ import { StoreLiteState } from '../store';
 import * as StatsActions from '../store/actions/stats.actions';
 import * as FileUploadActions from '../store/actions/file-upload.actions';
 import { TranslateService } from '../../localization/services/translate.service';
+import { Title, Meta } from '@angular/platform-browser';
+import { KeysConstants } from '../constants/keys.constants';
+import { SystemConstants } from '../constants/system.constants';
 
 @Injectable()
 export class StoreLitePresentation extends BasePresentation implements OnDestroy {
@@ -38,11 +41,13 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     protected usersRepository: UsersRepository,
     public storeLiteState$: Store<StoreLiteState>,
     protected serverPushRespository: PushRepository,
-    public translateService: TranslateService
+    private translateService: TranslateService,
+    private titleService: Title,
+    private metaService: Meta
     ) {
     super(usersRepository);
 
-      // Get logged user
+    // Get logged user
     this.subscribeToUser();
 
     this.loadStats();
@@ -51,7 +56,9 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     this.listenPushStats();
     this.listenPushGetStatsSignal();
 
-    //
+    // Set default language meta data
+    this.setDocumentMetaData();
+
   }
 
   /**
@@ -76,10 +83,34 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     this.translateService.use(langCode).then(
       (result: boolean) => {
         if (result) {
-          //
+          this.setDocumentMetaData();
         }
       }
     );
+  }
+
+  private setDocumentMetaData() {
+    this.setTitle(KeysConstants.homeDocumentTitleKey);
+    this.addMetaTag(SystemConstants.descriptionMetaTag, KeysConstants.homeDocumentMetaDescriptionKey);
+  }
+
+  private setTitle(key: string) {
+    const titleText = this.translate(key);
+    if (titleText !== key) {
+      this.titleService.setTitle(titleText);
+    }
+  }
+
+  private addMetaTag(tagName: string, contentKey: string) {
+    const contentText = this.translate(contentKey);
+    if (contentText !== contentKey) {
+      const metaElment: HTMLMetaElement = this.metaService.getTag(`name= "${tagName}"`);
+      if (metaElment) {
+        this.metaService.updateTag({ name: tagName, content: contentText});
+      } else {
+        this.metaService.addTag({ name: tagName, content: contentText});
+      }
+    }
   }
 
   /**

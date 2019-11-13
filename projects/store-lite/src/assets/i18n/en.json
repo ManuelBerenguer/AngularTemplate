@@ -1,6 +1,8 @@
 {
   "storeLite": {
     "home": {
+      "documentTitle": "StoreLite",
+      "documentMetaDescription": "StoreLite - Upload any electronic file",
       "title": "Store",
       "subTitle": "Upload any electronic file",
       "storeStats": {

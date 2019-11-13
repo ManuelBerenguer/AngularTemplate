@@ -1,6 +1,12 @@
 export class KeysConstants {
 
   /**
+   * @description Store Meta Tags
+   */
+  public static readonly homeDocumentTitleKey = 'storeLite.home.documentTitle';
+  public static readonly homeDocumentMetaDescriptionKey = 'storeLite.home.documentMetaDescription';
+
+  /**
    * @description Store Stats
    */
   public static readonly textForUnlinkedKey = 'storeLite.storeStats.unlinkedText';
