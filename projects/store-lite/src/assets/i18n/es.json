@@ -1,8 +1,6 @@
 {
   "storeLite": {
     "home": {
-      "documentTitle": "StoreLite",
-      "documentMetaDescription": "StoreLite - Cargue cualquier fichero electrónico",
       "title": "Almacén",
       "subTitle": "Cargue cualquier fichero electrónico",
       "storeStats": {

@@ -5,9 +5,4 @@ export class SystemConstants {
    */
   public static readonly supportEmail = 'support@elcome.ltd.uk';
 
-  /**
-   * @description Document constants
-   */
-  public static readonly descriptionMetaTag = 'description';
-
 }

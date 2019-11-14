@@ -1,18 +1,15 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subscription, Observable, Subject } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { BasePresentation, User, UsersRepository } from 'shared-lib';
+import { TranslateService } from '../../localization/services/translate.service';
 import { AssetLinkTypeEnum } from '../enums/asset-link-type.enum';
 import { Stats } from '../models/stats.model';
 import { PushRepository } from '../repositories/push.repository';
 import * as storeLiteStore from '../store';
 import { StoreLiteState } from '../store';
-import * as StatsActions from '../store/actions/stats.actions';
 import * as FileUploadActions from '../store/actions/file-upload.actions';
-import { TranslateService } from '../../localization/services/translate.service';
-import { Title, Meta } from '@angular/platform-browser';
-import { KeysConstants } from '../constants/keys.constants';
-import { SystemConstants } from '../constants/system.constants';
+import * as StatsActions from '../store/actions/stats.actions';
 
 @Injectable()
 export class StoreLitePresentation extends BasePresentation implements OnDestroy {
@@ -41,14 +38,9 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     protected usersRepository: UsersRepository,
     public storeLiteState$: Store<StoreLiteState>,
     protected serverPushRespository: PushRepository,
-    private translateService: TranslateService,
-    private titleService: Title,
-    private metaService: Meta
+    private translateService: TranslateService
     ) {
     super(usersRepository);
-
-    // Listen for Language changes
-    this.subscribeToOnLangChanges();
 
     // Get logged user
     this.subscribeToUser();
@@ -85,38 +77,6 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
         if (result) {
         }
       }
-    );
-  }
-
-  private setDocumentMetaData() {
-    this.setTitle(KeysConstants.homeDocumentTitleKey);
-    this.addMetaTag(SystemConstants.descriptionMetaTag, KeysConstants.homeDocumentMetaDescriptionKey);
-  }
-
-  private setTitle(key: string) { // possibly public in the future
-    const titleText = this.translate(key);
-    this.titleService.setTitle(titleText);
-  }
-
-  private addMetaTag(tagName: string, contentKey: string) { // possibly public in the future
-    const contentText = this.translate(contentKey);
-    const metaElment: HTMLMetaElement = this.metaService.getTag(`name="${tagName}"`);
-    if (metaElment) {
-      this.metaService.updateTag({ name: tagName, content: contentText});
-    } else {
-      this.metaService.addTag({ name: tagName, content: contentText});
-    }
-  }
-
-  /**
-   * @description Subscribe to to language changes.
-   */
-  private subscribeToOnLangChanges(): void {
-    this.subscriptions.add(
-      this.onLangChanges().subscribe(
-        (res: any) => {
-          this.setDocumentMetaData();
-        })
     );
   }
 
