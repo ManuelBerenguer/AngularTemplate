@@ -1,15 +1,15 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subscription, Observable, Subject } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { BasePresentation, User, UsersRepository } from 'shared-lib';
+import { TranslateService } from '../../localization/services/translate.service';
 import { AssetLinkTypeEnum } from '../enums/asset-link-type.enum';
 import { Stats } from '../models/stats.model';
 import { PushRepository } from '../repositories/push.repository';
 import * as storeLiteStore from '../store';
 import { StoreLiteState } from '../store';
-import * as StatsActions from '../store/actions/stats.actions';
 import * as FileUploadActions from '../store/actions/file-upload.actions';
-import { TranslateService } from '../../localization/services/translate.service';
+import * as StatsActions from '../store/actions/stats.actions';
 
 @Injectable()
 export class StoreLitePresentation extends BasePresentation implements OnDestroy {
@@ -38,11 +38,11 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     protected usersRepository: UsersRepository,
     public storeLiteState$: Store<StoreLiteState>,
     protected serverPushRespository: PushRepository,
-    public translateService: TranslateService
+    private translateService: TranslateService
     ) {
     super(usersRepository);
 
-      // Get logged user
+    // Get logged user
     this.subscribeToUser();
 
     this.loadStats();
@@ -51,7 +51,6 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     this.listenPushStats();
     this.listenPushGetStatsSignal();
 
-    //
   }
 
   /**
@@ -76,7 +75,6 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     this.translateService.use(langCode).then(
       (result: boolean) => {
         if (result) {
-          //
         }
       }
     );
@@ -129,7 +127,6 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
    * everytime the observable emits a new value for user
    */
   private subscribeToUser() {
-
     this.subscriptions.add(
       this.loggedUser$.subscribe(
         (user: User) => {
@@ -137,7 +134,6 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
         }
       )
     );
-
   }
 
   /**
@@ -145,14 +141,12 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
    * Triggers the initial action corresponding to the upload files process
    */
   public uploadAssets(filesList: FileList, mode: AssetLinkTypeEnum): void {
-
     this.storeLiteState$.dispatch(FileUploadActions.getDoChecksAction({
       files: filesList,
       maxNumberOfFiles: this.loggedUser.maxAssetsPerUpload,
       fileTypesList: this.loggedUser.allowedAssetsFilesTypesList,
       mode
     }));
-
   }
 
   /**
