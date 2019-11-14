@@ -6,7 +6,7 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
   styleUrls: ['./image-text.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush, // We should use this strategy only for components that depend only on their inputs
 })
-export class ImageTextComponent implements OnInit {
+export class ImageTextComponent {
 
   @Input() text: string;
   @Input() iconUrl: string;
@@ -14,8 +14,4 @@ export class ImageTextComponent implements OnInit {
   @Input() adjustIcon: boolean;
 
   constructor() {}
-
-  ngOnInit() {
-  }
-
 }

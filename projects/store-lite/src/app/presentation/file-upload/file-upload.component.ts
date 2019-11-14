@@ -8,13 +8,14 @@ import { StoreLitePresentation } from '../../core/services/store-lite.presentati
 import { ErrorModalComponent } from './error-modal/error-modal.component';
 import { NotificationsConstants } from '../../core/constants/notifications.constants';
 import { UploadErrorTypes } from '../../core/enums/upload-error-types.enum';
+import { BaseComponent } from '../../core/base/base.component';
 
 @Component({
   selector: 'app-file-upload',
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.scss']
 })
-export class FileUploadComponent implements OnInit, OnDestroy {
+export class FileUploadComponent extends BaseComponent {
 
   private readonly linkedControlName = 'linked';
   private readonly assetsControlName = 'assets';
@@ -44,8 +45,11 @@ export class FileUploadComponent implements OnInit, OnDestroy {
   constructor(
     private modalService: BsModalService,
     private fb: FormBuilder,
-    public storeLitePresentation: StoreLitePresentation) {}
+    public storeLitePresentation: StoreLitePresentation) {
+      super();
+    }
 
+  // tslint:disable-next-line: use-lifecycle-interface
   ngOnInit() {
     // We init the input data for the nested generic reactive form for radio buttons
     this.data = {
@@ -70,7 +74,8 @@ export class FileUploadComponent implements OnInit, OnDestroy {
       assets: ['', [Validators.required]] // file input to select files from disk
     });
 
-    this.subscriptions.add(
+    this.addSubscriptions(
+
       this.storeLitePresentation.filesUploadError$.subscribe(
         (error: any) => {
           // If the error is not null
@@ -91,36 +96,28 @@ export class FileUploadComponent implements OnInit, OnDestroy {
           }
 
         }
-      )
-    );
+      ),
 
-    this.subscriptions.add(
       this.storeLitePresentation.filesUploadSuccess$.subscribe(
         (success: boolean) => {
           if (success) {
             this.showUploadSuccessModal();
           }
         }
-      )
-    );
+      ),
 
-    this.subscriptions.add(
       this.storeLitePresentation.filesUploadReady$.subscribe(
         (ready: boolean) => {
           this.showProgressBar = !ready;
         }
-      )
-    );
+      ),
 
-    this.subscriptions.add(
       this.storeLitePresentation.filesUploadProgress$.subscribe(
         (percentage: number) => {
           this.progressBarPercentage = percentage;
         }
-      )
-    );
+      ),
 
-    this.subscriptions.add(
       this.storeLitePresentation.filesUploadUploading$.subscribe(
         (uploading: boolean) => {
           if (uploading) {
@@ -128,14 +125,9 @@ export class FileUploadComponent implements OnInit, OnDestroy {
           }
         }
       )
-    );
-  }
 
-  /**
-   * @description Unsubscribes from all subscriptions to avoid memory leak
-   */
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
+    );
+
   }
 
   /**

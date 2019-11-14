@@ -7,20 +7,13 @@ import { BarGaugeSerie } from './bar-gauge-serie';
   templateUrl: './bar-gauge.component.html',
   styleUrls: ['./bar-gauge.component.scss']
 })
-export class BarGaugeComponent implements OnInit, OnChanges {
+export class BarGaugeComponent implements OnChanges {
 
   @Input() seriesList: BarGaugeSerie[];
   seriesValues: number[] = [];
   seriesPalette: number[] = [];
 
-  constructor() {
-    this.customizeText = this.customizeText.bind(this);
-   }
-
-  ngOnInit() {
-    // console.log('BasicBarGaugeComponent ngOnInit', this.seriesList);
-    // this.serieListToArray();
-  }
+  constructor() { }
 
   ngOnChanges(changes) {
     // console.log('BasicBarGaugeComponent ngOnChanges');
@@ -43,34 +36,6 @@ export class BarGaugeComponent implements OnInit, OnChanges {
 
     this.seriesValues = values;
     this.seriesPalette = palette;
-  }
-
-  // devExpressObjOnInitialized(e) {
-  //   // console.log(e.component);
-  // }
-
-  customizeText(arg) {
-    // console.log('arg', arg);
-    if (this.seriesList && this.seriesList.length > 0) {
-      let serieItemIndex = 0;
-      try {
-        // console.log(arg.index);
-        if (arg.index) {
-          serieItemIndex = arg.index;
-        } else if (arg.item && arg.item.index) {
-          serieItemIndex = arg.item.index;
-        }
-
-      } catch (ex) {
-        serieItemIndex = 0;
-        // console.log(ex);
-      }
-      const item: BarGaugeSerie = this.seriesList[serieItemIndex];
-      // console.log(this.seriesList[serieItemIndex]);
-      return item ? (item.labelText ? item.labelText : '') : '';
-    } else {
-      return '';
-    }
   }
 
 }

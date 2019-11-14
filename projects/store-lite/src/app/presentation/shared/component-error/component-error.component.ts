@@ -6,7 +6,7 @@ import { Component, OnInit, Output, EventEmitter, Input, ChangeDetectionStrategy
   styleUrls: ['./component-error.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush, // We should use this strategy only for components that depend only on their inputs
 })
-export class ComponentErrorComponent implements OnInit {
+export class ComponentErrorComponent {
 
   constructor() { }
 
@@ -15,9 +15,6 @@ export class ComponentErrorComponent implements OnInit {
 
   // To emit an event to the parent to inform we want to retry
   @Output() public tryAgainEmitter = new EventEmitter();
-
-  ngOnInit() {
-  }
 
   /**
    * @description It will use the event emitter to inform the parent to try again

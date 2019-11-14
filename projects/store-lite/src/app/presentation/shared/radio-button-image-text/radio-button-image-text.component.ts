@@ -18,7 +18,7 @@ import { FormGroup, FormBuilder, Validators, NG_VALUE_ACCESSOR, NG_VALIDATORS, C
     // }
   ]
 })
-export class RadioButtonImageTextComponent implements OnInit, ControlValueAccessor {
+export class RadioButtonImageTextComponent implements ControlValueAccessor {
 
   @Input() data: any = {};
 
@@ -31,9 +31,6 @@ export class RadioButtonImageTextComponent implements OnInit, ControlValueAccess
   value: number;
 
   constructor() {}
-
-  ngOnInit() {
-  }
 
   // It triggers every time the selected option changes
   selectOption(option: number) {

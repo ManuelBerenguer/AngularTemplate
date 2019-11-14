@@ -6,7 +6,7 @@ import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core
   templateUrl: './basic-stat.component.html',
   styleUrls: ['./basic-stat.component.scss']
 })
-export class BasicStatComponent implements OnInit {
+export class BasicStatComponent {
 
   @Input() number: number;
   @Input() iconUrl: string;
@@ -14,8 +14,4 @@ export class BasicStatComponent implements OnInit {
   @Input() viewUrl: string;
 
   constructor() { }
-
-  ngOnInit() {
-  }
-
 }
