@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { StoreLitePresentation } from '../../core/services/store-lite.presentation';
 import { BaseComponent } from '../../core/base/base.component';
 import { Stats } from '../../core/models/stats.model';
+import { KeysConstants } from '../../core/constants/keys.constants';
 
 @Component({
   selector: 'app-stats',
@@ -11,10 +12,7 @@ import { Stats } from '../../core/models/stats.model';
 export class StatsComponent extends BaseComponent {
   // TODO solve the asset icon issue!
 
-  public readonly textForUnlinked = 'Assets are unlinked';
-  public readonly textForUnresolved = 'Unresolved conflicts';
-  public readonly textForTooSmall = 'Assets are too small';
-  public readonly errorText = 'Problem loading Store Stats';
+  public textForUnlinked: string; public textForUnresolved: string; public textForTooSmall: string; public errorText: string;
 
   public stats: Stats;
 
@@ -46,7 +44,20 @@ export class StatsComponent extends BaseComponent {
             this.stats = stats;
           }
         }
+      ),
+
+      this.storeLitePresentation.translateStream([KeysConstants.textForUnresolvedKey, KeysConstants.textForUnlinkedKey,
+        KeysConstants.textForTooSmallKey, KeysConstants.storeStatsErrorTextKey]).subscribe(
+
+        (res: Array<string>) => {
+          this.textForUnlinked = res[KeysConstants.textForUnlinkedKey];
+          this.textForUnresolved = res[KeysConstants.textForUnresolvedKey];
+          this.textForTooSmall = res[KeysConstants.textForTooSmallKey];
+          this.errorText = res[KeysConstants.storeStatsErrorTextKey];
+        }
+
       )
+
     );
 
   }

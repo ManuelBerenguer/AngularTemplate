@@ -1,8 +1,12 @@
 <div class="container storeContainer">
   <div class="row">
     <div class="col">
-      <h1 class="dash">Store</h1>
-      <p>Upload any electronic file</p>
+      <h1 class="dash">{{ 'storeLite.home.title' | translate }}</h1>
+      <p>{{ 'storeLite.home.subTitle' | translate }}</p>
+    </div>
+    <div>
+      <button class="btn btn-default" (click)="setLang('es')">Language: ES</button>
+      <button class="btn btn-default" (click)="setLang('en')">Language: EN</button>
     </div>
   </div>
   <div class="row">
@@ -11,7 +15,7 @@
 
       <div class="card store-card text-center" >
         <div class="card-body card-body-flex">
-          <div class="card-block-header">Store Stats</div>
+          <div class="card-block-header">{{ 'storeLite.home.storeStats.title' | translate }}</div>
           <div class="card-block-content">
             <app-stats style="width: 100%;"></app-stats>
           </div>
@@ -23,7 +27,7 @@
 
       <div class="card store-card text-center">
         <div class="card-body card-body-flex">
-          <div class="card-block-header">Storage</div>
+          <div class="card-block-header">{{ 'storeLite.home.storage.title' | translate }}</div>
           <div class="card-block-content">
             <app-storage style="width: 100%;"></app-storage>
           </div>

@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { BaseCheckNumberOfFilesUseCase } from './check-number-files.base-usecase';
 import { FileUtilsService } from 'shared-lib';
 import { FileTypesEnum } from '../../enums/file-types.enum';

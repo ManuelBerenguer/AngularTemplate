@@ -46,6 +46,7 @@ import { ImageTextComponent } from './presentation/shared/image-text/image-text.
 import { UpgradeComponent } from './presentation/upgrade/upgrade.component';
 import { ComponentErrorComponent } from './presentation/shared/component-error/component-error.component';
 import { LoadingComponent } from './presentation/shared/loading/loading.component';
+import { LocalizationModule } from './localization/localization.module';
 
 
 @NgModule({
@@ -84,7 +85,9 @@ import { LoadingComponent } from './presentation/shared/loading/loading.componen
     ProgressbarModule.forRoot(),
     PopoverModule.forRoot(),
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+
+    LocalizationModule.forRoot({ defaultLang: 'es', basePath: 'assets/i18n' })
   ],
   entryComponents: [ErrorModalComponent],
   providers: [

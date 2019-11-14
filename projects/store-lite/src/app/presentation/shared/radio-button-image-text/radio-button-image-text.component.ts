@@ -10,7 +10,7 @@ import { FormGroup, FormBuilder, Validators, NG_VALUE_ACCESSOR, NG_VALIDATORS, C
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => RadioButtonImageTextComponent),
       multi: true // enables multi providers, allowing multiple values for a single DI token
-    }//,
+    }// ,
     // {
     //   provide: NG_VALIDATORS,
     //   useExisting: forwardRef(() => RadioButtonImageTextComponent),
@@ -63,6 +63,6 @@ export class RadioButtonImageTextComponent implements OnInit, ControlValueAccess
 
   setDisabledState?(isDisabled: boolean): void {
     // when the parent updates the state of the form control
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
 }

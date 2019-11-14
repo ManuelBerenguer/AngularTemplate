@@ -1,14 +1,15 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { BasePresentation, User, UsersRepository } from 'shared-lib';
+import { TranslateService } from '../../localization/services/translate.service';
 import { AssetLinkTypeEnum } from '../enums/asset-link-type.enum';
 import { Stats } from '../models/stats.model';
 import { PushRepository } from '../repositories/push.repository';
 import * as storeLiteStore from '../store';
 import { StoreLiteState } from '../store';
-import * as StatsActions from '../store/actions/stats.actions';
 import * as FileUploadActions from '../store/actions/file-upload.actions';
+import * as StatsActions from '../store/actions/stats.actions';
 
 @Injectable()
 export class StoreLitePresentation extends BasePresentation implements OnDestroy {
@@ -36,11 +37,12 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
   constructor(
     protected usersRepository: UsersRepository,
     public storeLiteState$: Store<StoreLiteState>,
-    protected serverPushRespository: PushRepository
+    protected serverPushRespository: PushRepository,
+    private translateService: TranslateService
     ) {
     super(usersRepository);
 
-      // Get logged user
+    // Get logged user
     this.subscribeToUser();
 
     this.loadStats();
@@ -48,6 +50,34 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     // Listen for Pushes
     this.listenPushStats();
     this.listenPushGetStatsSignal();
+
+  }
+
+  /**
+   *
+   * @param key Key to translate
+   * @param ...args Array with values for replace the translated text placeholders
+   * @description Translates a key to the corresponding text
+   */
+  public translate(key: string, ...args: string[]): string {
+    return this.translateService.instant(key, ...args)/*.format(...args)*/;
+  }
+
+  public translateStream(key: string | Array<string>, ...args: string[][]): Observable<string | Array<string>> {
+    return this.translateService.stream(key, args);
+  }
+
+  public onLangChanges() {
+    return this.translateService.onLanguageChange;
+  }
+
+  public setLang(langCode: string): void {
+    this.translateService.use(langCode).then(
+      (result: boolean) => {
+        if (result) {
+        }
+      }
+    );
   }
 
   /**
@@ -97,7 +127,6 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
    * everytime the observable emits a new value for user
    */
   private subscribeToUser() {
-
     this.subscriptions.add(
       this.loggedUser$.subscribe(
         (user: User) => {
@@ -105,7 +134,6 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
         }
       )
     );
-
   }
 
   /**
@@ -113,14 +141,12 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
    * Triggers the initial action corresponding to the upload files process
    */
   public uploadAssets(filesList: FileList, mode: AssetLinkTypeEnum): void {
-
     this.storeLiteState$.dispatch(FileUploadActions.getDoChecksAction({
       files: filesList,
       maxNumberOfFiles: this.loggedUser.maxAssetsPerUpload,
       fileTypesList: this.loggedUser.allowedAssetsFilesTypesList,
       mode
     }));
-
   }
 
   /**
@@ -134,4 +160,22 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
 
     this.subscriptions.unsubscribe();
   }
+}
+
+declare global {
+  interface String {
+    format(...replacements: string[]): string;
+  }
+}
+
+if (!String.prototype.format) {
+  String.prototype.format = function() {
+    const args = arguments;
+    return this.replace(/{(\d+)}/g, (match: any, index: number) => {
+      return typeof args[index] !== 'undefined'
+        ? args[index]
+        : match
+      ;
+    });
+  };
 }

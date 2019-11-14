@@ -1,4 +1,4 @@
-import { TestBed } from "@angular/core/testing";
+import { TestBed } from '@angular/core/testing';
 import { StatsEffects } from './stats.effects';
 import { BaseGetStatsUseCase } from '../../use-cases/stats/get-stats.base-usecase';
 import { Observable } from 'rxjs';
