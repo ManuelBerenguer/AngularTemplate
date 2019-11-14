@@ -64,8 +64,8 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     return this.translateService.instant(key, ...args)/*.format(...args)*/;
   }
 
-  public translateStream(key: string | Array<string>): Observable<string | Array<string>> {
-    return this.translateService.stream(key);
+  public translateStream(key: string | Array<string>, ...args: string[][]): Observable<string | Array<string>> {
+    return this.translateService.stream(key, args);
   }
 
   public onLangChanges() {

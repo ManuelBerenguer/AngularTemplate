@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BaseTranslateParser } from './base-translate.parser';
+import { isDefined } from '@angular/compiler/src/util';
 
 @Injectable()
 export class ObjectNotationParser extends BaseTranslateParser {
@@ -11,6 +12,11 @@ export class ObjectNotationParser extends BaseTranslateParser {
    * @description Gets the value of one property in the object tree according to the path
    */
   getValue(target: object, key: string): string {
+
+    if(!isDefined(target) || !isDefined(key)) {
+      return undefined;
+    }
+
     // We split the path using dot character as separator
     const pathSplitted = key.split('.');
 

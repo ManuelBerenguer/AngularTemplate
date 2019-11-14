@@ -112,12 +112,13 @@ export class TranslateService {
   /**
    *
    * @param key The key to get translation from
+   * @param args String array containing N string values to use for replacing {0}, {1}, ..., {n} in the translated text
    * @description
    * Returns the translation corresponding to the parameter key and in function of current localization.
    * If key doesn't exist we delegate to missingTranslationHandler to obtain something to return.
    */
   instant(key: string, ...args: string[]): string {
-    let got = this.formatter.format(this.parser.getValue(this.translations, key), ...args);
+    let got = this.formatter.format(this.parser.getValue(this.translations, key), args);
     if (!got) {
       const params: MissingTranslationHandlerParams = { key, translateService: this };
       got = this.missingTranslationHandler.handle(params);
@@ -130,16 +131,18 @@ export class TranslateService {
    * @description Gets the translated values of an array of keys
    * @param keys Array with keys to translate
    */
-  public getTranslations(keys: Array<string>): Observable<Array<string>> {
+  private getTranslations(keys: Array<string>, args: string[][]): Observable<Array<string>> {
     if (!isDefined(keys) || !keys.length) {
       throw new Error(`Parameter "key" required`);
     }
 
     const result: any = {};
-    for (const key of keys) {
-      result[key] = this.parser.getValue(this.translations, key);
-      if (!result[key]) {
-        this.missingTranslationHandler.handle({ key, translateService: this });
+    // tslint:disable-next-line: forin
+    for (const i in keys) {
+      result[keys[i]] = this.formatter.format(this.parser.getValue(this.translations, keys[i]),
+      isDefined(args) ? ( isDefined(args[i]) ? args[i] : null ) : null );
+      if (!result[keys[i]]) {
+        this.missingTranslationHandler.handle({ key: keys[i], translateService: this });
       }
     }
 
@@ -150,15 +153,15 @@ export class TranslateService {
    * Gets the translated value of a key (or an array of keys)
    * @returns the translated key, or an object of translated keys
    */
-  public getTranslation(key: string | Array<string>): Observable<string | Array<string> | any> {
+  private getTranslation(key: string | Array<string>, args?: string[] | string[][]): Observable<string | Array<string> | any> {
     if (!isDefined(key) || !key.length) {
       throw new Error(`Parameter "key" required`);
     }
 
     if (key instanceof Array) {
-      return this.getTranslations(key);
+      return this.getTranslations(key, args as string[][]);
     } else {
-      let translation = this.parser.getValue(this.translations, key);
+      let translation = this.formatter.format(this.parser.getValue(this.translations, key), args as string[]);
       if (!translation) {
         translation = this.missingTranslationHandler.handle({ key, translateService: this });
       }
@@ -171,18 +174,18 @@ export class TranslateService {
    * whenever the language changes.
    * @returns A stream of the translated key, or an object of translated keys
    */
-  public stream(key: string | Array<string>): Observable<string | Array<string> | any> {
+  public stream(key: string | Array<string>, args?: string[] | string[][]): Observable<string | Array<string> | any> {
     if (!isDefined(key) || !key.length) {
       throw new Error(`Parameter "key" required`);
     }
 
     // we concat two observables: the current translation for the key and the potential new translation after language change
     return concat(
-      this.getTranslation(key),
+      this.getTranslation(key, args),
       this.onLangChange.pipe(
         // We change the observable corresponding to language change with the observable corresponding to the new translations for the key
         switchMap((event: LangChangeEvent) => {
-          return this.getTranslation(key);
+          return this.getTranslation(key, args);
         })
       ));
   }
