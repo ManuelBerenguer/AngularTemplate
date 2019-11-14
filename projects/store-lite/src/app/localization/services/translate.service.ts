@@ -89,8 +89,12 @@ export class TranslateService {
 
     return new Promise<{}>((resolve, reject) => {
 
+      if ( this.currentLang === lang ) {
+        resolve(false);
+      }
+
       // Path to the language resource file
-      const langPath = `${this.basePath}/${lang || 'en'}.json`;
+      const langPath = `${this.basePath}/${lang || this.defaultLang}.json`;
 
       this.httpCli.get(langPath).subscribe(
         txs => {
@@ -100,7 +104,6 @@ export class TranslateService {
           resolve(true);
         },
         error => {
-          this.translations = {};
           resolve(false);
         }
       );
