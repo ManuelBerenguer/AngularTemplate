@@ -1,6 +1,7 @@
-import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 import { StoreLitePresentation } from '../../core/services/store-lite.presentation';
 import { BaseComponent } from '../../core/base/base.component';
+import { BaseHandleStatsSignalUseCase } from '../../core/use-cases/stats/handle-stats-signal.base-usecase';
 
 @Component({
   selector: 'app-store-lite',

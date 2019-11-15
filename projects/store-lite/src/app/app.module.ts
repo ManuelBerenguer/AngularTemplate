@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { EffectsModule } from '@ngrx/effects';
@@ -47,7 +47,12 @@ import { UpgradeComponent } from './presentation/upgrade/upgrade.component';
 import { ComponentErrorComponent } from './presentation/shared/component-error/component-error.component';
 import { LoadingComponent } from './presentation/shared/loading/loading.component';
 import { LocalizationModule } from './localization/localization.module';
+import { BaseHandleStatsSignalUseCase } from './core/use-cases/stats/handle-stats-signal.base-usecase';
+import { HandleStatsSignalUseCase } from './core/use-cases/stats/handle-stats-signal.usecase';
 
+export function initApp(handleStatsSignalUseCase: BaseHandleStatsSignalUseCase) {
+  return () => handleStatsSignalUseCase.execute();
+}
 
 @NgModule({
   declarations: [
@@ -99,12 +104,19 @@ import { LocalizationModule } from './localization/localization.module';
     {provide: PushRepository, useClass: PushMockSignalrRepository},
     {provide: BaseIsUploadValidUseCase, useClass: IsUploadValidUseCase},
     {provide: BaseCheckNumberOfFilesUseCase, useClass: CheckNumberOfFilesUseCase},
+    {provide: BaseHandleStatsSignalUseCase, useClass: HandleStatsSignalUseCase},
+    //HandleStatsSignalUseCase,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initApp,
+      multi: true,
+      deps: [BaseHandleStatsSignalUseCase]
+    },
 
     StoreLitePresentation,
     DictionaryStatsMapper,
     StoreLiteGuard,
     BsModalService
-
   ],
   bootstrap: [AppComponent]
 })

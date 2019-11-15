@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { BaseHandleStatsSignalUseCase } from './core/use-cases/stats/handle-stats-signal.base-usecase';
 
 @Component({
   selector: 'app-root',

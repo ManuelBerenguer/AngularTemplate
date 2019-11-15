@@ -40,8 +40,6 @@ export class FileUploadComponent extends BaseComponent {
   public progressBarPercentage = 0;
   public data: any;
 
-  private subscriptions: Subscription = new Subscription();
-
   constructor(
     private modalService: BsModalService,
     private fb: FormBuilder,

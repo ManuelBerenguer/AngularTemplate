@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Stats } from '../../models/stats.model';
 
 /**
- * Base class for Login use case. We will inject this class instead of a concrete class.
+ * Base class for getting the store/storage stats. We will inject this class instead of a concrete class.
  * By this way we can change between different implementations easily
  * when we want.
  */

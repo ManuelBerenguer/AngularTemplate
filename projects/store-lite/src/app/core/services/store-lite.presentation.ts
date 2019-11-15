@@ -4,8 +4,6 @@ import { Observable, Subscription } from 'rxjs';
 import { BasePresentation, User, UsersRepository } from 'shared-lib';
 import { TranslateService } from '../../localization/services/translate.service';
 import { AssetLinkTypeEnum } from '../enums/asset-link-type.enum';
-import { Stats } from '../models/stats.model';
-import { PushRepository } from '../repositories/push.repository';
 import * as storeLiteStore from '../store';
 import { StoreLiteState } from '../store';
 import * as FileUploadActions from '../store/actions/file-upload.actions';
@@ -37,7 +35,6 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
   constructor(
     protected usersRepository: UsersRepository,
     public storeLiteState$: Store<StoreLiteState>,
-    protected serverPushRespository: PushRepository,
     private translateService: TranslateService
     ) {
     super(usersRepository);
@@ -46,11 +43,6 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
     this.subscribeToUser();
 
     this.loadStats();
-
-    // Listen for Pushes
-    this.listenPushStats();
-    this.listenPushGetStatsSignal();
-
   }
 
   /**
@@ -85,41 +77,6 @@ export class StoreLitePresentation extends BasePresentation implements OnDestroy
    */
   public loadStats(): void {
     this.storeLiteState$.dispatch(StatsActions.getStatsAction());
-  }
-
-  /**
-   * @description Listens to notifications from server with new stats data.
-   * After each notification, it dispatches the same action we dispatch when we get the
-   * stats from server so the stats will be updated in the same way.
-   */
-  private listenPushStats(): void {
-    this.subscriptions.add(
-      this.serverPushRespository.pushStats()
-      .subscribe(
-        (statsObj: Stats) => {
-          if (statsObj) {
-            this.storeLiteState$.dispatch(StatsActions.getStatsSuccessAction({stats: statsObj}));
-          }
-        }
-      )
-    );
-  }
-
-  /**
-   * @description Listens to notifications from server indicating new stats are available.
-   * After each notification, it dispatches the action to get stats from server.
-   */
-  private listenPushGetStatsSignal(): void {
-    this.subscriptions.add(
-      this.serverPushRespository.pushGetStatsSignal()
-      .subscribe(
-        (signalData: string) => {
-          if (signalData) {
-            this.loadStats();
-          }
-        }
-      )
-    );
   }
 
   /**
